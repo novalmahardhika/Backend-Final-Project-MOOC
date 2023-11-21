@@ -1,0 +1,5 @@
+{
+    "testPathIgnorePatterns": ["app/models/index.js"],
+    "coveragePathIgnorePatterns": ["app/models/index.js"],
+    "transform": {}
+}
