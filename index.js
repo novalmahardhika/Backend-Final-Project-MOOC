@@ -1,13 +1,13 @@
-import express from 'express';
-import UserController from "./app/controllers/user.js";
-import Auth from "./app/controllers/user.js";
-import AuthMiddleware from "./middlewares/auth.js";
-// import { User } from './app/models/index.js';
-import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './DOCS/openapi.json' assert {type: "json"};
-// import { uploadToMemory } from './middlewares/uploadOnMemory.js';
+const express = require('express');
+const UserController = require("./app/controllers/user.js");
+const Auth = require("./app/controllers/user.js");
+const AuthMiddleware = require("./middlewares/auth.js");
+// const { User } = require('./app/models/index.js');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./DOCS/openapi.json');
+// const { uploadToMemory } = require('./middlewares/uploadOnMemory.js');
 // import { uploadToCloudinary } from "./middlewares/uploadOnCloudinary.js"
-import cors from "cors";
+const cors = require("cors");
 
 const app = express();
 const PORT = 80;

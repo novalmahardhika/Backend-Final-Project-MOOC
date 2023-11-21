@@ -19,14 +19,12 @@ module.exports = {
         }
     ],
     "parserOptions": {
-        // "ecmaVersion": "latest"
-        "sourceType": "module",
+        "ecmaVersion": "latest"
     },
     "ignorePatterns": ["*.spec.js"],
     "rules": {
         "no-unused-vars": [
-            "off",
-            // { "args": "all", "argsIgnorePattern": "^", "varsIgnorePattern": "^" }
+            "off"
           ]
     }
 }

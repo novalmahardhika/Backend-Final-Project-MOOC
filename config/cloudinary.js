@@ -1,5 +1,5 @@
 // Require the Cloudinary library
-import { v2 as cloudinary } from "cloudinary";
+const { v2: cloudinary } = require("cloudinary");
 
 cloudinary.config({
   cloud_name: "da4wioxmv", // TODO: Ganti dengan cloudname-mu
@@ -8,4 +8,4 @@ cloudinary.config({
   secure: true,
 });
 
-export default cloudinary;
+module.exports = cloudinary;

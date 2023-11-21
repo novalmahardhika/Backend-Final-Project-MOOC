@@ -1,5 +1,5 @@
-import UserController from "./user"
-import { describe, expect, it, jest } from '@jest/globals'
+const UserController = require("./user");
+// const { describe, expect, it, jest } = require('@jest/globals');
 
 const status = {
     OK: "OK",

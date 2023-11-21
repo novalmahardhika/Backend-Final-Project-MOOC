@@ -1,6 +1,6 @@
-import cloudinary from "../config/cloudinary.js"
+const cloudinary = require("../config/cloudinary.js");
 
-export function uploadToCloudinary (req, res, next) {
+exports.uploadToCloudinary = (req, res, next) => {
     const fileBase64 = req.file.buffer.toString("base64");
     const file = `data:${req.file.mimetype};base64,${fileBase64}`;
 

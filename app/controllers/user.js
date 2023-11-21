@@ -1,4 +1,4 @@
-import userService from "../services/user.js";
+const userService = require("../services/user.js");
 
 const findAll = async (req, res) => {
     try {
@@ -67,7 +67,7 @@ const currentUser = async (req, res) => {
     })
 }
 
-export default {
+module.exports = {
     findAll,
     register,
     registerAdmin,

@@ -1,6 +1,6 @@
-import ApplicationError from "../../config/errors/ApplicationError.js";
-import UserRepo from "../repositories/user.js";
-import Auth from "./auth.js";
+const ApplicationError = require("../../config/errors/ApplicationError.js");
+const UserRepo = require("../repositories/user.js");
+const Auth = require("./auth.js");
 
 const findAll = async () => {
     try {
@@ -66,7 +66,7 @@ const checkUser = async (credentials) => {
     }
 }
 
-export default {
+module.exports = {
     findAll,
     create,
     update,

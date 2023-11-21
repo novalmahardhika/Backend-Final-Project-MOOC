@@ -1,10 +1,10 @@
-import multer from "multer";
-import path from "path";
+const multer = require("multer");
+const path = require("path");
 
 // Mendefinisikan gimana cara nyimpen file-nya
 const storage = multer.memoryStorage();
 
-export function uploadToMemory(req, res, next) {
+exports.uploadToMemory = (req, res, next) => {
     const upload = multer({storage}).single("image");
     upload(req, res, (err) => {
         if (err) {

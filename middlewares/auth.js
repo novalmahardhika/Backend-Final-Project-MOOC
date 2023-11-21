@@ -1,6 +1,6 @@
-import ApplicationError from "../config/errors/ApplicationError.js";
-import jwt from "jsonwebtoken";
-import Auth from "../app/services/auth.js"
+const ApplicationError = require("../config/errors/ApplicationError.js");
+const jwt = require("jsonwebtoken");
+const Auth = require("../app/services/auth.js");
 
 const authorize = async (req, res, next) => {
     try {
@@ -41,7 +41,7 @@ const isRootOrAdmin =  (req, res, next) => {
     next();
 }
 
-export default {
+module.exports = {
     authorize,
     isRoot,
     isRootOrAdmin

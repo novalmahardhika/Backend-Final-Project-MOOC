@@ -1,7 +1,7 @@
-import ApplicationError from "../../config/errors/ApplicationError.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import UserRepo from "../repositories/user.js";
+const ApplicationError = require("../../config/errors/ApplicationError.js");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const UserRepo = require("../repositories/user.js");
 
 const JWT_SECRET_KEY = 'FSW1';
 
@@ -50,7 +50,7 @@ const authorize = async (token) => {
     }
 }
 
-export default {
+module.exports = {
     encryptPassword,
     cmpPassword,
     createToken,

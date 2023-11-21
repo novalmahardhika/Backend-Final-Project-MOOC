@@ -1,5 +1,5 @@
-import { User } from "../models/index.js"
-import bcrypt from "bcrypt";
+const { User } = require("../models/index.js");
+const bcrypt = require("bcrypt");
 
 const findAll = async () => {
     return await User.findAll({ attributes: { exclude: ["encryptedPassword"] } });
@@ -21,7 +21,7 @@ const findByPk = async (id) => {
     return await User.findByPk(id);
 }
 
-export default {
+module.exports = {
     findAll,
     create,
     findUserByEmail,
