@@ -19,313 +19,14 @@
   ],
   "tags": [
     {
-      "name": "cars",
-      "description": "Operations about your cars"
-    },
-    {
       "name": "user",
       "description": "Operations about your user"
     }
   ],
   "paths": {
-    "/cars": {
-      "get": {
-        "tags": [
-          "cars"
-        ],
-        "summary": "Get all car list",
-        "description": "Get all car list",
-        "operationId": "getCarList",
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/OK"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "data": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "oneOf": [
-                              {
-                                "$ref": "#/components/schemas/Car"
-                              },
-                              {
-                                "$ref": "#/components/schemas/Car2"
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/v1/register": {
       "post": {
-        "tags": [
-          "cars"
-        ],
-        "summary": "Create car data",
-        "description": "Create car data",
-        "operationId": "createCar",
-        "security": [
-          {
-            "api_key": []
-          }
-        ],
-        "requestBody": {
-          "description": "Create a new car data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CarRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Data was created successfully."
-                    },
-                    "data": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/Car"
-                        },
-                        {
-                          "$ref": "#/components/schemas/Car2"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Body is missing."
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cars/{id}": {
-      "get": {
-        "tags": [
-          "cars"
-        ],
-        "summary": "Get a car data",
-        "description": "Get a car data",
-        "operationId": "getCarDetail",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of car to get the data",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/Car"
-                    },
-                    {
-                      "$ref": "#/components/schemas/Car2"
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/FAIL"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "example": "Failed to get the data. Data not found"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Invalid operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/FAIL"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "example": "Failed to get the data. invalid input syntax for type uuid: \"xxxxxx-xxxxxx-xxxxxx-xxxxxx\""
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "cars"
-        ],
-        "summary": "Delete a car",
-        "description": "Delete a car",
-        "operationId": "deleteCar",
-        "security": [
-          {
-            "api_key": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of car to get the data",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Deleted successfully."
-                    },
-                    "data": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/Car"
-                        },
-                        {
-                          "$ref": "#/components/schemas/Car2"
-                        }
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Data not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/FAIL"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "example": "Failed to get the data. Data not found"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Invalid operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/FAIL"
-                    },
-                    {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "example": "Failed to get the data. invalid input syntax for type uuid: \"xxxxxx-xxxxxx-xxxxxx-xxxxxx\""
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/register": {
-      "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Register new user",
         "description": "Register new user",
         "operationId": "registerUser",
@@ -401,11 +102,9 @@
         }
       }
     },
-    "/login": {
+    "/api/v1/login": {
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Login user",
         "description": "Login user",
         "operationId": "loginUser",
@@ -508,11 +207,9 @@
         }
       }
     },
-    "/users": {
+    "/api/v1/users": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Get all user list",
         "description": "Get all user list",
         "operationId": "getUserList",
@@ -624,11 +321,9 @@
         }
       }
     },
-    "/current-user": {
+    "/api/v1/current-user": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Get current user information",
         "description": "Get current user information",
         "operationId": "currentUser",
@@ -700,10 +395,7 @@
                       "type": "object",
                       "properties": {
                         "message": {
-                          "enum": [
-                            "invalid token",
-                            "jwt expired"
-                          ]
+                          "enum": ["invalid token", "jwt expired"]
                         }
                       }
                     }
@@ -715,11 +407,9 @@
         }
       }
     },
-    "/admin/register": {
+    "/api/v1/admin/register": {
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "Register new admin",
         "description": "Register new admin",
         "operationId": "registerAdmin",
@@ -1090,11 +780,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ROOT",
-              "ADMIN",
-              "MEMBER"
-            ],
+            "enum": ["ROOT", "ADMIN", "MEMBER"],
             "example": "ROOT"
           },
           "createdAt": {
@@ -1136,11 +822,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ROOT",
-              "ADMIN",
-              "MEMBER"
-            ],
+            "enum": ["ROOT", "ADMIN", "MEMBER"],
             "example": "ADMIN"
           },
           "createdAt": {
@@ -1182,11 +864,7 @@
           },
           "role": {
             "type": "string",
-            "enum": [
-              "ROOT",
-              "ADMIN",
-              "MEMBER"
-            ],
+            "enum": ["ROOT", "ADMIN", "MEMBER"],
             "example": "MEMBER"
           },
           "createdAt": {
