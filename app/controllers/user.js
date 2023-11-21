@@ -10,7 +10,7 @@ const findAll = async (req, res) => {
         }
         res.json({ status: "OK", message: "Success", data });
     } catch (err) {
-        res.status(err.statusCode).json({ status: "FAIL", message: err.message});
+        res.status(err.statusCode || 400).json({ status: "FAIL", message: err.message});
     }
 }
 
@@ -18,7 +18,7 @@ const register = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         const ret = await userService.create(req.body);
-        res.status(201).json({ message: "Data was created successfully.", data: ret });
+        res.status(201).json({ status: "OK", message: "Data was created successfully.", data: ret });
     } catch (err) {
         res.status(err.statusCode).json({
             status: "FAIL",
@@ -31,7 +31,7 @@ const registerAdmin = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         const ret = await userService.create(req.body, true);
-        res.status(201).json({ message: "Data was created successfully.", data: ret });
+        res.status(201).json({ status: "OK", message: "Data was created successfully.", data: ret });
     } catch (err) {
         res.status(err.statusCode).json({
             status: "FAIL",
