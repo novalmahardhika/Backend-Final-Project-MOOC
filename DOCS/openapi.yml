@@ -11,175 +11,12 @@ externalDocs:
 servers:
   - url: http://localhost
 tags:
-  - name: cars
-    description: Operations about your cars
   - name: user
     description: Operations about your user
 paths:
-  /cars:
-    get:
-      tags:
-        - cars
-      summary: Get all car list
-      description: Get all car list
-      operationId: getCarList
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/OK'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          oneOf:
-                            - $ref: '#/components/schemas/Car'
-                            - $ref: '#/components/schemas/Car2'
+  /api/v1/register:
     post:
       tags:
-        - cars
-      summary: Create car data
-      description: Create car data
-      operationId: createCar
-      security:
-        - api_key: []
-      requestBody:
-        description: Create a new car data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CarRequest'
-        required: true
-      responses:
-        '201':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Data was created successfully."
-                  data:
-                    oneOf:
-                      - $ref: '#/components/schemas/Car'
-                      - $ref: '#/components/schemas/Car2'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Body is missing."
-  /cars/{id}:
-    get:
-      tags:
-        - cars
-      summary: Get a car data
-      description: Get a car data
-      operationId: getCarDetail
-      parameters:
-        - name: id
-          in: path
-          description: ID of car to get the data
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Car'
-                  - $ref: '#/components/schemas/Car2'
-        '404':
-          description: Data not found
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/FAIL'
-                  - type: object
-                    properties:
-                      message:
-                        example: "Failed to get the data. Data not found"
-        '500':
-          description: Invalid operation
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/FAIL'
-                  - type: object
-                    properties:
-                      message:
-                        example: "Failed to get the data. invalid input syntax for type uuid: \"xxxxxx-xxxxxx-xxxxxx-xxxxxx\""
-    delete:
-      tags:
-        - cars
-      summary: Delete a car
-      description: Delete a car
-      operationId: deleteCar
-      security:
-        - api_key: []
-      parameters:
-        - name: id
-          in: path
-          description: ID of car to get the data
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Deleted successfully."
-                  data:
-                    oneOf:
-                      - $ref: '#/components/schemas/Car'
-                      - $ref: '#/components/schemas/Car2'
-        '404':
-          description: Data not found
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/FAIL'
-                  - type: object
-                    properties:
-                      message:
-                        example: "Failed to get the data. Data not found"
-        '500':
-          description: Invalid operation
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/FAIL'
-                  - type: object
-                    properties:
-                      message:
-                        example: "Failed to get the data. invalid input syntax for type uuid: \"xxxxxx-xxxxxx-xxxxxx-xxxxxx\""
-  /register:
-    post:
-      tags: 
         - user
       summary: Register new user
       description: Register new user
@@ -201,7 +38,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Data was created successfully."
+                    example: Data was created successfully.
                   data:
                     $ref: '#/components/schemas/User3'
         '400':
@@ -213,7 +50,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Body is missing."
+                    example: Body is missing.
         '500':
           description: Invalid operation
           content:
@@ -224,10 +61,10 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Failed to create data. Validation error"
-  /login:
+                        example: Failed to create data. Validation error
+  /api/v1/login:
     post:
-      tags: 
+      tags:
         - user
       summary: Login user
       description: Login user
@@ -251,7 +88,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: "Login successfully."
+                        example: Login successfully.
                       data:
                         type: object
                         allOf:
@@ -260,7 +97,8 @@ paths:
                             properties:
                               token:
                                 type: string
-                                example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyZDZkNzkyLWZlNzUtNDYxMy1iMWMyLTU3OWVkMDU2NGIzYyIsImlhdCI6MTY5NzgzNDE3OSwiZXhwIjoxNjk3ODM3Nzc5fQ.JHrFKoKLtze1NwbWoKLsZR3-Gs3LtT5MtHJG-WVmyPs"
+                                example: >-
+                                  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyZDZkNzkyLWZlNzUtNDYxMy1iMWMyLTU3OWVkMDU2NGIzYyIsImlhdCI6MTY5NzgzNDE3OSwiZXhwIjoxNjk3ODM3Nzc5fQ.JHrFKoKLtze1NwbWoKLsZR3-Gs3LtT5MtHJG-WVmyPs
         '400':
           description: Invalid operation
           content:
@@ -271,7 +109,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Please input email and password."
+                        example: Please input email and password.
         '404':
           description: Email or password is invalid
           content:
@@ -282,8 +120,8 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Email or password is invalid."
-  /users:
+                        example: Email or password is invalid.
+  /api/v1/users:
     get:
       tags:
         - user
@@ -319,7 +157,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Unauthorized"
+                        example: Unauthorized
         '403':
           description: Forbidden access
           content:
@@ -330,7 +168,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "FORBIDDEN."
+                        example: FORBIDDEN.
         '500':
           description: Token expired
           content:
@@ -341,10 +179,10 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "jwt expired"
-  /current-user:
+                        example: jwt expired
+  /api/v1/current-user:
     get:
-      tags: 
+      tags:
         - user
       summary: Get current user information
       description: Get current user information
@@ -363,7 +201,7 @@ paths:
                     properties:
                       message:
                         type: string
-                        example: "Login successfully."
+                        example: Login successfully.
                       data:
                         type: object
                         $ref: '#/components/schemas/User'
@@ -377,7 +215,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Please input email and password."
+                        example: Please input email and password.
         '500':
           description: Invalid token or JWT expired
           content:
@@ -388,10 +226,12 @@ paths:
                   - type: object
                     properties:
                       message:
-                        enum: ["invalid token", "jwt expired"]
-  /admin/register:
+                        enum:
+                          - invalid token
+                          - jwt expired
+  /api/v1/admin/register:
     post:
-      tags: 
+      tags:
         - user
       summary: Register new admin
       description: Register new admin
@@ -415,7 +255,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Data was created successfully."
+                    example: Data was created successfully.
                   data:
                     $ref: '#/components/schemas/User2'
         '400':
@@ -427,7 +267,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Body is missing."
+                    example: Body is missing.
         '401':
           description: Unauthorized
           content:
@@ -438,7 +278,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Unauthorized"
+                        example: Unauthorized
         '500':
           description: Invalid operation
           content:
@@ -449,7 +289,7 @@ paths:
                   - type: object
                     properties:
                       message:
-                        example: "Failed to create data. Validation error"
+                        example: Failed to create data. Validation error
 components:
   schemas:
     OK:
@@ -457,7 +297,7 @@ components:
       properties:
         status:
           type: string
-          example: "OK"
+          example: OK
         message:
           type: string
           example: Success
@@ -466,10 +306,9 @@ components:
       properties:
         status:
           type: string
-          example: "FAIL"
+          example: FAIL
         message:
           type: string
-
     CarRequest:
       type: object
       properties:
@@ -490,7 +329,11 @@ components:
           example: 200000
         description:
           type: string
-          example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis, ex ut auctor molestie, mauris est porttitor mi, nec pellentesque augue quam et nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget quam metus."
+          example: >-
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+            lobortis, ex ut auctor molestie, mauris est porttitor mi, nec
+            pellentesque augue quam et nibh. Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Aenean eget quam metus.
         availableAt:
           type: string
           example: '2023-10-20T13:08:58.007Z'
@@ -499,16 +342,16 @@ components:
       properties:
         id:
           type: string
-          example: "8d7c8fb6-d018-4175-a5fc-2a462fc3b62b"
+          example: 8d7c8fb6-d018-4175-a5fc-2a462fc3b62b
         name:
           type: string
-          example: "Dummy Name 1"
+          example: Dummy Name 1
         type:
           type: string
-          example: "Type Dummy 1"
+          example: Type Dummy 1
         image:
           type: string
-          example: "image/cars1.jpg"
+          example: image/cars1.jpg
         capacity:
           type: integer
           example: 4
@@ -517,7 +360,11 @@ components:
           example: 200000
         description:
           type: string
-          example: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis, ex ut auctor molestie, mauris est porttitor mi, nec pellentesque augue quam et nibh. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget quam metus."
+          example: >-
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
+            lobortis, ex ut auctor molestie, mauris est porttitor mi, nec
+            pellentesque augue quam et nibh. Lorem ipsum dolor sit amet,
+            consectetur adipiscing elit. Aenean eget quam metus.
         availableAt:
           type: string
           example: '2023-10-20T13:08:58.007Z'
@@ -541,16 +388,16 @@ components:
       properties:
         id:
           type: string
-          example: "566dde14-5c11-42eb-b86d-94bf41ad3c3b"
+          example: 566dde14-5c11-42eb-b86d-94bf41ad3c3b
         name:
           type: string
-          example: "Dummy Name 2"
+          example: Dummy Name 2
         type:
           type: string
-          example: "Type Dummy 2"
+          example: Type Dummy 2
         image:
           type: string
-          example: "image/cars2.jpg"
+          example: image/cars2.jpg
         capacity:
           type: integer
           example: 2
@@ -577,146 +424,153 @@ components:
           type: object
         deleted:
           type: object
-
     MemberRequest:
       type: object
       properties:
         name:
           type: string
-          example: "TESTER2"
+          example: TESTER2
         email:
           type: string
-          example: "test2@gmail.com"
+          example: test2@gmail.com
         password:
           type: string
-          example: "test"
+          example: test
         phoneNumber:
           type: string
-          example: "082112345678"
+          example: '082112345678'
         address:
           type: string
-          example: "Earth"
+          example: Earth
     RegisterAdmin:
       type: object
       properties:
         name:
           type: string
-          example: "TESTER"
+          example: TESTER
         email:
           type: string
-          example: "test@gmail.com"
+          example: test@gmail.com
         password:
           type: string
-          example: "test"
+          example: test
         phoneNumber:
           type: string
-          example: "082112345678"
+          example: '082112345678'
         address:
           type: string
-          example: "Earth"
+          example: Earth
     RootLogin:
       type: object
       properties:
         email:
           type: string
-          example: "root@gmail.com"
+          example: root@gmail.com
         password:
           type: string
-          example: "root"
+          example: root
     User:
       type: object
       properties:
         id:
           type: string
-          example: "d2d6d792-fe75-4613-b1c2-579ed0564b3c"
+          example: d2d6d792-fe75-4613-b1c2-579ed0564b3c
         name:
           type: string
-          example: "root"
+          example: root
         email:
           type: string
-          example: "root@gmail.com"
+          example: root@gmail.com
         encryptedPassword:
           type: string
-          example: "$2b$10$CZWqOKzxtogiTgPNLmxMXORb0fEuZxr0qrEuh2exgpe5I8c6Zq.Du"
+          example: $2b$10$CZWqOKzxtogiTgPNLmxMXORb0fEuZxr0qrEuh2exgpe5I8c6Zq.Du
         phoneNumber:
           type: string
-          example: "082112345678"
+          example: '082112345678'
         address:
           type: string
-          example: "Earth"
+          example: Earth
         role:
           type: string
-          enum: ["ROOT", "ADMIN", "MEMBER"]
-          example: "ROOT"
+          enum:
+            - ROOT
+            - ADMIN
+            - MEMBER
+          example: ROOT
         createdAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
+          example: '2023-10-18T13:42:59.162Z'
         updatedAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
+          example: '2023-10-18T13:42:59.162Z'
     User2:
       type: object
       properties:
         id:
           type: string
-          example: "640f98ab-951b-4b7b-845d-6e78b411b566"
+          example: 640f98ab-951b-4b7b-845d-6e78b411b566
         name:
           type: string
-          example: "TESTER"
+          example: TESTER
         email:
           type: string
-          example: "test@gmail.com"
+          example: test@gmail.com
         encryptedPassword:
           type: string
-          example: "$2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK"
+          example: $2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK
         phoneNumber:
           type: string
-          example: "082112345678"
+          example: '082112345678'
         address:
           type: string
-          example: "Earth"
+          example: Earth
         role:
           type: string
-          enum: ["ROOT", "ADMIN", "MEMBER"]
-          example: "ADMIN"
+          enum:
+            - ROOT
+            - ADMIN
+            - MEMBER
+          example: ADMIN
         createdAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
+          example: '2023-10-18T13:42:59.162Z'
         updatedAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
+          example: '2023-10-18T13:42:59.162Z'
     User3:
       type: object
       properties:
         id:
           type: string
-          example: "0d05f684-1a9c-4481-b5a8-cb7442cedeae"
+          example: 0d05f684-1a9c-4481-b5a8-cb7442cedeae
         name:
           type: string
-          example: "TESTER2"
+          example: TESTER2
         email:
           type: string
-          example: "test2@gmail.com"
+          example: test2@gmail.com
         encryptedPassword:
           type: string
-          example: "$2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK"
+          example: $2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK
         phoneNumber:
           type: string
-          example: "082112345678"
+          example: '082112345678'
         address:
           type: string
-          example: "Earth"
+          example: Earth
         role:
           type: string
-          enum: ["ROOT", "ADMIN", "MEMBER"]
-          example: "MEMBER"
+          enum:
+            - ROOT
+            - ADMIN
+            - MEMBER
+          example: MEMBER
         createdAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
+          example: '2023-10-18T13:42:59.162Z'
         updatedAt:
           type: string
-          example: "2023-10-18T13:42:59.162Z"
-
+          example: '2023-10-18T13:42:59.162Z'
   securitySchemes:
     api_key:
       type: apiKey
