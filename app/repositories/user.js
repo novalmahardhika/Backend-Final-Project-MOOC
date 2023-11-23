@@ -1,23 +1,23 @@
 const { User } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
-const findAll = async () => {
+async function findAll() {
     return await User.findAll({ attributes: { exclude: ["encryptedPassword"] } });
 }
 
-const create = async (body) => {
+async function create(body) {
     return await User.create(body);
 }
 
-const findUserByEmail = async (email) => {
+async function findUserByEmail(email) {
     return await User.findOne({ where: { email }});
 }
 
-const checkPassword = async (password, hash) => {
+async function checkPassword(password, hash) {
     return await bcrypt.compare(password, hash);
 }
 
-const findByPk = async (id) => {
+async function findByPk(id) {
     return await User.findByPk(id);
 }
 

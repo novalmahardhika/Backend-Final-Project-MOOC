@@ -1,27 +1,34 @@
-const { Course } = require("../models");
+const { Course } = require("../models/index.js");
 
-exports.getListCourse = () => {
-    return Course.findAll();
-  };
-  
-exports.getListCourseByType = (type) => {
-    return Course.findAll({ where: { type } });
-  };
-
-
-  exports.createCourse = (payload) => {
-    return Course.create( payload);
-  };
-
-  exports.update = async (id, payload) => {
-    return Course.update( payload , { where: { id }, returning: true })
-  };
-
-
-  exports.findByPk = (id) => {
-    return Course.findByPk(id);
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+async function findAll(filter) {
+    if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
+    return await Course.findAll({ where: filter });
 }
 
-exports.destory = (id) => {
-  return Course.destroy({ where: { id } });
+async function create(body) {
+    return await Course.create(body);
+}
+
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+async function destroy(filter) {
+    if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
+    return await Course.destroy({ where: filter })
+}
+
+async function findByPk(id) {
+    return await Course.findByPk(id);
+}
+
+module.exports = {
+    findAll,
+    create,
+    destroy,
+    findByPk
 }

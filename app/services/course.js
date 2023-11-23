@@ -1,55 +1,54 @@
 const courseRepository = require('./../repositories/course');
 const ApplicationError = require('./../../config/errors/ApplicationError');
 
-exports.listCourse = async (type) => {
+exports.findAll = async (type) => {
     try {
-      if (type) {
-        const course = await courseRepository.getListCourseByType(type);
+        return courseRepository.findAll(type);
+    } catch (error) {
+        throw new ApplicationError(`Failed to retrieve the list of course: ${error.message}`, 500);
+    }
+};
+
+exports.create = async (payload) => {
+    try {
+        const course = await courseRepository.create(payload);
         return course;
-      } else {
-        const course = await courseRepository.getListCourse();
+    } catch (error) {
+        throw new ApplicationError(`Failed to add a new course: ${error.message}`, 500);
+    }
+};
+
+exports.update = async (req, payload) => {
+    try {
+        const data = req;
+        data.set(payload);
+        return await data.save();
+    } catch (err) {
+        throw new ApplicationError(`Failed to update data. ${err.message}`, 500);
+    }
+};
+
+exports.findByPk = async (id) => {
+    try {
+        const course = await courseRepository.findByPk(id);
+        if (!course) throw new ApplicationError("Course not found", 404);
+        
         return course;
-      }
-    } catch (error) {
-      throw new ApplicationError(`Failed to retrieve the list of course: ${error.message}`, 500);
-    }
-  };
-
-exports.createCourse = async (payload) => {
-    try {
-      const course = await courseRepository.createCourse(payload);
-      return course;
-    } catch (error) {
-      throw new ApplicationError(`Failed to add a new course: ${error.message}`, 500);
-    }
-  };
-
-exports.updateCourseById = async (id, payload) => {
-    try {
-      const [_, data] = await courseRepository.update(id,payload);
-      return data;
-    } catch (error) {
-      throw new ApplicationError(`Failed to update course by ID: ${error.message}`, 500);
-    }
-  };
-
-  exports.getCourseById = async (id) => {
-    try {
-      const course = await courseRepository.findByPk(id);
-      if (!course) {
-        throw new ApplicationError("Course not found", 404);
-      }
-      return course;
     } catch (err) {
-      throw new ApplicationError(`Failed to get course by ID: ${err.message}`, 500);
+        throw new ApplicationError(`Failed to get course by ID: ${err.message}`, 500);
     }
-  };
+};
 
-  exports.deleteCourseById = async (id,userId) => {
+exports.destroy = async (id) => {
+    // try {
+    //     const course =  await courseRepository.destory({ id });
+    //     return course;
+    // } catch (err) {
+    //     throw new ApplicationError(`Failed to delete course by ID: ${err.message}`, 500);
+    // }
     try {
-     const course =  await courseRepository.destory(id);
-     return course;
+        return courseRepository.destroy(id);
     } catch (err) {
-      throw new ApplicationError(`Failed to delete course by ID: ${err.message}`, 500);
+        throw new ApplicationError(`Failed to delete data. ${err.message}`, 500);
     }
-  };
+};
