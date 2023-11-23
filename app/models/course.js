@@ -1,9 +1,5 @@
-'use strict';
-const {v4: uuidv4} = require('uuid');
-
-const {
-  Model
-} = require('sequelize');
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -15,21 +11,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Course.init({
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+  Course.init(
+    {
+      title: DataTypes.STRING,
+      type: DataTypes.ENUM('free','premium'),
+      level: DataTypes.ENUM('beginner','intermediate','advance'),
+      price: DataTypes.INTEGER,
+      image: DataTypes.STRING,
+      creator: DataTypes.STRING,
     },
-    title: DataTypes.STRING,
-    type: DataTypes.ENUM("free ","premium"),
-    level: DataTypes.ENUM("beginner","intermediate ","advance"),
-    price: DataTypes.NUMBER,
-    image: DataTypes.STRING,
-    creator: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Course',
-  });
-  Course.beforeCreate(course => course.id = uuidv4())
-  return Course;
-};
+    {
+      sequelize,
+      modelName: 'Course',
+    }
+  )
+
+  return Course
+}
