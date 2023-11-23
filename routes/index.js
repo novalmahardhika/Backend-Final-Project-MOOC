@@ -1,7 +1,6 @@
 const { Router } = require('express')
 const router = Router()
-const authRoutes = require('./user.routes')
-const courseRoute = require('./course.routes')
+const apiV1 = require('./api/v1')
 const notFoundRoute = require('./404.routes')
 const rootRouter = require('./root.routes')
 
@@ -13,10 +12,7 @@ const swaggerDocument = require('../DOCS/openapi.json')
 router.use('/', rootRouter)
 
 // routes controller
-router.use('/api/v1/', authRoutes)
-
-// Course controller
-router.use('/course', courseRoute)
+router.use('/api/v1/', apiV1)
 
 // api documentation
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
