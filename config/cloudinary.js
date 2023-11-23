@@ -1,10 +1,9 @@
-// Require the Cloudinary library
-const { v2: cloudinary } = require("cloudinary");
+const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-  cloud_name: "da4wioxmv", // TODO: Ganti dengan cloudname-mu
-  api_key: "811318132972564", // TODO: Ganti dengan API Key-mu
-  api_secret: "dDTWDtk14NMWYQlqfrDnBwG4iYM", // TODO: Ganti dengan API Secret-mu
+  cloud_name: 'djsjnrfv0',
+  api_key: '877239792134697',
+  api_secret: 'QzYPQv6Pk-u0il5DW8pC-BAswDQ',
   secure: true,
 });
 
