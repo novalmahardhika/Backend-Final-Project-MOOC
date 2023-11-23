@@ -1,5 +1,4 @@
 'use strict'
-
 const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
@@ -15,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
   Course.init(
     {
       title: DataTypes.STRING,
-      type: DataTypes.ENUM('free', 'premium'),
-      level: DataTypes.ENUM('beginner', 'intermediate', 'advance'),
-      price: DataTypes.NUMBER,
+      type: DataTypes.ENUM('free','premium'),
+      level: DataTypes.ENUM('beginner','intermediate','advance'),
+      price: DataTypes.INTEGER,
       image: DataTypes.STRING,
       creator: DataTypes.STRING,
     },

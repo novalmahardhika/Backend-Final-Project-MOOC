@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       type: {
-        type: Sequelize.ENUM('free ', 'premium'),
+        type: Sequelize.ENUM('free', 'premium'),
       },
       level: {
-        type: Sequelize.ENUM('beginner', 'intermediate ', 'advance'),
+        type: Sequelize.ENUM('beginner', 'intermediate', 'advance'),
       },
       price: {
         type: Sequelize.INTEGER,
