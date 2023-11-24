@@ -13,7 +13,582 @@ servers:
 tags:
   - name: user
     description: Operations about your user
+  - name: course
+    description: Operations about your Course
+  - name: chapter
+    description: Operations about your Chapter
 paths:
+  /api/v1/chapter:
+    get:
+      tags:
+        - chapter
+      summary: Get list Chapter
+      description: Get all Chapter list
+      operationId: getChapterList
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              example: 82087470-5913-4137-bb57-a889d9b3030e
+                        - $ref: '#/components/schemas/Chapter'
+                        - type: object
+                          properties:
+                            createdAt:
+                              example: 2023-11-24T10:10:02.523Z
+                            updatedAt:
+                              example: 2023-11-24T10:10:02.523Z
+
+        '500':
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: Failed to retrieve the list of chapter
+
+    post:
+      tags:
+        - chapter
+      summary: create Chapter
+      description: Create chapter
+      operationId: createChapter
+      requestBody:
+        description: create chapter
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chapter'
+        required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/Chapter'
+                      - type: object
+                        properties:
+                          createdAt:
+                            example: 2023-11-24T10:10:02.523Z
+                          updatedAt:
+                            example: 2023-11-24T10:10:02.523Z
+
+        '500':
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: Failed to retrieve the list of chapter
+
+  /api/v1/chapter/{id}:
+    get:
+      tags:
+        - chapter
+      summary: Get a chapter by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/Chapter'
+                      - type: object
+                        properties:
+                          createdAt:
+                            example: 2023-11-24T10:10:02.523Z
+                          updatedAt:
+                            example: 2023-11-24T10:10:02.523Z
+
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Chapter not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: ...'
+    put:
+      tags:
+        - chapter
+      summary: update chapter by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+
+      requestBody:
+        description: update chapter
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chapter'
+        required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              example: 82087470-5913-4137-bb57-a889d9b3030e
+                        - $ref: '#/components/schemas/Chapter'
+                        - type: object
+                          properties:
+                            createdAt:
+                              example: 2023-11-24T10:10:02.523Z
+                            updatedAt:
+                              example: 2023-11-24T10:10:02.523Z
+
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get chapter by ID: Chapter not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to update chapter by ID'
+    delete:
+      tags:
+        - chapter
+      summary: Get a chapter by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/Chapter'
+                      - type: object
+                        properties:
+                          createdAt:
+                            example: 2023-11-24T10:10:02.523Z
+                          updatedAt:
+                            example: 2023-11-24T10:10:02.523Z
+
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get chapter by ID: Chapter not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to delete chapter by ID'
+
+  /api/v1/course:
+    get:
+      tags:
+        - course
+      summary: Get list course
+      description: Get all Courses list
+      operationId: getCourseList
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    type: array
+                    items:
+                      allOf:
+                        - type: object
+                          properties:
+                            id:
+                              example: 82087470-5913-4137-bb57-a889d9b3030e
+                        - $ref: '#/components/schemas/CourseList'
+                        - type: object
+                          properties:
+                            createdAt:
+                              example: 2023-11-24T10:10:02.523Z
+                            updatedAt:
+                              example: 2023-11-24T10:10:02.523Z
+        '500':
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: Failed to retrieve the list of course
+
+    post:
+      tags:
+        - course
+      summary: Update a course by ID
+      requestBody:
+        description: Register new user
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseList'
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/CourseList'
+                      - type: object
+                        properties:
+                          createdAt:
+                            example: 2023-11-24T10:10:02.523Z
+                          updatedAt:
+                            example: 2023-11-24T10:10:02.523Z
+        '500':
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: Failed to retrieve the list of course
+
+  /api/v1/course/{id}:
+    get:
+      tags:
+        - course
+      summary: Get a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/CourseList'
+                      - type: object
+                        properties:
+                          createdAt:
+                            example: 2023-11-24T10:10:02.523Z
+                          updatedAt:
+                            example: 2023-11-24T10:10:02.523Z
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: ...'
+    put:
+      tags:
+        - course
+      summary: Update a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+      requestBody:
+        description: Register new user
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseList'
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                  data:
+                    $ref: '#/components/schemas/CourseList'
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to update data.'
+
+    delete:
+      tags:
+        - course
+      summary: Delete a course by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deleted'
+        '404':
+          description: Id Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Internal Server Error'
+
   /api/v1/register:
     post:
       tags:
@@ -203,7 +778,6 @@ paths:
                         type: string
                         example: Login successfully.
                       data:
-                        type: object
                         $ref: '#/components/schemas/User'
         '400':
           description: Invalid operation
@@ -301,6 +875,17 @@ components:
         message:
           type: string
           example: Success
+
+    Deleted:
+      type: object
+      properties:
+        status:
+          type: string
+          example: OK
+        message:
+          type: string
+          example: Deleted successfully.
+
     FAIL:
       type: object
       properties:
@@ -309,121 +894,7 @@ components:
           example: FAIL
         message:
           type: string
-    CarRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Create Car
-        type:
-          type: string
-          example: Create
-        image:
-          type: string
-          example: image/cars1.jpg
-        capacity:
-          type: integer
-          example: 4
-        rentPerDay:
-          type: integer
-          example: 200000
-        description:
-          type: string
-          example: >-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-            lobortis, ex ut auctor molestie, mauris est porttitor mi, nec
-            pellentesque augue quam et nibh. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Aenean eget quam metus.
-        availableAt:
-          type: string
-          example: '2023-10-20T13:08:58.007Z'
-    Car:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 8d7c8fb6-d018-4175-a5fc-2a462fc3b62b
-        name:
-          type: string
-          example: Dummy Name 1
-        type:
-          type: string
-          example: Type Dummy 1
-        image:
-          type: string
-          example: image/cars1.jpg
-        capacity:
-          type: integer
-          example: 4
-        rentPerDay:
-          type: integer
-          example: 200000
-        description:
-          type: string
-          example: >-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-            lobortis, ex ut auctor molestie, mauris est porttitor mi, nec
-            pellentesque augue quam et nibh. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Aenean eget quam metus.
-        availableAt:
-          type: string
-          example: '2023-10-20T13:08:58.007Z'
-        createdAt:
-          type: string
-          example: '2023-10-20T13:08:58.007Z'
-        updatedAt:
-          type: string
-          example: '2023-10-20T13:08:58.007Z'
-        deletedAt:
-          type: string
-          example: null
-        created:
-          type: object
-        updated:
-          type: object
-        deleted:
-          type: object
-    Car2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 566dde14-5c11-42eb-b86d-94bf41ad3c3b
-        name:
-          type: string
-          example: Dummy Name 2
-        type:
-          type: string
-          example: Type Dummy 2
-        image:
-          type: string
-          example: image/cars2.jpg
-        capacity:
-          type: integer
-          example: 2
-        rentPerDay:
-          type: integer
-          example: 300000
-        description:
-          type: string
-        availableAt:
-          type: string
-          example: '2023-10-20T11:08:58.007Z'
-        createdAt:
-          type: string
-          example: '2023-10-20T11:08:58.007Z'
-        updatedAt:
-          type: string
-          example: '2023-10-20T11:08:58.007Z'
-        deletedAt:
-          type: string
-          example: null
-        created:
-          type: object
-        updated:
-          type: object
-        deleted:
-          type: object
+
     MemberRequest:
       type: object
       properties:
@@ -537,6 +1008,7 @@ components:
         updatedAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
+
     User3:
       type: object
       properties:
@@ -571,6 +1043,42 @@ components:
         updatedAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
+
+    CourseList:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Learn Basic Javascript
+        type:
+          type: string
+          example: premium
+        level:
+          type: string
+          example: beginner
+        price:
+          type: number
+          example: 99000
+        image:
+          type: string
+          format: base64
+        creator:
+          type: string
+          example: John Doe
+
+    Chapter:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Set Up Project Tailwind with Shadcn UI
+        chapterNumber:
+          type: number
+          example: 1
+        duration:
+          type: number
+          example: 60
+
   securitySchemes:
     api_key:
       type: apiKey
