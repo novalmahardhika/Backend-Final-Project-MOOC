@@ -7,21 +7,21 @@ const findAll = async (req, res) => {
     res.json({ status: 'OK', message: 'Success', data: chapter })
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      status: 'FAIl',
+      status: 'FAIL',
       message: error.message,
     })
   }
 }
 
-const findById = async (req, res) => {
+const findByPk = async (req, res, next) => {
   try {
-    const _id = req.params.id
-    const chapter = await courseService.findById(_id)
+    const { id } = req.params
 
-    res.json({ status: 'OK', message: 'Success', data: chapter })
+    req.courseChapter = await courseService.findByPk(id)
+    next()
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      status: 'FAIl',
+      status: 'FAIL',
       message: error.message,
     })
   }
@@ -30,13 +30,12 @@ const findById = async (req, res) => {
 const create = async (req, res) => {
   try {
     const payload = req.body
-
     const chapter = await courseService.create(payload)
 
     res.json({ status: 'OK', message: 'Success', data: chapter })
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      status: 'FAIl',
+      status: 'FAIL',
       message: error.message,
     })
   }
@@ -44,15 +43,13 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const _id = req.params.id
     const payload = req.body
 
-    const chapter = await courseService.update(_id, payload)
-
+    const chapter = await courseService.update(req.courseChapter.id, payload)
     res.json({ status: 'OK', message: 'Success', data: chapter })
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      status: 'FAIl',
+      status: 'FAIL',
       message: error.message,
     })
   }
@@ -60,17 +57,20 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-    const _id = req.params.id
 
-    await courseService.destroy(_id)
+    await courseService.destroy(req.courseChapter.id)
 
-    res.json({ status: 'OK', message: 'Success' })
+    res.json({ status: 'OK', message: 'Success', data: req.courseChapter })
   } catch (error) {
     res.status(error.statusCode || 500).json({
-      status: 'FAIl',
+      status: 'FAIL',
       message: error.message,
     })
   }
 }
 
-module.exports = { findAll, findById, create, update, destroy }
+const detail = (req, res) => {
+  res.json({ status: 'OK', message: 'Success', data: req.courseChapter })
+}
+
+module.exports = { findAll, findByPk, create, update, destroy, detail }

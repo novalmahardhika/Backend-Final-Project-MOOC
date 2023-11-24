@@ -1,12 +1,16 @@
 const { CourseChapter } = require('../models/index.js')
 
-const findAll = async () => {
-  const chapter = await CourseChapter.findAll()
-  return chapter
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+const findAll = async (filter) => {
+  if (typeof filter !== "object" && filter != null) return new Error('filter is not an object')
+  return await CourseChapter.findAll({ where: filter })
 }
 
-const findById = async (_id) => {
-  const chapter = await CourseChapter.findByPk(_id)
+const findByPk = async (id) => {
+  const chapter = await CourseChapter.findByPk(id)
 
   return chapter
 }
@@ -16,16 +20,16 @@ const create = async (payload) => {
   return chapter
 }
 
-const update = async (_id, payload) => {
+const update = async (id, payload) => {
   const [_, chapter] = await CourseChapter.update(payload, {
-    where: { id: _id },
+    where: { id },
     returning: true,
   })
   return chapter
 }
 
-const destroy = async (_id) => {
-  await CourseChapter.destroy({ where: { id: _id } })
+const destroy = async (id) => {
+  await CourseChapter.destroy({ where: { id: id } })
 }
 
-module.exports = { findAll, findById, create, update, destroy }
+module.exports = { findAll, findByPk, create, update, destroy }

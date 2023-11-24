@@ -14,9 +14,9 @@ const findAll = async () => {
   }
 }
 
-const findById = async (_id) => {
+const findByPk = async (_id) => {
   try {
-    const chapter = await repoChapter.findById(_id)
+    const chapter = await repoChapter.findByPk(_id)
 
     if (!chapter) throw new ApplicationError(`chapter Id is not found`, 404)
 
@@ -42,25 +42,16 @@ const create = async (payload) => {
   }
 }
 
-const update = async (_id, payload) => {
+const update = async (id, payload) => {
   try {
-    const existId = await repoChapter.findById(_id)
-
-    if (!existId) throw new ApplicationError(`chapter Id is not found`, 404)
-
-    const chapter = repoChapter.update(_id, payload)
-    return chapter
+    return repoChapter.update(id, payload)
   } catch (error) {
     throw new ApplicationError(`Failed to update data. ${error.message}`, 500)
   }
 }
 
-const destroy = async (_id) => {
-  const existId = await repoChapter.findById(_id)
-
-  if (!existId) throw new ApplicationError(`chapter Id is not found`, 404)
-
-  await repoChapter.destroy(_id)
+const destroy = async (id) => {
+  return await repoChapter.destroy(id)
 }
 
-module.exports = { findAll, findById, create, update, destroy }
+module.exports = { findAll, findByPk, create, update, destroy }
