@@ -3,18 +3,17 @@ const ApplicationError = require('./../../config/errors/ApplicationError');
 
 exports.findAll = async (type) => {
     try {
-        return courseRepository.findAll(type);
+        return await courseRepository.findAll(type);
     } catch (error) {
-        throw new ApplicationError(`Failed to retrieve the list of course: ${error.message}`, 500);
+        throw new ApplicationError(`Failed to retrieve the list of course. ${error.message}`, 500);
     }
 };
 
 exports.create = async (payload) => {
     try {
-        const course = await courseRepository.create(payload);
-        return course;
+        return await courseRepository.create(payload);
     } catch (error) {
-        throw new ApplicationError(`Failed to add a new course: ${error.message}`, 500);
+        throw new ApplicationError(`Failed to add a new course. ${error.message}`, 500);
     }
 };
 
@@ -35,19 +34,13 @@ exports.findByPk = async (id) => {
         
         return course;
     } catch (err) {
-        throw new ApplicationError(`Failed to get course by ID: ${err.message}`, 500);
+        throw new ApplicationError(`Failed to get course by ID. ${err.message}`, 500);
     }
 };
 
 exports.destroy = async (id) => {
-    // try {
-    //     const course =  await courseRepository.destory({ id });
-    //     return course;
-    // } catch (err) {
-    //     throw new ApplicationError(`Failed to delete course by ID: ${err.message}`, 500);
-    // }
     try {
-        return courseRepository.destroy(id);
+        return await courseRepository.destroy(id);
     } catch (err) {
         throw new ApplicationError(`Failed to delete data. ${err.message}`, 500);
     }

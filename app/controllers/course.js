@@ -3,12 +3,10 @@ const courseService = require('../services/course')
 const list = async (req, res) => {
   try {
     const { type } = req.query
-    const data = type
-      ? await courseService.findAll({ type })
-      : await courseService.findAll()
+    const data = type ? await courseService.findAll({ type }) : await courseService.findAll()
     res.status(200).json({
       status: 'OK',
-      message: 'success',
+      message: 'Success',
       data,
     })
   } catch (error) {
@@ -37,7 +35,7 @@ const update = async (req, res) => {
     const { body } = req
 
     const data = await courseService.update(req.course, body)
-    res.status(201).json({ message: 'Data was updated successfully.', data })
+    res.status(201).json({ status: 'OK', message: 'Data was updated successfully.', data })
   } catch (err) {
     res.status(err.statusCode).json({
       status: 'FAIL',
@@ -63,11 +61,11 @@ const destroyById = async (req, res) => {
   try {
     const { id } = req.course
     await courseService.destroy({ id })
-    res.json({ status: 'OK', message: 'Deleted successfully.' })
+    res.json({ status: 'OK', message: 'Deleted successfully.', data: req.course })
   } catch (error) {
     res.status(error.statusCode || 500).json({
       status: 'FAIL',
-      message: error.message,
+      message: error.message
     })
   }
 }
