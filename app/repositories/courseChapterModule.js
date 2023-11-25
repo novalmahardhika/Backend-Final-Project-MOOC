@@ -20,14 +20,19 @@ const create = async (payload) => {
 
 const update = async (id, payload) => {
     const [_, courseModule] = await courseChapterModule.update(payload, {
-      where: { id },
-      returning: true,
+        where: { id },
+        returning: true,
     })
     return courseModule
-  }
+}
 
-  const destroy = async (id) => {
-    await courseChapterModule.destroy({ where: { id: id } })
-  }
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+async function destroy(filter) {
+    if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
+    return await courseChapterModule.destroy({ where: filter })
+}
 
 module.exports = { findAll, findByPk, create, update, destroy }
