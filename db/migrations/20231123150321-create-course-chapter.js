@@ -21,6 +21,13 @@ module.exports = {
       duration: {
         type: Sequelize.INTEGER,
       },
+      courseId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'Courses',
+          key: 'id'
+        }
+      } ,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
