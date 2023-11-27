@@ -43,7 +43,7 @@ describe("CourseController", () => {
 	});
 
 	describe("#create", () => {
-		it("Should create course", async () => {
+		it("Should create new user", async () => {
             userModel.User.create.mockResolvedValue(userDummy.root);
 
 			const result = await userRepository.create(userDummy.root);
@@ -53,7 +53,7 @@ describe("CourseController", () => {
 	});
 
 	describe("#findByPk", () => {
-		it("Should get course model data", async () => {
+		it("Should get user model data", async () => {
 			const model = userDummy.member;
 
             userModel.User.findByPk.mockResolvedValue(model);
