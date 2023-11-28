@@ -1,5 +1,6 @@
 const courseService = require('../services/courseChapter.js')
 
+
 const findAll = async (req, res) => {
   try {
     const chapter = await courseService.findAll()
@@ -15,9 +16,10 @@ const findAll = async (req, res) => {
 
 const findByPk = async (req, res, next) => {
   try {
-    const { id } = req.params
+    const { chapterId } = req.params
+  
 
-    req.courseChapter = await courseService.findByPk(id)
+    req.courseChapter = await courseService.findByPk(chapterId)
     next()
   } catch (error) {
     res.status(error.statusCode || 500).json({
@@ -29,8 +31,12 @@ const findByPk = async (req, res, next) => {
 
 const create = async (req, res) => {
   try {
+    const { id } = req.params
     const payload = req.body
-    const chapter = await courseService.create(payload)
+
+    payload.courseId = id
+
+    const chapter = await courseService.create(payload, id)
 
     res.json({ status: 'OK', message: 'Success', data: chapter })
   } catch (error) {
@@ -57,10 +63,9 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-
     await courseService.destroy(req.courseChapter.id)
 
-    res.json({ status: 'OK', message: 'Success', data: req.courseChapter })
+    res.json({ status: 'OK', message: 'Success', data: req.courseChapter  })
   } catch (error) {
     res.status(error.statusCode || 500).json({
       status: 'FAIL',
@@ -73,4 +78,6 @@ const detail = (req, res) => {
   res.json({ status: 'OK', message: 'Success', data: req.courseChapter })
 }
 
-module.exports = { findAll, findByPk, create, update, destroy, detail }
+
+
+module.exports = { findAll, findByPk, create, update, destroy, detail}

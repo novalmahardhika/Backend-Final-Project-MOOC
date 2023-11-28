@@ -24,6 +24,7 @@ module.exports = {
           level: 'beginner',
           price: 50000,
           image: 'image.jpg',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
           creator: 'John Doe',
           createdAt: new Date(),
           updatedAt: new Date(),

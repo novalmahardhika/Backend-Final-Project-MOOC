@@ -11,15 +11,39 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      CourseChapter.belongsTo(models.Course,{
+        foreignKey: 'courseId'
+      })
+
+       CourseChapter.hasMany(models.courseChapterModule,{
+        foreignKey: 'chapterId',
+        onDelete: 'CASCADE' ,
+        as: 'modules'
+      })
     }
   }
   CourseChapter.init({
     title: DataTypes.STRING,
     chapterNumber: DataTypes.INTEGER,
+
+    courseId: {
+     type: DataTypes.UUID,
+     references: {
+      model: 'Courses',
+      key: 'id'
+     }
+    } ,
+    
     duration: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'CourseChapter',
+
+    defaultScope: {
+        attributes: {
+          exclude: ['createdAt','updatedAt']
+        }
+      }
   });
   return CourseChapter;
 };

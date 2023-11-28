@@ -9,19 +9,19 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
-      chapter: {
-        type: Sequelize.INTEGER
+      
+      chapterId: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'CourseChapters',
+          key: 'id'
+        }
       },
-      moduleOrder: {
-        type: Sequelize.INTEGER
+
+      title: {
+        type: Sequelize.STRING
       },
       video: {
-        type: Sequelize.STRING
-      },
-      description: {
-        type: Sequelize.STRING
-      },
-      forWho: {
         type: Sequelize.STRING
       },
       createdAt: {

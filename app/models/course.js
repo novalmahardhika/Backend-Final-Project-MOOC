@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Course.hasMany(models.CourseChapter, {
+        foreignKey: 'courseId',
+        onDelete: 'CASCADE',
+        as: 'chapters'
+      })
     }
   }
   Course.init(
@@ -18,11 +23,19 @@ module.exports = (sequelize, DataTypes) => {
       level: DataTypes.ENUM('beginner','intermediate','advance'),
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
+      description: DataTypes.STRING,
       creator: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: 'Course',
+
+      // exclude property model
+      defaultScope: {
+        attributes: {
+          exclude: ['createdAt','updatedAt']
+        }
+      }
     }
   )
 
