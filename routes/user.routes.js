@@ -7,7 +7,7 @@ const AuthMiddleware = require('../middlewares/auth')
 const isBodyNotNull = async (req, res, next) => {
   if (!Object.keys(req.body).length) {
     res.setHeader('Content-Type', 'application/json')
-    res.status(400).json({ message: 'Body is missing.' })
+    res.status(400).json({ status: "FAIL", message: 'Body is missing.' })
     return
   }
   next()
