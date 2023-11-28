@@ -1,9 +1,9 @@
 const courseRepository = require('./../repositories/course');
 const ApplicationError = require('./../../config/errors/ApplicationError');
 
-exports.findAll = async (type) => {
+exports.findAll = async (filter) => {
     try {
-        return await courseRepository.findAll(type);
+        return await courseRepository.findAll(filter);
     } catch (error) {
         throw new ApplicationError(`Failed to retrieve the list of course. ${error.message}`, 500);
     }
