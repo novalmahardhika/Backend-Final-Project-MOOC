@@ -1,4 +1,4 @@
-const { CourseChapter } = require('../models/index.js')
+const { CourseChapter,courseChapterModule } = require('../models/index.js')
 
 /**
 * Filter the course with specific condition.
@@ -6,7 +6,7 @@ const { CourseChapter } = require('../models/index.js')
 */
 const findAll = async (filter) => {
   if (typeof filter !== "object" && filter != null) return new Error('filter is not an object')
-  return await CourseChapter.findAll({ where: filter })
+  return await CourseChapter.findAll({ where: filter } )
 }
 
 const findByPk = async (id) => {

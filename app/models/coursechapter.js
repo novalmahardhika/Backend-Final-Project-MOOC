@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
       CourseChapter.belongsTo(models.Course,{
         foreignKey: 'courseId'
       })
+
+       CourseChapter.hasMany(models.courseChapterModule,{
+        foreignKey: 'chapterId',
+        onDelete: 'CASCADE' ,
+        as: 'modules'
+      })
     }
   }
   CourseChapter.init({
@@ -32,6 +38,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'CourseChapter',
+
+    defaultScope: {
+        attributes: {
+          exclude: ['createdAt','updatedAt']
+        }
+      }
   });
   return CourseChapter;
 };

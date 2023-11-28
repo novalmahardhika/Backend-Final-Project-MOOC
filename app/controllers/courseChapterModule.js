@@ -1,5 +1,6 @@
 const courseService = require('../services/courseChapterModule')
 
+
 const findAll = async (req, res) => {
     try {
         const { body } = req;
@@ -19,9 +20,13 @@ const findAll = async (req, res) => {
 
 const findSetById = async (req, res, next) => {
     try {
-        const { id } = req.params
+        const { moduleId } = req.params
         
-        req.courseChapterModule = await courseService.findByPk(id)
+        req.courseChapterModule = await courseService.findByPk(moduleId)
+
+
+
+
         next()
     } catch (error) {
         res.status(error.statusCode || 500).json({
@@ -34,7 +39,12 @@ const findSetById = async (req, res, next) => {
 const create = async (req, res) => {
     try {
         const payload = req.body
+        const { chapterId } = req.params
+        
+        payload.chapterId = chapterId
         const courseModule = await courseService.create(payload)
+
+
         
         res.json({ status: 'OK', message: 'Success', data: courseModule })
     } catch (error) {
@@ -47,8 +57,9 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
     try {
+        const { moduleId } = req.params
         const payload = req.body
-        const courseModule = await courseService.update(req.courseChapterModule.id, payload)
+        const courseModule = await courseService.update(moduleId, payload)
         res.json({ status: 'OK', message: 'Success', data: courseModule })
     } catch (error) {
         res.status(error.statusCode || 500).json({
@@ -60,7 +71,8 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
     try {
-        const { id } = req.courseChapterModule
+        const { id } = req.courseChapterModule 
+    
         await courseService.destroy({ id })
         
         res.json({ status: 'OK', message: 'Success', data: req.courseChapterModule })
@@ -84,4 +96,5 @@ module.exports = {
     update,
     destroy,
     detail,
+   
 };

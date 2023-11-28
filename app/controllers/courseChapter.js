@@ -63,10 +63,9 @@ const update = async (req, res) => {
 
 const destroy = async (req, res) => {
   try {
-
     await courseService.destroy(req.courseChapter.id)
 
-    res.json({ status: 'OK', message: 'Success', data: req.courseChapter })
+    res.json({ status: 'OK', message: 'Success', data: req.courseChapter  })
   } catch (error) {
     res.status(error.statusCode || 500).json({
       status: 'FAIL',

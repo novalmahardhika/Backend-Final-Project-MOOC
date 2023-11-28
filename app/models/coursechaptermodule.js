@@ -11,17 +11,32 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      courseChapterModule.belongsTo(models.CourseChapter, {
+        foreignKey: 'chapterId',
+      })
     }
   }
   courseChapterModule.init({
-    chapter: DataTypes.INTEGER,
-    moduleOrder: DataTypes.INTEGER,
+    
+    chapterId: {
+       type: DataTypes.UUID,
+        references: {
+          model: 'CourseChapters',
+          key: 'id'
+        }
+    },
+    title: DataTypes.STRING,
     video: DataTypes.STRING,
-    description: DataTypes.STRING,
-    forWho: DataTypes.STRING,
+
   }, {
     sequelize,
     modelName: 'courseChapterModule',
+    
+    defaultScope: {
+        attributes: {
+          exclude: ['createdAt','updatedAt']
+        }
+      }
   });
   return courseChapterModule;
 };
