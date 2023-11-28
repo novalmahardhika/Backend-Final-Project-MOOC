@@ -78,6 +78,7 @@ const detail = (req, res) => {
         const moduleLen = Object.keys(course.chapters[i].modules).length;
         for(let j = 0; j < moduleLen; j++) totalModule++;
     }
+    
     res.json({ status: 'OK', message: 'Success', data: { totalModule, ...req.course.dataValues } })
 }
 
@@ -87,5 +88,5 @@ module.exports = {
     list,
     create,
     update,
-    detail,
+    detail
 }
