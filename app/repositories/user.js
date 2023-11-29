@@ -2,7 +2,7 @@ const { User } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
 async function findAll() {
-    return await User.findAll({ attributes: { exclude: ["encryptedPassword"] } });
+    return await User.findAll({ attributes: { exclude: ["encryptedPassword", "otp", "otpExpiredAt", "verified"] } });
 }
 
 async function create(body) {
