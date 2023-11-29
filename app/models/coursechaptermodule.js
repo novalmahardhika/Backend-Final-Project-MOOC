@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'CourseChapters',
           key: 'id'
-        }
+        },
+        onDelete: "CASCADE"
     },
     title: DataTypes.STRING,
     video: DataTypes.STRING,

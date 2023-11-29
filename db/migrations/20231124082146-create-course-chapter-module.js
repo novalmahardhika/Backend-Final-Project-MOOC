@@ -15,7 +15,8 @@ module.exports = {
         references: {
           model: 'CourseChapters',
           key: 'id'
-        }
+        },
+         onDelete: 'CASCADE'
       },
 
       title: {

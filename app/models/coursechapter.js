@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
 
        CourseChapter.hasMany(models.courseChapterModule,{
         foreignKey: 'chapterId',
-        onDelete: 'CASCADE' ,
         as: 'modules'
       })
     }
@@ -31,7 +30,8 @@ module.exports = (sequelize, DataTypes) => {
      references: {
       model: 'Courses',
       key: 'id'
-     }
+     },
+     onDelete: 'CASCADE'
     } ,
     
     duration: DataTypes.INTEGER

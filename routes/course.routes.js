@@ -40,7 +40,7 @@ router.get("/module", Module.findAll )
 router.get("/module/:moduleId", Module.findSetById, Module.detail )
 router.put("/module/:moduleId", Module.update )
 router.delete("/module/:moduleId",  Module.findSetById ,Module.destroy )
-// create chapter why using endpoint chapter ? because we need assign chapter id as a value for field chapterId
+// create module, why using endpoint chapter ? because we need assign chapter id as a value for field chapterId
 router.post("/chapter/:chapterId", Module.create )
 
 
