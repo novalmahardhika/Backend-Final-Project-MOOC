@@ -49,14 +49,14 @@ const chapters = [
   {
     id: "587386f0-a011-42df-83e0-4892e9e0c7a4",
     title: 'Get Started Next JS',
-    chapterId: 'b5d70188-6b85-4d98-a975-509a80710671',
+    courseId: 'b5d70188-6b85-4d98-a975-509a80710671',
     chapterNumber: 1,
     duration: 60
   },
 {
     id: "9c0f9722-6733-48d3-8284-c865fc4fe061",
     title: 'SSR in Next JS',
-    chapterId: 'b5d70188-6b85-4d98-a975-509a80710671',
+    courseId: 'b5d70188-6b85-4d98-a975-509a80710671',
     chapterNumber: 2,
     duration: 60
   },
