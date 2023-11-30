@@ -31,12 +31,12 @@ const level = [
 ]
 
 const categories = [
-  "ui/ux_design",
-  "product_management",
-  "web_development",
-  "android_development",
-  "ios_development",
-  "data_science",
+  "UI/UX Design",
+  "Product Management",
+  "Web Development",
+  "Android Development",
+  "IOS Development",
+  "Data Science",
 ]
 
 function getRandomInt(max) {
