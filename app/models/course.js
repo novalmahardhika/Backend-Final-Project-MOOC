@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
       description: DataTypes.STRING,
+      telegram: DataTypes.STRING,
       creator: DataTypes.STRING,
     },
     {

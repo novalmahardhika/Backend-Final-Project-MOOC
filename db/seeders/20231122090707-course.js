@@ -66,6 +66,7 @@ module.exports = {
       price: Math.random()*200000+50000,
       image: 'https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+      telegram: 'https://web.telegram.org/',
       creator: 'John Doe',
       createdAt: new Date(),
       updatedAt: new Date(),
