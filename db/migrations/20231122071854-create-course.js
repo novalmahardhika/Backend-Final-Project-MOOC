@@ -12,6 +12,9 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
       },
+      category: {
+        type: Sequelize.STRING
+      },
       type: {
         type: Sequelize.ENUM('free', 'premium'),
       },
