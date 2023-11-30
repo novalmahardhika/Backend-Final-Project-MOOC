@@ -30,6 +30,15 @@ const level = [
   "advance"
 ]
 
+const categories = [
+  "ui/ux_design",
+  "product_management",
+  "web_development",
+  "android_development",
+  "ios_development",
+  "data_science",
+]
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -51,6 +60,7 @@ module.exports = {
     const courses = datas.map((data) => ({
       id: data.id,
       title: data.title,
+      category: categories[getRandomInt(categories.length)] ,
       type: type[getRandomInt(type.length)],
       level: level[getRandomInt(level.length)],
       price: Math.random()*200000+50000,
