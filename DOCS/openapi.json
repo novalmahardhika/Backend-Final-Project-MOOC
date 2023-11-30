@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost"
+      "url": "https://idea-academy.up.railway.app/"
     }
   ],
   "tags": [
@@ -29,18 +29,451 @@
     {
       "name": "chapter",
       "description": "Operations about your Chapter"
+    },
+    {
+      "name": "module",
+      "description": "Operations about your module"
     }
   ],
   "paths": {
+    "/api/v1/module": {
+      "get": {
+        "tags": [
+          "module"
+        ],
+        "summary": "Get Modules",
+        "description": "Retrieve a list of modules",
+        "operationId": "getModules",
+        "responses": {
+          "200": {
+            "description": "List of Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "oneOf": [
+                              {
+                                "$ref": "#/components/schemas/Module2"
+                              },
+                              {
+                                "$ref": "#/components/schemas/Module3"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to retrieve the list of Modules"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/chapter/{id}/": {
+      "post": {
+        "tags": [
+          "module"
+        ],
+        "summary": "Create Module",
+        "description": "create a module using the chapter ID",
+        "operationId": "createModuleInChapter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true,
+            "description": "ID of the chapter in which the module will be created"
+          }
+        ],
+        "requestBody": {
+          "description": "Module object to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Module"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Create Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Module2"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to Create Module"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/module/{id}": {
+      "get": {
+        "tags": [
+          "module"
+        ],
+        "summary": "Get a module details by ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get course details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "$ref": "#/components/schemas/Module2"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to get course by ID: Course not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "module"
+        ],
+        "summary": "Update Module",
+        "description": "Update an existing module",
+        "operationId": "updateModule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true,
+            "description": "ID of the module to be updated"
+          }
+        ],
+        "requestBody": {
+          "description": "Updated Module object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Module"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Update Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Module2"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to get course by ID: Course not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to update module by ID: ..."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "module"
+        ],
+        "summary": "Delete Module",
+        "description": "Delete an existing module",
+        "operationId": "deleteModule",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true,
+            "description": "ID of the module to be deleted"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete Module",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+                            }
+                          }
+                        },
+                        {
+                          "$ref": "#/components/schemas/Module"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to get course by ID: Course not found"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/FAIL"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "example": "Failed to Delete module by ID: ..."
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/chapter": {
       "get": {
-        "tags": ["chapter"],
+        "tags": [
+          "chapter"
+        ],
         "summary": "Get list Chapter",
         "description": "Get all Chapter list",
         "operationId": "getChapterList",
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "List of chapter",
             "content": {
               "application/json": {
                 "schema": {
@@ -57,28 +490,12 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "allOf": [
+                        "oneOf": [
                           {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "example": "82087470-5913-4137-bb57-a889d9b3030e"
-                              }
-                            }
+                            "$ref": "#/components/schemas/Chapter2"
                           },
                           {
-                            "$ref": "#/components/schemas/Chapter"
-                          },
-                          {
-                            "type": "object",
-                            "properties": {
-                              "createdAt": {
-                                "example": "2023-11-24T10:10:02.523Z"
-                              },
-                              "updatedAt": {
-                                "example": "2023-11-24T10:10:02.523Z"
-                              }
-                            }
+                            "$ref": "#/components/schemas/Chapter3"
                           }
                         ]
                       }
@@ -111,22 +528,39 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/v1/course/{id}/": {
       "post": {
-        "tags": ["chapter"],
-        "summary": "create Chapter",
-        "description": "Create chapter",
+        "tags": [
+          "chapter"
+        ],
+        "summary": "Create Chapter",
+        "description": "create chapter using course ID",
         "operationId": "createChapter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true,
+            "description": "ID of the course for which the chapter is created"
+          }
+        ],
         "requestBody": {
-          "description": "create chapter",
+          "description": "Chapter object to be created",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/Chapter"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -202,7 +636,9 @@
     },
     "/api/v1/chapter/{id}": {
       "get": {
-        "tags": ["chapter"],
+        "tags": [
+          "chapter"
+        ],
         "summary": "Get a chapter by ID",
         "parameters": [
           {
@@ -310,8 +746,10 @@
         }
       },
       "put": {
-        "tags": ["chapter"],
-        "summary": "update chapter by ID",
+        "tags": [
+          "chapter"
+        ],
+        "summary": "Update chapter by ID",
         "parameters": [
           {
             "in": "path",
@@ -432,7 +870,9 @@
         }
       },
       "delete": {
-        "tags": ["chapter"],
+        "tags": [
+          "chapter"
+        ],
         "summary": "Get a chapter by ID",
         "parameters": [
           {
@@ -542,13 +982,59 @@
     },
     "/api/v1/course": {
       "get": {
-        "tags": ["course"],
-        "summary": "Get list course",
-        "description": "Get all Courses list",
-        "operationId": "getCourseList",
+        "summary": "Get a list of courses",
+        "tags": [
+          "course"
+        ],
+        "description": "Get all course list",
+        "parameters": [
+          {
+            "name": "level",
+            "in": "query",
+            "description": "Filter courses by type (free or premium)",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "beginner",
+                "intermediate",
+                "advance"
+              ]
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Filter courses by category",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ui/ux design",
+                "web development",
+                "android development",
+                "product management",
+                "ios develoment"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter courses by type",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "free",
+                "premium"
+              ]
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "List of courses",
             "content": {
               "application/json": {
                 "schema": {
@@ -565,28 +1051,15 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "allOf": [
+                        "oneOf": [
                           {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "example": "82087470-5913-4137-bb57-a889d9b3030e"
-                              }
-                            }
+                            "$ref": "#/components/schemas/Course1"
                           },
                           {
-                            "$ref": "#/components/schemas/CourseList"
+                            "$ref": "#/components/schemas/Course2"
                           },
                           {
-                            "type": "object",
-                            "properties": {
-                              "createdAt": {
-                                "example": "2023-11-24T10:10:02.523Z"
-                              },
-                              "updatedAt": {
-                                "example": "2023-11-24T10:10:02.523Z"
-                              }
-                            }
+                            "$ref": "#/components/schemas/Course3"
                           }
                         ]
                       }
@@ -621,8 +1094,10 @@
         }
       },
       "post": {
-        "tags": ["course"],
-        "summary": "Update a course by ID",
+        "tags": [
+          "course"
+        ],
+        "summary": "Create a course",
         "requestBody": {
           "description": "Register new user",
           "content": {
@@ -707,8 +1182,10 @@
     },
     "/api/v1/course/{id}": {
       "get": {
-        "tags": ["course"],
-        "summary": "Get a course by ID",
+        "tags": [
+          "course"
+        ],
+        "summary": "Get a course details by ID",
         "parameters": [
           {
             "in": "path",
@@ -723,47 +1200,60 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "get course details",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "example": "OK"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
                     },
-                    "message": {
-                      "type": "string",
-                      "example": "success"
-                    },
-                    "data": {
-                      "allOf": [
-                        {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "example": "82087470-5913-4137-bb57-a889d9b3030e"
-                            }
-                          }
-                        },
-                        {
-                          "$ref": "#/components/schemas/CourseList"
-                        },
-                        {
-                          "type": "object",
-                          "properties": {
-                            "createdAt": {
-                              "example": "2023-11-24T10:10:02.523Z"
-                            },
-                            "updatedAt": {
-                              "example": "2023-11-24T10:10:02.523Z"
-                            }
+                    {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "allOf": [
+                              {
+                                "$ref": "#/components/schemas/Course3"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "chapters": {
+                                    "type": "array",
+                                    "items": {
+                                      "allOf": [
+                                        {
+                                          "$ref": "#/components/schemas/Chapter"
+                                        },
+                                        {
+                                          "type": "object",
+                                          "properties": {
+                                            "modules": {
+                                              "type": "array",
+                                              "items": {
+                                                "allOf": [
+                                                  {
+                                                    "$ref": "#/components/schemas/Module"
+                                                  }
+                                                ]
+                                              }
+                                            }
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  }
+                                }
+                              }
+                            ]
                           }
                         }
-                      ]
+                      }
                     }
-                  }
+                  ]
                 }
               }
             }
@@ -815,7 +1305,9 @@
         }
       },
       "put": {
-        "tags": ["course"],
+        "tags": [
+          "course"
+        ],
         "summary": "Update a course by ID",
         "parameters": [
           {
@@ -853,7 +1345,7 @@
                     },
                     "message": {
                       "type": "string",
-                      "example": "success"
+                      "example": "Data was updated successfully."
                     },
                     "data": {
                       "$ref": "#/components/schemas/CourseList"
@@ -910,8 +1402,10 @@
         }
       },
       "delete": {
-        "tags": ["course"],
-        "summary": "Delete a course by ID",
+        "tags": [
+          "course"
+        ],
+        "summary": "Delete a Course by ID",
         "parameters": [
           {
             "in": "path",
@@ -930,7 +1424,20 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Deleted"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Deleted successfully."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Course3"
+                    }
+                  }
                 }
               }
             }
@@ -984,7 +1491,9 @@
     },
     "/api/v1/register": {
       "post": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "Register new user",
         "description": "Register new user",
         "operationId": "registerUser",
@@ -1062,7 +1571,9 @@
     },
     "/api/v1/login": {
       "post": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "Login user",
         "description": "Login user",
         "operationId": "loginUser",
@@ -1167,7 +1678,9 @@
     },
     "/api/v1/users": {
       "get": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "Get all user list",
         "description": "Get all user list",
         "operationId": "getUserList",
@@ -1281,7 +1794,9 @@
     },
     "/api/v1/current-user": {
       "get": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "Get current user information",
         "description": "Get current user information",
         "operationId": "currentUser",
@@ -1352,7 +1867,10 @@
                       "type": "object",
                       "properties": {
                         "message": {
-                          "enum": ["invalid token", "jwt expired"]
+                          "enum": [
+                            "invalid token",
+                            "jwt expired"
+                          ]
                         }
                       }
                     }
@@ -1366,7 +1884,9 @@
     },
     "/api/v1/admin/register": {
       "post": {
-        "tags": ["user"],
+        "tags": [
+          "user"
+        ],
         "summary": "Register new admin",
         "description": "Register new admin",
         "operationId": "registerAdmin",
@@ -1602,7 +2122,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ROOT", "ADMIN", "MEMBER"],
+            "enum": [
+              "ROOT",
+              "ADMIN",
+              "MEMBER"
+            ],
             "example": "ROOT"
           },
           "createdAt": {
@@ -1644,7 +2168,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ROOT", "ADMIN", "MEMBER"],
+            "enum": [
+              "ROOT",
+              "ADMIN",
+              "MEMBER"
+            ],
             "example": "ADMIN"
           },
           "createdAt": {
@@ -1686,7 +2214,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["ROOT", "ADMIN", "MEMBER"],
+            "enum": [
+              "ROOT",
+              "ADMIN",
+              "MEMBER"
+            ],
             "example": "MEMBER"
           },
           "createdAt": {
@@ -1718,13 +2250,172 @@
             "type": "number",
             "example": 99000
           },
+          "forWho": {
+            "type": "string",
+            "example": "everyone"
+          },
+          "description": {
+            "type": "string",
+            "example": "Some description"
+          },
           "image": {
             "type": "string",
-            "format": "base64"
+            "format": "base64",
+            "example": "image.jpg"
           },
           "creator": {
             "type": "string",
             "example": "John Doe"
+          }
+        }
+      },
+      "Course1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Learn Basic Javascript"
+          },
+          "type": {
+            "type": "string",
+            "example": "premium"
+          },
+          "level": {
+            "type": "string",
+            "example": "beginner"
+          },
+          "price": {
+            "type": "number",
+            "example": 99000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "everyone"
+          },
+          "description": {
+            "type": "string",
+            "example": "Some description"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "image.jpg"
+          },
+          "creator": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Course2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "New Course"
+          },
+          "type": {
+            "type": "string",
+            "example": "free"
+          },
+          "level": {
+            "type": "string",
+            "example": "intermediate"
+          },
+          "price": {
+            "type": "number",
+            "example": 20000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "targetedAudience"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description for the new course"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "new_course_image.jpg"
+          },
+          "creator": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Course3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "New Course"
+          },
+          "type": {
+            "type": "string",
+            "example": "premium"
+          },
+          "level": {
+            "type": "string",
+            "example": "intermediate"
+          },
+          "price": {
+            "type": "number",
+            "example": 60000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "targetedAudience"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description for the new course"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "new_course_image.jpg"
+          },
+          "creator": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
           }
         }
       },
@@ -1740,8 +2431,147 @@
             "example": 1
           },
           "duration": {
-            "type": "number",
+            "type": "integer",
             "example": 60
+          }
+        }
+      },
+      "Chapter2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Set Up Project Tailwind with Shadcn UI"
+          },
+          "chapterNumber": {
+            "type": "number",
+            "example": 1
+          },
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "duration": {
+            "type": "integer",
+            "example": 60
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Chapter3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Set Up Project Tailwind with Shadcn UI"
+          },
+          "chapterNumber": {
+            "type": "number",
+            "example": 1
+          },
+          "courseId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "duration": {
+            "type": "integer",
+            "example": 60
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Module": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Inheritance Javascript"
+          },
+          "Video": {
+            "type": "string",
+            "example": "https://youtu.be/DwTkyMJi890"
+          }
+        }
+      },
+      "Module2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f"
+          },
+          "chapterId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Abstraction Javascript"
+          },
+          "Video": {
+            "type": "string",
+            "example": "https://youtu.be/ixOd42SEUF0"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Module3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f"
+          },
+          "chapterId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Abstraction Javascript"
+          },
+          "Video": {
+            "type": "string",
+            "example": "https://youtu.be/ixOd42SEUF0"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
           }
         }
       }
