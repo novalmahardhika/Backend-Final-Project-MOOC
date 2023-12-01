@@ -89,12 +89,11 @@ const update = async (req, payload) => {
 
 const checkUser = async (credentials) => {
     try {
-        const { email, password } = credentials;
-        if (!email || !password) {
-            throw new ApplicationError(`Please input email and password.`, 400);
-        }
+        const { email, phoneNumber, password } = credentials;
+        if (!email && !phoneNumber) throw new ApplicationError(`Please input email/phone number and password.`, 400);
+        if (!password) throw new ApplicationError(`Please input your password.`, 400);
 
-        const user = await UserRepo.findUserByEmail(email);
+        const user = email ? await UserRepo.findOne({ email }) : await UserRepo.findOne({ phoneNumber });
         const checkedPassword = await UserRepo.checkPassword(password, user.encryptedPassword);
 
         if (!user || !checkedPassword) {
