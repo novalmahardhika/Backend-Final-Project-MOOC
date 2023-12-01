@@ -10,6 +10,16 @@ const countModule = (course) => {
     return totalModule;
 }
 
+const countDuration = (course) => {
+    const chapterLen = Object.keys(course.chapters).length;
+    let totalDuration = 0;
+    for(let i = 0; i < chapterLen; i++) {
+        const moduleLen = Object.keys(course.chapters[i].modules).length;
+        for(let j = 0; j < moduleLen; j++) totalDuration += course.chapters[i].duration;
+    }
+    return totalDuration;
+}
+
 const list = async (req, res) => {
     try {
         const isFilter = Object.keys(req.query).length;
@@ -18,6 +28,7 @@ const list = async (req, res) => {
 
         for(let i = 0; i < dataLen; i++) {
             data[i].dataValues.totalModule = countModule(data[i]);
+            data[i].dataValues.totalDuration = countDuration(data[i]);
             delete data[i].dataValues.chapters;
         }
         
@@ -89,8 +100,9 @@ const destroyById = async (req, res) => {
 
 const detail = (req, res) => {
     const totalModule = countModule(req.course);
+    const totalDuration = countDuration(req.course);
     
-    res.json({ status: 'OK', message: 'Success', data: { totalModule, ...req.course.dataValues } })
+    res.json({ status: 'OK', message: 'Success', data: { totalModule, totalDuration, ...req.course.dataValues } })
 }
 
 module.exports = {
