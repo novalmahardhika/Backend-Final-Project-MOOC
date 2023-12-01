@@ -35,6 +35,16 @@ module.exports = {
         allowNull: false,
         defaultValue: 'MEMBER'
       },
+      otp: {
+        type: Sequelize.STRING
+      },
+      otpExpiredAt: {
+        type: Sequelize.DATE
+      },
+      verified: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
