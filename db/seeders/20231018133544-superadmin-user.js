@@ -22,7 +22,6 @@ module.exports = {
       phoneNumber: "082112345678",
       address: "Earth",
       role: "ROOT",
-      verified: true,
       createdAt: new Date(),
       updatedAt: new Date()
     }])

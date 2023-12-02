@@ -3,7 +3,7 @@ const router = Router()
 
 router.get('/', (req, res) => {
   res.setHeader('Content-Type', 'application/json')
-  res.json({ status: "OK", message: 'Ping successfully' })
+  res.json({ message: 'Ping successfully' })
 })
 
 module.exports = router
