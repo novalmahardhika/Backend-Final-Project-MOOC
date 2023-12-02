@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     },
 
-    otpExpired: DataTypes.Date,
+    otpExpired: DataTypes.DATE,
     otpType: DataTypes.STRING
   }, {
     sequelize,

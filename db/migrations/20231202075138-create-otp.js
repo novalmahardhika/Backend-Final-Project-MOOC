@@ -19,7 +19,7 @@ module.exports = {
           onDelete: 'CASCADE'
       },
       otpExpired: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       otpType: {
         type: Sequelize.STRING
