@@ -2,11 +2,20 @@ const { User } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
 async function findAll() {
-    return await User.findAll({ attributes: { exclude: ["encryptedPassword"] } });
+    return await User.findAll({ attributes: { exclude: ["encryptedPassword", "otp", "otpExpiredAt", "verified"] } });
 }
 
 async function create(body) {
     return await User.create(body);
+}
+
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+async function findOne(filter) {
+    if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
+    return await User.findOne({ where: filter });
 }
 
 async function findUserByEmail(email) {
@@ -24,6 +33,7 @@ async function findByPk(id) {
 module.exports = {
     findAll,
     create,
+    findOne,
     findUserByEmail,
     checkPassword,
     findByPk

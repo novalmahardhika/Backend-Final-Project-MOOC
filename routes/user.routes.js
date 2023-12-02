@@ -24,6 +24,10 @@ router.post(
 // register user
 router.post('/register', isBodyNotNull, Auth.register)
 
+router.get('/account-verify', Auth.verifyAccount)
+
+router.get('/resend-otp', Auth.resendOtp)
+
 // login user
 router.post('/login', isBodyNotNull, Auth.login)
 

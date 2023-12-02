@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+
+      static associate(models) {
+      User.hasOne(models.Otp, {
+        foreignKey: 'userId',
+        as: 'OTP'
+      })
+    }
+
   }
   User.init({
     name: DataTypes.STRING,
@@ -25,7 +33,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     phoneNumber: DataTypes.NUMBER,
     address: DataTypes.STRING,
-    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER')
+    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER'),
+    otp: DataTypes.STRING,
+    otpExpiredAt: DataTypes.DATE,
+    verified: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',
