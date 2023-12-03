@@ -27,6 +27,32 @@ const register = async (req, res) => {
     }
 }
 
+const resendOtp = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        await userService.sendOtp(req.query);
+        res.status(201).json({ status: "OK", message: "Success" });
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
+const verifyAccount = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const user = await userService.verifyAccount(req.query);
+        res.status(201).json({ status: "OK", message: "Account is verified successfully.", data: { user: user.email } });
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
 const registerAdmin = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
@@ -70,6 +96,8 @@ const currentUser = async (req, res) => {
 module.exports = {
     findAll,
     register,
+    resendOtp,
+    verifyAccount,
     registerAdmin,
     login,
     currentUser

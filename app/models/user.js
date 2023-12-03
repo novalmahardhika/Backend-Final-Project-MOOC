@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     phoneNumber: DataTypes.NUMBER,
     address: DataTypes.STRING,
-    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER')
+    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER'),
+    otp: DataTypes.STRING,
+    otpExpiredAt: DataTypes.DATE,
+    verified: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',

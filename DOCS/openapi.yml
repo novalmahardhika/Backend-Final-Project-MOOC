@@ -10,6 +10,7 @@ externalDocs:
   url: https://github.com/TheReVeaLz
 servers:
   - url: https://idea-academy.up.railway.app/
+  - url: https://idea-academy.up.railway.app/
 tags:
   - name: user
     description: Operations about your user
@@ -17,6 +18,8 @@ tags:
     description: Operations about your Course
   - name: chapter
     description: Operations about your Chapter
+  - name: module
+    description: Operations about your module
   - name: module
     description: Operations about your module
 paths:
@@ -856,7 +859,7 @@ paths:
     delete:
       tags:
         - course
-      summary: Delete a course by ID
+      summary: Delete a Course by ID
       parameters:
         - in: path
           name: id

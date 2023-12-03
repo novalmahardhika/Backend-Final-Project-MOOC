@@ -1,29 +1,39 @@
 const { User } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
-const findAll = async () => {
-    return await User.findAll({ attributes: { exclude: ["encryptedPassword"] } });
+async function findAll() {
+    return await User.findAll({ attributes: { exclude: ["encryptedPassword", "otp", "otpExpiredAt", "verified"] } });
 }
 
-const create = async (body) => {
+async function create(body) {
     return await User.create(body);
 }
 
-const findUserByEmail = async (email) => {
+/**
+* Filter the course with specific condition.
+* [filter] - Object to specifying the condition (Ex. { id: 1 })
+*/
+async function findOne(filter) {
+    if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
+    return await User.findOne({ where: filter });
+}
+
+async function findUserByEmail(email) {
     return await User.findOne({ where: { email }});
 }
 
-const checkPassword = async (password, hash) => {
+async function checkPassword(password, hash) {
     return await bcrypt.compare(password, hash);
 }
 
-const findByPk = async (id) => {
+async function findByPk(id) {
     return await User.findByPk(id);
 }
 
 module.exports = {
     findAll,
     create,
+    findOne,
     findUserByEmail,
     checkPassword,
     findByPk

@@ -551,6 +551,19 @@
             "description": "ID of the course for which the chapter is created"
           }
         ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+            },
+            "required": true,
+            "description": "ID of the course for which the chapter is created"
+          }
+        ],
         "requestBody": {
           "description": "Chapter object to be created",
           "required": true,
@@ -2457,6 +2470,156 @@
           "telegram": {
             "type": "string",
             "example": "https://web.telegram.org/"
+          },
+          "creator": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Course1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "Learn Basic Javascript"
+          },
+          "type": {
+            "type": "string",
+            "example": "premium"
+          },
+          "level": {
+            "type": "string",
+            "example": "beginner"
+          },
+          "price": {
+            "type": "number",
+            "example": 99000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "everyone"
+          },
+          "description": {
+            "type": "string",
+            "example": "Some description"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "image.jpg"
+          },
+          "creator": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Course2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "New Course"
+          },
+          "type": {
+            "type": "string",
+            "example": "free"
+          },
+          "level": {
+            "type": "string",
+            "example": "intermediate"
+          },
+          "price": {
+            "type": "number",
+            "example": 20000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "targetedAudience"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description for the new course"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "new_course_image.jpg"
+          },
+          "creator": {
+            "type": "string",
+            "example": "Jane Doe"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "example": "2023-10-18T13:42:59.162Z"
+          }
+        }
+      },
+      "Course3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string",
+            "example": "New Course"
+          },
+          "type": {
+            "type": "string",
+            "example": "premium"
+          },
+          "level": {
+            "type": "string",
+            "example": "intermediate"
+          },
+          "price": {
+            "type": "number",
+            "example": 60000
+          },
+          "forWho": {
+            "type": "string",
+            "example": "targetedAudience"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description for the new course"
+          },
+          "image": {
+            "type": "string",
+            "format": "base64",
+            "example": "new_course_image.jpg"
           },
           "creator": {
             "type": "string",
