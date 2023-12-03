@@ -41,7 +41,7 @@
         "tags": [
           "module"
         ],
-        "summary": "Get Modules",
+        "summary": "Get module",
         "description": "Retrieve a list of modules",
         "operationId": "getModules",
         "responses": {
@@ -107,7 +107,7 @@
         "tags": [
           "module"
         ],
-        "summary": "Create Module",
+        "summary": "Create module",
         "description": "create a module using the chapter ID",
         "operationId": "createModuleInChapter",
         "parameters": [
@@ -198,7 +198,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+              "example": "e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f"
             },
             "required": true
           }
@@ -261,7 +261,7 @@
         "tags": [
           "module"
         ],
-        "summary": "Update Module",
+        "summary": "Update module",
         "description": "Update an existing module",
         "operationId": "updateModule",
         "parameters": [
@@ -364,7 +364,7 @@
         "tags": [
           "module"
         ],
-        "summary": "Delete Module",
+        "summary": "Delete module",
         "description": "Delete an existing module",
         "operationId": "deleteModule",
         "parameters": [
@@ -468,7 +468,7 @@
         "tags": [
           "chapter"
         ],
-        "summary": "Get list Chapter",
+        "summary": "Get list chapter",
         "description": "Get all Chapter list",
         "operationId": "getChapterList",
         "responses": {
@@ -535,7 +535,7 @@
         "tags": [
           "chapter"
         ],
-        "summary": "Create Chapter",
+        "summary": "Create chapter",
         "description": "create chapter using course ID",
         "operationId": "createChapter",
         "parameters": [
@@ -647,7 +647,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+              "example": "b1d45d20-5307-4f4e-bb5d-44fe9bb5a65d"
             },
             "required": true
           }
@@ -982,7 +982,7 @@
     },
     "/api/v1/course": {
       "get": {
-        "summary": "Get a list of courses",
+        "summary": "Get a list of course",
         "tags": [
           "course"
         ],
@@ -991,7 +991,7 @@
           {
             "name": "level",
             "in": "query",
-            "description": "Filter courses by type (free or premium)",
+            "description": "Filter courses by level",
             "required": false,
             "schema": {
               "type": "string",
@@ -1010,18 +1010,18 @@
             "schema": {
               "type": "string",
               "enum": [
-                "ui/ux design",
-                "web development",
-                "android development",
-                "product management",
-                "ios develoment"
+                "Product Management",
+                "Web Development",
+                "UI/UX Design",
+                "Android Development",
+                "Data Science"
               ]
             }
           },
           {
             "name": "type",
             "in": "query",
-            "description": "Filter courses by type",
+            "description": "Filter courses by type (free or premium)",
             "required": false,
             "schema": {
               "type": "string",
@@ -1029,6 +1029,24 @@
                 "free",
                 "premium"
               ]
+            }
+          },
+          {
+            "name": "title",
+            "in": "query",
+            "description": "Filter courses by title",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "creator",
+            "in": "query",
+            "description": "Filter courses by creator",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -1109,7 +1127,7 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {
@@ -1193,7 +1211,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+              "example": "b5d70188-6b85-4d98-a975-509a80710671"
             },
             "required": true
           }
@@ -1316,7 +1334,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "example": "82087470-5913-4137-bb57-a889d9b3030e"
+              "example": "b5d70188-6b85-4d98-a975-509a80710671"
             },
             "required": true
           }
@@ -1405,7 +1423,7 @@
         "tags": [
           "course"
         ],
-        "summary": "Delete a Course by ID",
+        "summary": "Delete a course by ID",
         "parameters": [
           {
             "in": "path",
@@ -2129,6 +2147,10 @@
             ],
             "example": "ROOT"
           },
+          "country": {
+            "type": "string",
+            "example": "indonesia"
+          },
           "createdAt": {
             "type": "string",
             "example": "2023-10-18T13:42:59.162Z"
@@ -2250,10 +2272,6 @@
             "type": "number",
             "example": 99000
           },
-          "forWho": {
-            "type": "string",
-            "example": "everyone"
-          },
           "description": {
             "type": "string",
             "example": "Some description"
@@ -2266,6 +2284,14 @@
           "creator": {
             "type": "string",
             "example": "John Doe"
+          },
+          "category": {
+            "type": "string",
+            "example": "Product Management"
+          },
+          "telegram": {
+            "type": "string",
+            "example": "https://web.telegram.org/"
           }
         }
       },
@@ -2303,7 +2329,15 @@
           "image": {
             "type": "string",
             "format": "base64",
-            "example": "image.jpg"
+            "example": "https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg"
+          },
+          "category": {
+            "type": "string",
+            "example": "Product Management"
+          },
+          "telegram": {
+            "type": "string",
+            "example": "https://web.telegram.org/"
           },
           "creator": {
             "type": "string",
@@ -2353,7 +2387,15 @@
           "image": {
             "type": "string",
             "format": "base64",
-            "example": "new_course_image.jpg"
+            "example": "https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg"
+          },
+          "category": {
+            "type": "string",
+            "example": "Web Development"
+          },
+          "telegram": {
+            "type": "string",
+            "example": "https://web.telegram.org/"
           },
           "creator": {
             "type": "string",
@@ -2403,7 +2445,15 @@
           "image": {
             "type": "string",
             "format": "base64",
-            "example": "new_course_image.jpg"
+            "example": "https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg"
+          },
+          "category": {
+            "type": "string",
+            "example": "Web Development"
+          },
+          "telegram": {
+            "type": "string",
+            "example": "https://web.telegram.org/"
           },
           "creator": {
             "type": "string",
