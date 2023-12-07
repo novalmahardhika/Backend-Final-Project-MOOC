@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 const { otpTypeList, sendMailType } = require("../../config/struct.js")
 const ApplicationError = require("../../config/errors/ApplicationError.js");
 
+
 const transporter = nodemailer.createTransport({
     port: 465,
     host: "smtp.gmail.com",
@@ -11,6 +12,7 @@ const transporter = nodemailer.createTransport({
     },
     secure: true
 });
+
 
 async function sendMailOtp(data) {
     const verifyURL = (data.otpType == "verify") ? "http://localhost/api/v1/account-verify" : "http://localhost/api/v1/forgot-password"
@@ -33,6 +35,7 @@ async function sendMailOtp(data) {
         `,
     };
     
+
     try {
         await transporter.sendMail(mail);
     } catch (err) {
@@ -44,6 +47,7 @@ async function sendMailOtp(data) {
 exports.sendMail = async (data, type) => {
     switch(type) {
         case sendMailType.otp:
-            return await sendMailOtp(data);
+           return await sendMailOtp(data);
     }
+
 }

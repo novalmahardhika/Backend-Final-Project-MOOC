@@ -18,6 +18,7 @@ router.post('/admin/register',isBodyNotNull,AuthMiddleware.authorize,AuthMiddlew
 // register user
 router.post('/register', isBodyNotNull, Auth.register)
 
+
 router.post('/account-verify', Auth.verifyAccount)
 
 router.post('/forgot-password', Auth.forgotPassword)
@@ -25,6 +26,7 @@ router.post('/forgot-password', Auth.forgotPassword)
 router.put('/forgot-password', Auth.forgotPassword)
 
 router.post('/resend-otp', Auth.resendOtp)
+
 
 // login user
 router.post('/login', isBodyNotNull, Auth.login)

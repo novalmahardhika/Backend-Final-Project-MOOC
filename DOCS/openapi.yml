@@ -9,7 +9,7 @@ externalDocs:
   description: My Github
   url: https://github.com/TheReVeaLz
 servers:
-  - url: http://localhost
+  - url: https://idea-academy.up.railway.app/
 tags:
   - name: user
     description: Operations about your user
@@ -17,17 +17,274 @@ tags:
     description: Operations about your Course
   - name: chapter
     description: Operations about your Chapter
+  - name: module
+    description: Operations about your module
 paths:
+  /api/v1/module:
+    get:
+      tags:
+        - module
+      summary: Get module
+      description: Retrieve a list of modules
+      operationId: getModules
+      responses:
+        '200':
+            description: List of Module
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/OK'
+                    - type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            oneOf:
+                              - $ref: '#/components/schemas/Module2'
+                              - $ref: '#/components/schemas/Module3'
+                              
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to retrieve the list of Modules'
+                        
+  /api/v1/chapter/{id}/:
+    post:
+      tags:
+        - module
+      summary: Create module
+      description: create a module using the chapter ID
+      operationId: createModuleInChapter
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+          description: ID of the chapter in which the module will be created
+
+      requestBody:
+        description: Module object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+
+      responses:
+        '200':
+            description: Create Module
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/OK'
+                    - type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Module2'
+                            
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to Create Module'
+                        
+  /api/v1/module/{id}:
+    get:
+      tags:
+        - module
+      summary: Get a module details by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: 'e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f'
+          required: true
+          
+      responses:
+        '200':
+          description:  get course details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/OK'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/Module2'
+                            
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+                        
+    put:
+      tags:
+        - module
+      summary: Update module
+      description: Update an existing module
+      operationId: updateModule
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+          description: ID of the module to be updated
+
+      requestBody:
+        description: Updated Module object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Module'
+
+      responses:
+        '200':
+            description: Update Module
+            content:
+              application/json:
+                schema:
+                  allOf:
+                    - $ref: '#/components/schemas/OK'
+                    - type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            $ref: '#/components/schemas/Module2'
+                            
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+                        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to update module by ID: ...'
+                        
+    delete:
+      tags:
+        - module
+      summary: Delete module
+      description: Delete an existing module
+      operationId: deleteModule
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+          description: ID of the module to be deleted
+
+      responses:
+        '200':
+          description: Delete Module
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'Success'
+                  data:
+                    allOf:
+                      - type: object
+                        properties:
+                          id:
+                            example: 82087470-5913-4137-bb57-a889d9b3030e
+                      - $ref: '#/components/schemas/Module'
+                          
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to get course by ID: Course not found'
+                        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Failed to Delete module by ID: ...'
+                        
   /api/v1/chapter:
     get:
       tags:
         - chapter
-      summary: Get list Chapter
+      summary: Get list chapter
       description: Get all Chapter list
       operationId: getChapterList
       responses:
         '200':
-          description: Successful operation
+          description: List of chapter
           content:
             application/json:
               schema:
@@ -42,19 +299,10 @@ paths:
                   data:
                     type: array
                     items:
-                      allOf:
-                        - type: object
-                          properties:
-                            id:
-                              example: 82087470-5913-4137-bb57-a889d9b3030e
-                        - $ref: '#/components/schemas/Chapter'
-                        - type: object
-                          properties:
-                            createdAt:
-                              example: 2023-11-24T10:10:02.523Z
-                            updatedAt:
-                              example: 2023-11-24T10:10:02.523Z
-
+                      oneOf:
+                        - $ref: '#/components/schemas/Chapter2'
+                        - $ref: '#/components/schemas/Chapter3'
+                        
         '500':
           description: Invalid operation
           content:
@@ -66,20 +314,31 @@ paths:
                     properties:
                       message:
                         example: Failed to retrieve the list of chapter
-
+                        
+  /api/v1/course/{id}/:
     post:
       tags:
         - chapter
-      summary: create Chapter
-      description: Create chapter
+      summary: Create chapter
+      description: create chapter using course ID
       operationId: createChapter
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: '82087470-5913-4137-bb57-a889d9b3030e'
+          required: true
+          description: ID of the course for which the chapter is created
+
       requestBody:
-        description: create chapter
+        description: Chapter object to be created
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Chapter'
-        required: true
 
       responses:
         '200':
@@ -132,7 +391,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: 'b1d45d20-5307-4f4e-bb5d-44fe9bb5a65d'
           required: true
 
       responses:
@@ -186,10 +445,11 @@ paths:
                     properties:
                       message:
                         example: 'Failed to get course by ID: ...'
+                        
     put:
       tags:
         - chapter
-      summary: update chapter by ID
+      summary: Update chapter by ID
       parameters:
         - in: path
           name: id
@@ -327,14 +587,62 @@ paths:
 
   /api/v1/course:
     get:
+      summary: Get a list of course
       tags:
         - course
-      summary: Get list course
-      description: Get all Courses list
-      operationId: getCourseList
+      description: Get all course list
+      parameters:
+        - name: level
+          in: query
+          description: Filter courses by level
+          required: false
+          schema:
+            type: string
+            enum:
+              - beginner
+              - intermediate
+              - advance
+              
+        - name: category
+          in: query
+          description: Filter courses by category
+          required: false
+          schema:
+            type: string
+            enum:
+              - Product Management
+              - Web Development
+              - UI/UX Design
+              - Android Development
+              - Data Science
+          
+        - name: type
+          in: query
+          description: Filter courses by type (free or premium)
+          required: false
+          schema:
+            type: string
+            enum:
+              - free
+              - premium
+              
+        - name: title
+          in: query
+          description: Filter courses by title
+          required: false
+          schema:
+            type: string
+            
+        - name: creator
+          in: query
+          description: Filter courses by creator
+          required: false
+          schema:
+            type: string
+              
       responses:
         '200':
-          description: Successful operation
+          description: List of courses
           content:
             application/json:
               schema:
@@ -349,18 +657,11 @@ paths:
                   data:
                     type: array
                     items:
-                      allOf:
-                        - type: object
-                          properties:
-                            id:
-                              example: 82087470-5913-4137-bb57-a889d9b3030e
-                        - $ref: '#/components/schemas/CourseList'
-                        - type: object
-                          properties:
-                            createdAt:
-                              example: 2023-11-24T10:10:02.523Z
-                            updatedAt:
-                              example: 2023-11-24T10:10:02.523Z
+                      oneOf:
+                        - $ref: '#/components/schemas/Course1'
+                        - $ref: '#/components/schemas/Course2'
+                        - $ref: '#/components/schemas/Course3'
+                        
         '500':
           description: Invalid operation
           content:
@@ -376,7 +677,7 @@ paths:
     post:
       tags:
         - course
-      summary: Update a course by ID
+      summary: Create a course
       requestBody:
         description: Register new user
         content:
@@ -385,7 +686,7 @@ paths:
               $ref: '#/components/schemas/CourseList'
 
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -411,6 +712,7 @@ paths:
                             example: 2023-11-24T10:10:02.523Z
                           updatedAt:
                             example: 2023-11-24T10:10:02.523Z
+                            
         '500':
           description: Invalid operation
           content:
@@ -427,42 +729,46 @@ paths:
     get:
       tags:
         - course
-      summary: Get a course by ID
+      summary: Get a course details by ID
       parameters:
         - in: path
           name: id
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: 'b5d70188-6b85-4d98-a975-509a80710671'
           required: true
       responses:
+      
         '200':
-          description: Successful operation
+          description:  get course details
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: 'OK'
-                  message:
-                    type: string
-                    example: 'success'
-                  data:
-                    allOf:
-                      - type: object
-                        properties:
-                          id:
-                            example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/CourseList'
-                      - type: object
-                        properties:
-                          createdAt:
-                            example: 2023-11-24T10:10:02.523Z
-                          updatedAt:
-                            example: 2023-11-24T10:10:02.523Z
+                allOf:
+                  - $ref: '#/components/schemas/OK'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/Course3'
+                            - type: object
+                              properties:
+                                chapters:
+                                  type: array
+                                  items:
+                                    allOf:
+                                      - $ref: '#/components/schemas/Chapter'
+                                      - type: object
+                                        properties:
+                                          modules:
+                                            type: array
+                                            items:
+                                              allOf:
+                                                - $ref: '#/components/schemas/Module'
+                                                
         '404':
           description: Id Not found
           content:
@@ -496,8 +802,9 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: 'b5d70188-6b85-4d98-a975-509a80710671'
           required: true
+          
       requestBody:
         description: Register new user
         content:
@@ -518,9 +825,10 @@ paths:
                     example: 'OK'
                   message:
                     type: string
-                    example: 'success'
+                    example: 'Data was updated successfully.'
                   data:
                     $ref: '#/components/schemas/CourseList'
+                    
         '404':
           description: Id Not found
           content:
@@ -564,7 +872,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Deleted'
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'Deleted successfully.'
+                  data:
+                    $ref: '#/components/schemas/Course3'
+                    
         '404':
           description: Id Not found
           content:
@@ -603,6 +921,7 @@ paths:
             schema:
               $ref: '#/components/schemas/MemberRequest'
         required: true
+        
       responses:
         '201':
           description: Successful operation
@@ -616,6 +935,7 @@ paths:
                     example: Data was created successfully.
                   data:
                     $ref: '#/components/schemas/User3'
+                    
         '400':
           description: Bad request
           content:
@@ -626,6 +946,7 @@ paths:
                   message:
                     type: string
                     example: Body is missing.
+                    
         '500':
           description: Invalid operation
           content:
@@ -637,6 +958,7 @@ paths:
                     properties:
                       message:
                         example: Failed to create data. Validation error
+                        
   /api/v1/login:
     post:
       tags:
@@ -651,6 +973,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RootLogin'
         required: true
+        
       responses:
         '200':
           description: Successful operation
@@ -674,6 +997,7 @@ paths:
                                 type: string
                                 example: >-
                                   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyZDZkNzkyLWZlNzUtNDYxMy1iMWMyLTU3OWVkMDU2NGIzYyIsImlhdCI6MTY5NzgzNDE3OSwiZXhwIjoxNjk3ODM3Nzc5fQ.JHrFKoKLtze1NwbWoKLsZR3-Gs3LtT5MtHJG-WVmyPs
+                                  
         '400':
           description: Invalid operation
           content:
@@ -685,6 +1009,7 @@ paths:
                     properties:
                       message:
                         example: Please input email and password.
+                        
         '404':
           description: Email or password is invalid
           content:
@@ -696,6 +1021,7 @@ paths:
                     properties:
                       message:
                         example: Email or password is invalid.
+                        
   /api/v1/users:
     get:
       tags:
@@ -722,6 +1048,7 @@ paths:
                           oneOf:
                             - $ref: '#/components/schemas/User'
                             - $ref: '#/components/schemas/User2'
+                            
         '401':
           description: Unauthorized
           content:
@@ -733,6 +1060,7 @@ paths:
                     properties:
                       message:
                         example: Unauthorized
+                        
         '403':
           description: Forbidden access
           content:
@@ -755,6 +1083,7 @@ paths:
                     properties:
                       message:
                         example: jwt expired
+                        
   /api/v1/current-user:
     get:
       tags:
@@ -764,6 +1093,7 @@ paths:
       operationId: currentUser
       security:
         - api_key: []
+        
       responses:
         '200':
           description: Successful operation
@@ -779,6 +1109,7 @@ paths:
                         example: Login successfully.
                       data:
                         $ref: '#/components/schemas/User'
+                        
         '400':
           description: Invalid operation
           content:
@@ -790,6 +1121,7 @@ paths:
                     properties:
                       message:
                         example: Please input email and password.
+                        
         '500':
           description: Invalid token or JWT expired
           content:
@@ -803,6 +1135,7 @@ paths:
                         enum:
                           - invalid token
                           - jwt expired
+                          
   /api/v1/admin/register:
     post:
       tags:
@@ -819,6 +1152,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterAdmin'
         required: true
+        
       responses:
         '201':
           description: Successful operation
@@ -832,6 +1166,7 @@ paths:
                     example: Data was created successfully.
                   data:
                     $ref: '#/components/schemas/User2'
+                    
         '400':
           description: Bad request
           content:
@@ -842,6 +1177,7 @@ paths:
                   message:
                     type: string
                     example: Body is missing.
+                    
         '401':
           description: Unauthorized
           content:
@@ -853,6 +1189,7 @@ paths:
                     properties:
                       message:
                         example: Unauthorized
+                        
         '500':
           description: Invalid operation
           content:
@@ -864,6 +1201,7 @@ paths:
                     properties:
                       message:
                         example: Failed to create data. Validation error
+                        
 components:
   schemas:
     OK:
@@ -913,6 +1251,7 @@ components:
         address:
           type: string
           example: Earth
+          
     RegisterAdmin:
       type: object
       properties:
@@ -931,6 +1270,7 @@ components:
         address:
           type: string
           example: Earth
+          
     RootLogin:
       type: object
       properties:
@@ -940,6 +1280,7 @@ components:
         password:
           type: string
           example: root
+          
     User:
       type: object
       properties:
@@ -968,12 +1309,16 @@ components:
             - ADMIN
             - MEMBER
           example: ROOT
+        country:
+          type: string
+          example: indonesia
         createdAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
         updatedAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
+          
     User2:
       type: object
       properties:
@@ -1059,13 +1404,155 @@ components:
         price:
           type: number
           example: 99000
+        description:
+          type: string
+          example: Some description
         image:
           type: string
           format: base64
+          example: image.jpg
         creator:
           type: string
           example: John Doe
-
+        category:
+          type: string
+          example: Product Management
+        telegram:
+          type: string
+          example: https://web.telegram.org/
+        
+    Course1:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Learn Basic Javascript
+        type:
+          type: string
+          example: premium
+        level:
+          type: string
+          example: beginner
+        price:
+          type: number
+          example: 99000
+        forWho:
+          type: string
+          example: everyone
+        description:
+          type: string
+          example: Some description
+        image:
+          type: string
+          format: base64
+          example: https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg
+        category:
+          type: string
+          example: Product Management
+        telegram:
+          type: string
+          example: https://web.telegram.org/
+        creator:
+          type: string
+          example: John Doe
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        
+    Course2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: New Course
+        type:
+          type: string
+          example: free
+        level:
+          type: string
+          example: intermediate
+        price:
+          type: number
+          example: 20000
+        forWho:
+          type: string
+          example: targetedAudience
+        description:
+          type: string
+          example: Description for the new course
+        image:
+          type: string
+          format: base64
+          example: https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg
+        category:
+          type: string
+          example: Web Development
+        telegram:
+          type: string
+          example: https://web.telegram.org/
+        creator:
+          type: string
+          example: Jane Doe
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+          
+    Course3:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: New Course
+        type:
+          type: string
+          example: premium
+        level:
+          type: string
+          example: intermediate
+        price:
+          type: number
+          example: 60000
+        forWho:
+          type: string
+          example: targetedAudience
+        description:
+          type: string
+          example: Description for the new course
+        image:
+          type: string
+          format: base64
+          example: https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg
+        category:
+          type: string
+          example: Web Development
+        telegram:
+          type: string
+          example: https://web.telegram.org/
+        creator:
+          type: string
+          example: Jane Doe
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+          
     Chapter:
       type: object
       properties:
@@ -1076,9 +1563,115 @@ components:
           type: number
           example: 1
         duration:
-          type: number
+          type: integer
           example: 60
-
+          
+    Chapter2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Set Up Project Tailwind with Shadcn UI
+        chapterNumber:
+          type: number
+          example: 1
+        courseId:
+          type: string
+          format: uuid
+        duration:
+          type: integer
+          example: 60
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+          
+    Chapter3:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Set Up Project Tailwind with Shadcn UI
+        chapterNumber:
+          type: number
+          example: 1
+        courseId:
+          type: string
+          format: uuid
+        duration:
+          type: integer
+          example: 60
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        
+    Module:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Inheritance Javascript
+        Video: 
+          type: string
+          example: https://youtu.be/DwTkyMJi890
+          
+    Module2:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f
+        chapterId:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Abstraction Javascript
+        Video: 
+          type: string
+          example: https://youtu.be/ixOd42SEUF0
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+          
+    Module3:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f
+        chapterId:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: Abstraction Javascript
+        Video: 
+          type: string
+          example: https://youtu.be/ixOd42SEUF0
+        createdAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+        updatedAt:
+          type: string
+          example: '2023-10-18T13:42:59.162Z'
+          
   securitySchemes:
     api_key:
       type: apiKey

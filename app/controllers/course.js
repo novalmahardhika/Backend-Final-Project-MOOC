@@ -1,13 +1,20 @@
 const courseService = require('../services/course')
 
-const countModule = (course) => {
+const appendCourseInformation = (course) => {
     const chapterLen = Object.keys(course.chapters).length;
-    let totalModule = 0;
+    let totalModule = 0, totalDuration = 0;
+    
     for(let i = 0; i < chapterLen; i++) {
         const moduleLen = Object.keys(course.chapters[i].modules).length;
+        totalDuration += course.chapters[i].duration;
+
         for(let j = 0; j < moduleLen; j++) totalModule++;
     }
-    return totalModule;
+
+    const { chapters } = course.dataValues;
+    delete course.dataValues.chapters;
+
+    return { ...course.dataValues, totalModule, totalDuration, chapters };
 }
 
 const list = async (req, res) => {
@@ -17,7 +24,7 @@ const list = async (req, res) => {
         const dataLen = Object.keys(data).length;
 
         for(let i = 0; i < dataLen; i++) {
-            data[i].dataValues.totalModule = countModule(data[i]);
+            data[i].dataValues = appendCourseInformation(data[i])
             delete data[i].dataValues.chapters;
         }
         
@@ -88,9 +95,7 @@ const destroyById = async (req, res) => {
 }
 
 const detail = (req, res) => {
-    const totalModule = countModule(req.course);
-    
-    res.json({ status: 'OK', message: 'Success', data: { totalModule, ...req.course.dataValues } })
+    res.json({ status: 'OK', message: 'Success', data: appendCourseInformation(req.course) })
 }
 
 module.exports = {

@@ -6,11 +6,13 @@ const { sendMail } = require("./mailer.js");
 const { otpTypeList, sendMailType } = require("../../config/struct.js")
 
 
+
 const generateOTP = (length) => {
     let otp = "";
     for(let i = 0; i < length; i++) otp += String(Math.floor(Math.random() * 9));
     return otp;
 }
+
 
 const sendOtp = async (user, otpType) => {
     let otp = await OtpRepo.findOne({ userId: user.id });
@@ -56,6 +58,7 @@ const verifyAccount = async (payload) => {
 
     if (user.verified) throw new ApplicationError("Account is verified already.", 400);
     validatingOtp(otpDB, otp, otpTypeList.verify);
+  
     user.set({ verified: true, otpExpiredAt: null, otp: null });
     user.save();
     return user;
@@ -113,6 +116,7 @@ const create = async (payload, isAdmin) => {
             role: isAdmin ? 'ADMIN': 'MEMBER'
         });
         
+
         await sendOtp(user, "verify");
         delete user.dataValues.verified;
 

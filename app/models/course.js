@@ -18,11 +18,13 @@ module.exports = (sequelize, DataTypes) => {
   Course.init(
     {
       title: DataTypes.STRING,
+      category: DataTypes.STRING,
       type: DataTypes.ENUM('free','premium'),
       level: DataTypes.ENUM('beginner','intermediate','advance'),
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
       description: DataTypes.STRING,
+      telegram: DataTypes.STRING,
       creator: DataTypes.STRING,
     },
     {

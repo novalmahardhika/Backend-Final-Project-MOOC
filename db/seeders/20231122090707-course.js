@@ -30,6 +30,15 @@ const level = [
   "advance"
 ]
 
+const categories = [
+  "UI/UX Design",
+  "Product Management",
+  "Web Development",
+  "Android Development",
+  "IOS Development",
+  "Data Science",
+]
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -51,11 +60,13 @@ module.exports = {
     const courses = datas.map((data) => ({
       id: data.id,
       title: data.title,
+      category: categories[getRandomInt(categories.length)] ,
       type: type[getRandomInt(type.length)],
       level: level[getRandomInt(level.length)],
       price: Math.random()*200000+50000,
       image: 'https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg',
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+      telegram: 'https://web.telegram.org/',
       creator: 'John Doe',
       createdAt: new Date(),
       updatedAt: new Date(),
