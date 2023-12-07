@@ -14,13 +14,7 @@ const isBodyNotNull = async (req, res, next) => {
 }
 
 // register admin
-router.post(
-  '/admin/register',
-  isBodyNotNull,
-  AuthMiddleware.authorize,
-  AuthMiddleware.isRoot,
-  Auth.registerAdmin
-)
+router.post('/admin/register',isBodyNotNull,AuthMiddleware.authorize,AuthMiddleware.isRoot,Auth.registerAdmin)
 // register user
 router.post('/register', isBodyNotNull, Auth.register)
 
@@ -36,12 +30,8 @@ router.post('/resend-otp', Auth.resendOtp)
 router.post('/login', isBodyNotNull, Auth.login)
 
 // get user
-router.get(
-  '/users',
-  AuthMiddleware.authorize,
-  AuthMiddleware.isRootOrAdmin,
-  Auth.findAll
-)
+router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.findAll)
+
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
 
