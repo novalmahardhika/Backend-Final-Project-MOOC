@@ -18,10 +18,6 @@ async function findOne(filter) {
     return await User.findOne({ where: filter });
 }
 
-async function findUserByEmail(email) {
-    return await User.findOne({ where: { email }});
-}
-
 async function checkPassword(password, hash) {
     return await bcrypt.compare(password, hash);
 }
@@ -34,7 +30,6 @@ module.exports = {
     findAll,
     create,
     findOne,
-    findUserByEmail,
     checkPassword,
     findByPk
 }

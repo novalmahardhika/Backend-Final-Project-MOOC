@@ -9,7 +9,6 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('gen_random_uuid()')
       },
-      
       userId: {
           type: Sequelize.UUID,
           references: {
@@ -18,7 +17,10 @@ module.exports = {
           },
           onDelete: 'CASCADE'
       },
-      otpExpired: {
+      otp: {
+        type: Sequelize.STRING
+      },
+      otpExpiredAt: {
         type: Sequelize.DATE
       },
       otpType: {

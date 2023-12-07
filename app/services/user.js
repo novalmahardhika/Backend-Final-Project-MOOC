@@ -1,7 +1,10 @@
 const ApplicationError = require("../../config/errors/ApplicationError.js");
 const UserRepo = require("../repositories/user.js");
+const OtpRepo = require("../repositories/otp.js");
 const Auth = require("./auth.js");
 const { sendMail } = require("./mailer.js");
+const { otpTypeList, sendMailType } = require("../../config/struct.js")
+
 
 const generateOTP = (length) => {
     let otp = "";
@@ -9,35 +12,77 @@ const generateOTP = (length) => {
     return otp;
 }
 
-const verifyAccount = async (query) => {
-    const { email, otp } = query;
-    const user = await UserRepo.findUserByEmail(email);
-    const today = new Date();
+const sendOtp = async (user, otpType) => {
+    let otp = await OtpRepo.findOne({ userId: user.id });
+    if (!otp) otp = await OtpRepo.create({
+        userId: user.id
+    });
 
-    if (!user) throw new ApplicationError(`Failed to verify your account.`, 400);
+    const today = new Date();
+    if (otp.otpExpiredAt < today) {
+        const generatedOtp = generateOTP(6);
+        const otpExpiredAt = new Date();
+        otpExpiredAt.setMinutes(otpExpiredAt.getMinutes() + 5);
+        
+        otp.set({ otp: generatedOtp, otpExpiredAt });
+    }
+    if (otpType) otp.set({ otpType });
+    otp.save();
+
+    return await sendMail({ email: user.email, otp: otp.otp, otpType: otp.otpType }, sendMailType.otp);
+}
+
+const resendOtp = async (payload) => {
+    const { email } = payload;
+    const user = await UserRepo.findOne({ email });
+    if (!user) throw new ApplicationError(`Your account is not exist.`, 400);
+    
+    await sendOtp(user);
+}
+
+const validatingOtp = (otp, otpInput, type) => {
+    const today = new Date();
+    if (otp.otpExpiredAt < today) throw new ApplicationError("OTP is expired.", 400);
+    if (otp.otp !== otpInput || otp.otpType !== type) throw new ApplicationError("OTP is invalid", 400);
+}
+
+const verifyAccount = async (payload) => {
+    const { email, otp } = payload;
+    const user = await UserRepo.findOne({ email });
+    if (!user) throw new ApplicationError(`Your account is not exist.`, 400);
+    
+    const otpDB = await OtpRepo.findOne({ userId: user.id });
+    if (!otpDB) throw new ApplicationError(`Request your account verify.`, 400);
+
     if (user.verified) throw new ApplicationError("Account is verified already.", 400);
-    if (user.otpExpiredAt < today) throw new ApplicationError("OTP is expired.", 400);
-    if (user.otp !== otp) throw new ApplicationError("OTP is invalid", 400);
+    validatingOtp(otpDB, otp, otpTypeList.verify);
     user.set({ verified: true, otpExpiredAt: null, otp: null });
     user.save();
     return user;
 }
 
-const sendOtp = async (payload) => {
+const forgotPassword = async (payload) => {
     const { email } = payload;
-    const user = await UserRepo.findUserByEmail(email);
-    const today = new Date();
+    const user = await UserRepo.findOne({ email });
+    if (!user) throw new ApplicationError(`Your account is not exist.`, 400);
+    if (!user.verified) throw new ApplicationError("Please verify your email first.", 400);
 
-    if (user.otpExpiredAt < today) {
-        const otp = generateOTP(6);
-        const otpExpiredAt = new Date();
-        otpExpiredAt.setMinutes(otpExpiredAt.getMinutes() + 5);
-        
-        user.set({ otp, otpExpiredAt })
-        user.save();
-    }
+    await sendOtp(user, otpTypeList.resetPassword);
+}
+
+const setPasswordByOtp = async (payload) => {
+    const { email, otp, password } = payload;
+    const user = await UserRepo.findOne({ email });
+    if (!user) throw new ApplicationError(`Your account is not exist.`, 400);
+
+    const otpDB = await OtpRepo.findOne({ userId: user.id });
+    if (!otpDB) throw new ApplicationError(`Request your password change.`, 400);
     
-    await sendMail({ email: user.email, otp: user.otp });
+    validatingOtp(otpDB, otp, otpTypeList.resetPassword);
+    const encryptedPassword = await Auth.encryptPassword(password);
+    user.set({ encryptedPassword });
+    user.save();
+    return user;
 }
 
 const findAll = async () => {
@@ -68,7 +113,7 @@ const create = async (payload, isAdmin) => {
             role: isAdmin ? 'ADMIN': 'MEMBER'
         });
         
-        await sendOtp({ email });
+        await sendOtp(user, "verify");
         delete user.dataValues.verified;
 
         return user;
@@ -111,8 +156,11 @@ const checkUser = async (credentials) => {
 }
 
 module.exports = {
-    verifyAccount,
     sendOtp,
+    resendOtp,
+    verifyAccount,
+    forgotPassword,
+    setPasswordByOtp,
     findAll,
     create,
     update,

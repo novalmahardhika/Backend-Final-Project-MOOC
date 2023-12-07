@@ -17,8 +17,8 @@ const findAll = async (req, res) => {
 const register = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
-        const ret = await userService.create(req.body);
-        res.status(201).json({ status: "OK", message: "Data was created successfully.", data: ret });
+        const user = await userService.create(req.body);
+        res.status(201).json({ status: "OK", message: "Data was created successfully.", data: { name: user.name, user: user.email } });
     } catch (err) {
         res.status(err.statusCode).json({
             status: "FAIL",
@@ -30,7 +30,43 @@ const register = async (req, res) => {
 const resendOtp = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
-        await userService.sendOtp(req.query);
+        await userService.resendOtp(req.body);
+        res.status(201).json({ status: "OK", message: "Success" });
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
+const forgotPassword = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const { method } = req;
+        switch (method) {
+            case "POST":
+                await userService.forgotPassword(req.body);
+                break;
+            case "PUT":
+                await userService.setPasswordByOtp(req.body);
+                break;
+            default:
+                throw new Error(`Invalid request.`);
+        }
+        res.status(201).json({ status: "OK", message: "Success" });
+    } catch (err) {
+        res.status(err.statusCode || 400).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
+const setPasswordByOtp = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        await userService.forgotPassword(req.body);
         res.status(201).json({ status: "OK", message: "Success" });
     } catch (err) {
         res.status(err.statusCode).json({
@@ -43,7 +79,7 @@ const resendOtp = async (req, res) => {
 const verifyAccount = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
-        const user = await userService.verifyAccount(req.query);
+        const user = await userService.verifyAccount(req.body);
         res.status(201).json({ status: "OK", message: "Account is verified successfully.", data: { user: user.email } });
     } catch (err) {
         res.status(err.statusCode).json({
@@ -97,6 +133,8 @@ module.exports = {
     findAll,
     register,
     resendOtp,
+    forgotPassword,
+    setPasswordByOtp,
     verifyAccount,
     registerAdmin,
     login,
