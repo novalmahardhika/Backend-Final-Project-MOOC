@@ -39,6 +39,9 @@ const categories = [
   "Data Science",
 ]
 
+const rates = [4.5,4.6,4.7,4.8,4.9,5.0]
+
+
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
@@ -68,6 +71,7 @@ module.exports = {
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
       telegram: 'https://web.telegram.org/',
       creator: 'John Doe',
+      rating: rates[getRandomInt(rates.length)],
       createdAt: new Date(),
       updatedAt: new Date(),
     }))
