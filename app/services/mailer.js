@@ -1,17 +1,21 @@
 const nodemailer = require("nodemailer");
+const { otpTypeList, sendMailType } = require("../../config/struct.js")
+const ApplicationError = require("../../config/errors/ApplicationError.js");
+
 
 const transporter = nodemailer.createTransport({
     port: 465,
     host: "smtp.gmail.com",
     auth: {
-        user: '',
-        pass: '',
+        user: 'ideacademy5@gmail.com',
+        pass: 'gmau apwq glhh frcn',
     },
     secure: true
 });
 
-exports.sendMail = async (data) => {
-    const verifyURL = "http://localhost/api/v1/account-verify?email=" + data.email + "&otp=" + data.otp
+
+async function sendMailOtp(data) {
+    const verifyURL = (data.otpType == "verify") ? "http://localhost/api/v1/account-verify" : "http://localhost/api/v1/forgot-password"
     const mail = {
         from: 'Ideamy <no-reply@gmail.com>',
         to: data.email,
@@ -31,7 +35,19 @@ exports.sendMail = async (data) => {
         `,
     };
     
-    return await transporter.sendMail(mail, function (err, info) {
-        if (err) console.error(err);
-    });
+
+    try {
+        await transporter.sendMail(mail);
+    } catch (err) {
+        console.log(err.message);
+        throw new ApplicationError("Something is wrong.", 500);
+    }
+}
+
+exports.sendMail = async (data, type) => {
+    switch(type) {
+        case sendMailType.otp:
+           return await sendMailOtp(data);
+    }
+
 }

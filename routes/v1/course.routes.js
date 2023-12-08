@@ -1,13 +1,13 @@
 const { Router } = require('express')
 const router = Router()
 
-const Course = require('../app/controllers/course')
-const Chapter = require('../app/controllers/courseChapter')
-const Module = require('../app/controllers/courseChapterModule')
+const Course = require('../../app/controllers/course.js')
+const Chapter = require('../../app/controllers/courseChapter.js')
+const Module = require('../../app/controllers/courseChapterModule.js')
 
 
-const { uploadToMemory } = require('../middlewares/uploadOnMemory.js');
-const { uploadToCloudinary } = require("../middlewares/uploadOnCloudinary.js")
+const { uploadToMemory } = require('../../middlewares/uploadOnMemory.js');
+const { uploadToCloudinary } = require("../../middlewares/uploadOnCloudinary.js")
 
 // Get ist
 router.get("/course", Course.list)
