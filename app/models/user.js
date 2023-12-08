@@ -15,8 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId',
         as: 'OTP'
       })
-    }
 
+      User.belongsToMany(models.Course, { 
+        through:models.UserCourse ,
+        foreignKey: 'userId' 
+      })
+    }
   }
   User.init({
     name: DataTypes.STRING,
