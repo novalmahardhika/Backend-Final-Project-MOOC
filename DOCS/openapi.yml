@@ -13,6 +13,8 @@ servers:
 tags:
   - name: user
     description: Operations about your user
+  - name: otp
+    description: Operations about your Otp
   - name: course
     description: Operations about your Course
   - name: chapter
@@ -20,6 +22,213 @@ tags:
   - name: module
     description: Operations about your module
 paths:
+  /api/v1/account-verify:
+    post:
+      tags:
+        - otp
+      summary: Verify
+      description: Retrieve a list of modules
+      operationId: postVerify
+      requestBody:
+        description: Module object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verify'
+              
+      responses:
+        '200':
+          description: List of chapter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'Account is verified successfully.'
+                  data:
+                    type: array
+                    items:
+                      oneOf:
+                        - $ref: '#/components/schemas/Verify'
+                        
+        '400':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Account is verified already.'  
+                        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'OTP is invalid.'  
+  /api/v1/resend-otp:
+    post:
+      tags:
+        - otp
+      summary: Post resend otp
+      description: resend Otp
+      operationId: resendOtp
+      requestBody:
+        description: email
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendOtp'
+              
+      responses:
+        '200':
+          description: Resend-Otp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                        
+        '400':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Your account is not exist.'  
+                        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'OTP is invalid.'
+  /api/v1/forgot-password:
+    post:
+      tags:
+        - otp
+      summary: Forgot password
+      description: forgot password use otp
+      operationId: forgot password
+      requestBody:
+        description: Module object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendOtp'
+              
+      responses:
+        '200':
+          description: Resend-Otp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Your account is not exist.'  
+    put:
+      tags:
+        - otp
+      summary: Forgot password
+      description: forgot password use otp
+      operationId: forgotpassword
+      requestBody:
+        description: Module object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPassword'
+              
+      responses:
+        '200':
+          description: Resend-Otp
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'OK'
+                  message:
+                    type: string
+                    example: 'success'
+                        
+        '400':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'Your account is not exist.'
+                        
+        
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/FAIL'
+                  - type: object
+                    properties:
+                      message:
+                        example: 'OTP is invalid.'
+              
+  
   /api/v1/module:
     get:
       tags:
@@ -1201,6 +1410,32 @@ paths:
                     properties:
                       message:
                         example: Failed to create data. Validation error
+
+  /api/v1/user-course:
+    get:
+      tags:
+        - user
+      summary: Get current user information
+      description: Get current user information
+      operationId: user Course
+      security:
+        - api_key: []
+        
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/OK'
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: success.
+                      data:
+                        $ref: '#/components/schemas/UserCourse'
                         
 components:
   schemas:
@@ -1388,7 +1623,17 @@ components:
         updatedAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
-
+    
+    UserCourse:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        courseId:
+          type: string
+          format: uuid
+          
     CourseList:
       type: object
       properties:
@@ -1671,7 +1916,36 @@ components:
         updatedAt:
           type: string
           example: '2023-10-18T13:42:59.162Z'
+    Verify:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test2@gmail.com
+        otp:
+          type: string
+          example:   031442
           
+    ResendOtp:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test2@gmail.com
+          
+    ForgotPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          example: test2@gmail.com
+        otp:
+          type: integer
+          example: 658277
+        password:
+          type: integer
+          example: test1234
+      
   securitySchemes:
     api_key:
       type: apiKey
