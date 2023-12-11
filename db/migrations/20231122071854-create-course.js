@@ -26,6 +26,7 @@ module.exports = {
       },
       image: {
         type: Sequelize.STRING,
+        defaultValue: 'https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg'
       },
       creator: {
         type: Sequelize.STRING,
@@ -35,6 +36,9 @@ module.exports = {
       },
       telegram: {
         type: Sequelize.STRING
+      },
+      rating: {
+        type: Sequelize.FLOAT,
       },
       createdAt: {
         allowNull: false,

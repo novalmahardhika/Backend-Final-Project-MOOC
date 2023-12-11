@@ -1,8 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 
-const Auth = require('../app/controllers/user')
-const AuthMiddleware = require('../middlewares/auth')
+const Auth = require('../../app/controllers/user')
+const AuthMiddleware = require('../../middlewares/auth')
 
 const isBodyNotNull = async (req, res, next) => {
   if (!Object.keys(req.body).length) {

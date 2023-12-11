@@ -1,5 +1,15 @@
 'use strict'
 const { Model } = require('sequelize')
+
+
+const rates = [4.5,4.6,4.7,4.8,4.9,5.0]
+
+function randomIndex(length){
+  const index = Math.floor(Math.random() * length)
+  return index
+}
+
+
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     /**
@@ -13,7 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'courseId',
         as: 'chapters'
       })
+
+      Course.belongsToMany(models.User, {
+        through: models.UserCourse  ,
+        foreignKey: 'courseId',
+      })
     }
+    
   }
   Course.init(
     {
@@ -26,10 +42,12 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
       telegram: DataTypes.STRING,
       creator: DataTypes.STRING,
+      rating: DataTypes.FLOAT
     },
     {
       sequelize,
       modelName: 'Course',
+
 
       // exclude property model
       defaultScope: {
@@ -39,6 +57,9 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   )
+
+  Course.beforeCreate((x)=> (x.rating = rates[randomIndex(rates.length)]))
+
 
   return Course
 }
