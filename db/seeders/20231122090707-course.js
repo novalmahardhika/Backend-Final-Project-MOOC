@@ -39,6 +39,12 @@ const categories = [
   "Data Science",
 ]
 
+function getRandomInt(length){
+  const index = Math.floor(Math.random() * length)
+  return index
+}
+
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
