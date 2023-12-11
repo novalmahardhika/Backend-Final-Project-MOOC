@@ -39,10 +39,6 @@ const categories = [
   "Data Science",
 ]
 
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -68,6 +64,7 @@ module.exports = {
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
       telegram: 'https://web.telegram.org/',
       creator: 'John Doe',
+      rating: (4 + Math.random()).toFixed(1),
       createdAt: new Date(),
       updatedAt: new Date(),
     }))
