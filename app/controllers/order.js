@@ -138,9 +138,36 @@ const getPurchasedCourses = async (req, res) => {
     }
 };
 
+const deleteOrder = async (req, res) => {
+    try {
+      const orderId = req.params.id;
+      const deletedCount = await Order.destroy({
+        where: { id: orderId },
+      });
+      if (!deletedCount) {
+        return res.status(404).json({ status: 'FAIL', message: 'Order not found' });
+      }
+      res.status(200).json({ status: 'OK', message: 'Order deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: 'FAIL', message: error.message });
+    }
+  };
+
+  const getOrders = async (req, res) => {
+    try {
+      const orders = await Order.findAll();
+      res.status(200).json({ status: 'OK', message: 'Orders retrieved successfully', data: orders });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: 'FAIL', message: error.message });
+    }
+  };
 
 module.exports = {
     create,
     detailOrder,
-    getPurchasedCourses
+    getPurchasedCourses,
+    deleteOrder,
+    getOrders
 };
