@@ -26,11 +26,11 @@ module.exports = {
         onDelete: 'CASCADE'
       } ,
       status: {
-        type: Sequelize.ENUM("pending", "paid success"),
+        type: Sequelize.ENUM("PENDING", "COMPLETED", "CANCELED"),
+        defaultValue: "PENDING",
       },
-      isPaid: {
-        type: Sequelize.BOOLEAN
-      },
+      paymentMethod: Sequelize.STRING,
+      expiredDateAt: Sequelize.DATE,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

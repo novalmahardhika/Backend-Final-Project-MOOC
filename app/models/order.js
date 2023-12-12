@@ -11,15 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Order.belongsToMany(models.User, {
-        through: 'UserOrder', 
+      Order.belongsTo(models.User, {
         foreignKey: 'userId',
-        ortherKey: 'orderId',
       });
-      Order.belongsToMany(models.Course, {
-        through: 'CourseOrder', 
+      Order.belongsTo(models.Course, {
         foreignKey: 'courseId',
-        ortherKey: 'orderId',
       });
     }
   }
@@ -41,13 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
      },
     status: {
-      type: DataTypes.ENUM("pending", "paid success"),
-      defaultValue: "pending",
+      type: DataTypes.ENUM("PENDING", "COMPLETED", "CANCELED"),
     },
-    isPaid: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
+    paymentMethod: DataTypes.STRING,
+    expiredDateAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Order',
