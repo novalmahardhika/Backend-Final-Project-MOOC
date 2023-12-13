@@ -36,5 +36,6 @@ router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.f
 
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
+router.get('/my-course', AuthMiddleware.authorize, Auth.myCourse)
 
 module.exports = router

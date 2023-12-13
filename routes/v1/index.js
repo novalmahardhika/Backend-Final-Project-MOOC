@@ -15,7 +15,7 @@ router.use('/', rootRouter)
 // routes controller
 router.use('/v1/', authRoute)
 router.use('/v1/', courseRoute)
-router.use('/v1/', userCourse)
+// router.use('/v1/', userCourse)
 // router.use('/api/v1/', chapterModuleRoute)
 
 
