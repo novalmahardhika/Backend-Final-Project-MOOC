@@ -17,6 +17,19 @@ const authorize = async (req, res, next) => {
     }
 }
 
+const authorize2 = async (req, res, next) => {
+    try {
+        let { authorization } = req.headers;
+        if (authorization && authorization.substring(0, 7) === "Bearer ") authorization = authorization.substring(7, authorization.length);
+        const user = await Auth.authorize(authorization);
+        req.user = user;
+        next();
+    } catch (err) {
+        req.user = "guest";
+        next();
+    }
+}
+
 const isRoot = (req, res, next) => {
     const { role } = req.user;
     if (role !== "ROOT") {
@@ -43,6 +56,7 @@ const isRootOrAdmin =  (req, res, next) => {
 
 module.exports = {
     authorize,
+    authorize2,
     isRoot,
     isRootOrAdmin
 }

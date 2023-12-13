@@ -126,7 +126,7 @@ const login = async (req, res) => {
 const myCourse = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
-        const user = await userService.myCourse(req.user);
+        const user = await userService.myCourse(req.user.id);
 
         res.json({
             status: "OK",

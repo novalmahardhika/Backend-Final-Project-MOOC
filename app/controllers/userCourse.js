@@ -17,4 +17,23 @@ const list = async (req,res)=> {
   }
 }
 
-module.exports = { list } 
+const findOneAndSet = async (req, res, next) => {
+    try {
+        if (req.user == "guest") {
+            next()
+            return
+        }
+        req.userCourse = await UserCourseService.findOne({ userId: req.user.id })
+        next()
+    } catch (error) {
+        res.status(error.statusCode || 500).json({
+            status: 'FAIL',
+            message: error.message,
+        })
+    }
+}
+
+module.exports = {
+    list,
+    findOneAndSet
+} 

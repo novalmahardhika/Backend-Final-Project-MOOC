@@ -162,9 +162,9 @@ const checkUser = async (credentials) => {
     }
 }
 
-const myCourse = async (user) => {
+const myCourse = async (id) => {
     try {
-        const user = await UserRepo.findByPk(user.id);
+        const user = await UserRepo.findByPk(id);
         if (!user) {
             throw new ApplicationError(`User not found.`, 404);
         }
