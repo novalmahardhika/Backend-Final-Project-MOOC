@@ -1,10 +1,10 @@
-const { Order, UserCourse, Course } = require('../models/index');
+const orderService = require('../services/order')
 
 const create = async (req, res) => {
     try {
         const user = req.user;
         if (!user) {
-            res.status(403).json({
+            return res.status(403).json({
                 status: "FAIL",
                 message: "FORBIDDEN",
             });
@@ -12,94 +12,57 @@ const create = async (req, res) => {
 
         const courseId = req.params.id;
 
-        const existingOrder = await Order.findOne({
-            where: {
-                userId: user.id,
-                courseId: courseId,
-                status: "COMPLETED", 
-            },
-        });
+        const result = await orderService.createOrder(user.id, courseId);
 
-        if (existingOrder) {
-            return res.status(400).json({
+        if (result.error) {
+            return res.status(result.status).json({
                 status: 'FAIL',
-                message: 'You have already purchased this course',
+                message: result.message,
             });
         }
 
-        const payload = {
-            userId: user.id,
-            courseId: courseId,
-        };
-
-        const expirationMinutes = 60; 
-        const expiredDateAt = new Date();
-        expiredDateAt.setMinutes(expiredDateAt.getMinutes() + expirationMinutes);
-
-        payload.expiredDateAt = expiredDateAt;
-
-        const data = await Order.create(payload);
-
-        res.status(201).json({ status: 'OK', message: 'Success', data });
+        res.status(201).json({ status: 'OK', message: 'Success', data: result.data });
     } catch (error) {
-        res.status(500).json({
+        res.status(error.statuscode || 500).json({
             status: 'FAIL',
             message: error.message,
-        });
+        })
     }
 };
 
 const detailOrder = async (req, res) => {
     try {
-        const { paymentMethod, id } = req.body;
+      const { paymentMethod, cardNumber, cardHolderName, cvv, expiryDate } = req.body;
+      const orderId = req.params.id;
+  
+      let resultData;
+      if (paymentMethod === "Bank Transfer") {
+        resultData = await orderService.processBankTransfer(orderId, paymentMethod, cardNumber, cardHolderName, cvv, expiryDate);
+      } else if (paymentMethod === "Credit Card") {
+        resultData = await orderService.processCreditCard(orderId, paymentMethod, cardNumber, cardHolderName, cvv, expiryDate);
+      } 
 
-        const payload = {
-            paymentMethod,
-            status: "COMPLETED"
-        };
-        const [_, value] = await Order.update(payload, {
-            where: {
-                id
-            },
-            returning: true
-        });
-
-        const data = value[0];
-
-        const userId = data.userId;
-        const courseId = data.courseId;
-
-        console.log(data.status);
-
-        if (data.expiredDateAt && new Date() > new Date(data.expiredDateAt)) {
-            const canceledPayload = {
-                status: "CANCELED",
-            };
-            await Order.update(canceledPayload, {
-                where: {
-                    id
-                }
-            });
-
-            return res.status(400).json({
-                status: 'FAIL',
-                message: 'Order expired and canceled',
-            });
-        }
-
-        if (data.status === "COMPLETED") {
-            const value = await UserCourse.create({ userId, courseId });
-            console.log(value);
-        }
-
-        res.status(200).json({ status: 'OK', message: 'Success', data });
+      return res.status(200).json({
+        status: resultData ? 'OK' : 'FAIL',
+        message: resultData ? 'Success' : 'Failed to process payment',
+        data: resultData,
+      });
     } catch (error) {
-        res.status(500).json({
-            status: 'FAIL',
-            message: error.message,
+      if (error) {
+        return res.status(error.statusCode).json({
+          status: 'FAIL',
+          message: error.message,
         });
+      } else {
+        res.status(500).json({
+          status: 'FAIL',
+          message: `Failed to payment order: ${error.message}`,
+        });
+      }
     }
-};
+  };
+
+
 
 const getPurchasedCourses = async (req, res) => {
     try {
@@ -113,57 +76,44 @@ const getPurchasedCourses = async (req, res) => {
         }
 
         const userId = user.id;
-
+        const payload = {};
         
-        const completedOrders = await Order.findAll({
-            where: {
-                userId: userId,
-                status: "COMPLETED",
-            },
-            include: [
-                {
-                    model: Course,
-                    attributes: ['id', 'title', 'category', 'level', 'price'], 
-                },
-            ],
-        });
+        const completedOrders = await orderService.getCourse(userId,payload);
 
         res.status(200).json({ status: 'OK', message: 'Success', data: completedOrders });
     } catch (error) {
         console.error(error);
-        res.status(500).json({
+        res.status(error.statuscode || 500).json({
             status: 'FAIL',
             message: error.message,
-        });
+        })
     }
 };
 
 const deleteOrder = async (req, res) => {
     try {
-      const orderId = req.params.id;
-      const deletedCount = await Order.destroy({
-        where: { id: orderId },
-      });
-      if (!deletedCount) {
-        return res.status(404).json({ status: 'FAIL', message: 'Order not found' });
-      }
-      res.status(200).json({ status: 'OK', message: 'Order deleted successfully' });
+        const orderId = req.params.id;
+        await orderService.deleteOrder(orderId);
+        res.status(200).json({ status: 'OK', message: 'Order deleted successfully' });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ status: 'FAIL', message: error.message });
+        console.error(error);
+        res.status(error.statuscode || 500).json({
+            status: 'FAIL',
+            message: error.message,
+        })
     }
-  };
+};
 
-  const getOrders = async (req, res) => {
+
+const getOrders = async (req, res) => {
     try {
-      const orders = await Order.findAll();
-      res.status(200).json({ status: 'OK', message: 'Orders retrieved successfully', data: orders });
+        const orders = await orderService.getAllOrders();
+        res.status(200).json({ status: 'OK', message: 'Orders retrieved successfully', data: orders });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ status: 'FAIL', message: error.message });
+        console.error(error);
+        res.status(500).json({ status: 'FAIL', message: error.message });
     }
-  };
-
+};
 module.exports = {
     create,
     detailOrder,

@@ -41,6 +41,27 @@ module.exports = (sequelize, DataTypes) => {
     },
     paymentMethod: DataTypes.STRING,
     expiredDateAt: DataTypes.DATE,
+
+    cardNumber: {
+      type: DataTypes.STRING, 
+    },
+    cardHolderName: {
+      type: DataTypes.STRING,
+    },
+    cvv: {
+      type: DataTypes.STRING,
+      validate: {
+        isNumeric: true,
+        len: [3, 4],
+      },
+    },
+    expiryDate: {
+      type: DataTypes.STRING,
+      validate: {
+        is: /^(0[1-9]|1[0-2])\/\d{2}$/,
+      },
+    },
+
   }, {
     sequelize,
     modelName: 'Order',

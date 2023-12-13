@@ -31,6 +31,26 @@ module.exports = {
       },
       paymentMethod: Sequelize.STRING,
       expiredDateAt: Sequelize.DATE,
+
+      cardNumber: {
+        type: Sequelize.STRING, 
+      },
+      cardHolderName: {
+        type: Sequelize.STRING,
+      },
+      cvv: {
+        type: Sequelize.STRING,
+        validate: {
+          isNumeric: true,
+          len: [3, 4],
+        },
+      },
+      expiryDate: {
+        type: Sequelize.STRING,
+        validate: {
+          is: /^(0[1-9]|1[0-2])\/\d{2}$/,
+        },
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
