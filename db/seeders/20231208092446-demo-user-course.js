@@ -1,9 +1,6 @@
 'use strict';
-const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
-
-const name = "root";
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -15,20 +12,22 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Users', [{
-      name,
-      email: name + "@gmail.com",
-      encryptedPassword: bcrypt.hashSync("root", 10),
-      phoneNumber: "082112345678",
-      address: "Earth",
-      role: "ROOT",
-      verified: true,
+
+      await queryInterface.bulkInsert('UserCourses', [{
+      userId: 'b4704a37-a60f-4ed0-b040-0afa6d2fd6a5',
+      courseId: '0c06de8f-ea83-49d6-9447-a4247e5cd4ec',
       createdAt: new Date(),
       updatedAt: new Date()
-    }])
+    },
+  {
+      userId: 'b4704a37-a60f-4ed0-b040-0afa6d2fd6a5',
+      courseId: '746112de-b9c0-464b-bc8e-74e524ec1408',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ], {});
   },
 
-  /** @param {import ("sequelize").QueryInterface} queryInterface */
   async down (queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
@@ -36,6 +35,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Users', { name })
   }
 };

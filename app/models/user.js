@@ -9,6 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
+
+      static associate(models) {
+      User.hasOne(models.Otp, {
+        foreignKey: 'userId',
+        as: 'OTP'
+      })
+      User.hasMany(models.Order, { 
+        foreignKey: 'userId' 
+      })
+      User.belongsToMany(models.Course, { 
+        through:models.UserCourse ,
+        foreignKey: 'userId' 
+      })
+    }
   }
   User.init({
     name: DataTypes.STRING,
@@ -23,9 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    phoneNumber: DataTypes.NUMBER,
+    phoneNumber: DataTypes.STRING,
     address: DataTypes.STRING,
-    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER')
+    role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER'),
+    verified: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'User',

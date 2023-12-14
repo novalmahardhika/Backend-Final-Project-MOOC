@@ -1,8 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 
-const Auth = require('../app/controllers/user')
-const AuthMiddleware = require('../middlewares/auth')
+const Auth = require('../../app/controllers/user')
+const AuthMiddleware = require('../../middlewares/auth')
 
 const isBodyNotNull = async (req, res, next) => {
   if (!Object.keys(req.body).length) {
@@ -14,27 +14,28 @@ const isBodyNotNull = async (req, res, next) => {
 }
 
 // register admin
-router.post(
-  '/admin/register',
-  isBodyNotNull,
-  AuthMiddleware.authorize,
-  AuthMiddleware.isRoot,
-  Auth.registerAdmin
-)
+router.post('/admin/register',isBodyNotNull,AuthMiddleware.authorize,AuthMiddleware.isRoot,Auth.registerAdmin)
 // register user
 router.post('/register', isBodyNotNull, Auth.register)
+
+
+router.post('/account-verify', Auth.verifyAccount)
+
+router.post('/forgot-password', Auth.forgotPassword)
+
+router.put('/forgot-password', Auth.forgotPassword)
+
+router.post('/resend-otp', Auth.resendOtp)
+
 
 // login user
 router.post('/login', isBodyNotNull, Auth.login)
 
 // get user
-router.get(
-  '/users',
-  AuthMiddleware.authorize,
-  AuthMiddleware.isRootOrAdmin,
-  Auth.findAll
-)
+router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.findAll)
+
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
+router.get('/my-course', AuthMiddleware.authorize, Auth.myCourse)
 
 module.exports = router

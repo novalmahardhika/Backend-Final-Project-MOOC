@@ -1,13 +1,14 @@
 const { Router } = require('express')
 const router = Router()
 
-const Course = require('../app/controllers/course')
-const Chapter = require('../app/controllers/courseChapter')
-const Module = require('../app/controllers/courseChapterModule')
+const Course = require('../../app/controllers/course.js')
+const Chapter = require('../../app/controllers/courseChapter.js')
+const Module = require('../../app/controllers/courseChapterModule.js')
+const AuthMiddleware = require('../../middlewares/auth')
+const UserCourse = require('../../app/controllers/userCourse')
 
-
-const { uploadToMemory } = require('../middlewares/uploadOnMemory.js');
-const { uploadToCloudinary } = require("../middlewares/uploadOnCloudinary.js")
+const { uploadToMemory } = require('../../middlewares/uploadOnMemory.js');
+const { uploadToCloudinary } = require("../../middlewares/uploadOnCloudinary.js")
 
 // Get ist
 router.get("/course", Course.list)
@@ -22,7 +23,7 @@ router.put("/course/:id", Course.findAndSetById, uploadToMemory, uploadToCloudin
 router.delete("/course/:id", Course.findAndSetById, Course.destroyById)
 
 // Get data detail from ID
-router.get("/course/:id", Course.findAndSetById, Course.detail)
+router.get("/course/:id", AuthMiddleware.authorize2, Course.findAndSetById, UserCourse.findOneAndSet, Course.detail)
 
 
 

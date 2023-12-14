@@ -2,8 +2,6 @@
 const bcrypt = require("bcrypt");
 
 /** @type {import('sequelize-cli').Migration} */
-
-const name = "root";
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -14,21 +12,23 @@ module.exports = {
      *   name: 'John Doe',
      *   isBetaMember: false
      * }], {});
+     * 
     */
-    await queryInterface.bulkInsert('Users', [{
-      name,
-      email: name + "@gmail.com",
-      encryptedPassword: bcrypt.hashSync("root", 10),
-      phoneNumber: "082112345678",
-      address: "Earth",
-      role: "ROOT",
+
+
+      await queryInterface.bulkInsert('Users', [{
+      id: 'b4704a37-a60f-4ed0-b040-0afa6d2fd6a5',
+      name: "Bob",
+      email: `bob@mail.com`,
+      encryptedPassword: bcrypt.hashSync("bob123", 10),
+      phoneNumber: "08808088808",
+      role: "MEMBER",
       verified: true,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }])
+      updatedAt: new Date(),
+    }], {});
   },
 
-  /** @param {import ("sequelize").QueryInterface} queryInterface */
   async down (queryInterface, Sequelize) {
     /**
      * Add commands to revert seed here.
@@ -36,6 +36,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Users', { name })
   }
 };

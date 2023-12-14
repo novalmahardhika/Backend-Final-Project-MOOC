@@ -26,15 +26,23 @@ module.exports = {
       },
       image: {
         type: Sequelize.STRING,
+        defaultValue: 'https://res.cloudinary.com/djsjnrfv0/image/upload/v1701248815/BINAR/nwnt4ty0nxgrx1hyh8ce.jpg'
       },
       creator: {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       telegram: {
         type: Sequelize.STRING
+      },
+      rating: {
+        type: Sequelize.FLOAT,
+      },
+      audience: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: ['Not easily give up', 'everyone looking to build high-performance', 'Strong desire to learn']
       },
       createdAt: {
         allowNull: false,
