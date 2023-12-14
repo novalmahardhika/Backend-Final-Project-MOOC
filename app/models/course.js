@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'chapters'
       })
 
+      Course.hasMany(models.Order, {
+        foreignKey: 'courseId',
+      })
       Course.belongsToMany(models.User, {
         through: models.UserCourse  ,
         foreignKey: 'courseId',

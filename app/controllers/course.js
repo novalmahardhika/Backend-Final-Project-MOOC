@@ -108,6 +108,7 @@ const destroyById = async (req, res) => {
 
 const detail = (req, res) => {
     let course = appendCourseInformation(req.course)
+
     if (req.userCourse == null) course = deleteDetail(course)
     
     res.json({ status: 'OK', message: 'Success', data: course })
