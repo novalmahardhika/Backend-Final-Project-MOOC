@@ -2920,7 +2920,7 @@
         }
       }
     },
-    "/api/v1/user-course": {
+    "/api/v1/my-course": {
       "get": {
         "tags": [
           "user"
