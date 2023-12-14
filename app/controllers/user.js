@@ -123,6 +123,24 @@ const login = async (req, res) => {
     }
 }
 
+const myCourse = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const user = await userService.myCourse(req.user.id);
+
+        res.json({
+            status: "OK",
+            message: "Success.",
+            data: user
+        })
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
 const currentUser = async (req, res) => {
     res.json({
         status: "OK",
@@ -140,5 +158,6 @@ module.exports = {
     login,
     setPasswordByOtp,
     forgotPassword,
-    currentUser
+    currentUser,
+    myCourse
 }

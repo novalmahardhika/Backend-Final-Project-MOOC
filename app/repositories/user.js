@@ -1,4 +1,4 @@
-const { User } = require("../models/index.js");
+const { User, Course } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
 async function findAll() {
@@ -23,7 +23,7 @@ async function checkPassword(password, hash) {
 }
 
 async function findByPk(id) {
-    return await User.findByPk(id);
+    return await User.findByPk(id, { include: [{ model: Course }], attributes: { exclude: ["UserCourse"] } });
 }
 
 module.exports = {

@@ -17,6 +17,18 @@ const appendCourseInformation = (course) => {
     return { ...course.dataValues, totalModule, totalDuration, chapters };
 }
 
+const deleteDetail = (course) => {
+    const chapterLen = Object.keys(course.chapters).length;
+    for(let i = 0; i < chapterLen; i++) {
+        const moduleLen = Object.keys(course.chapters[i].modules).length;
+        for(let j = 0; j < moduleLen; j++) {
+            if (i == 0) continue;
+            delete course.chapters[i].modules[j].dataValues.video
+        }
+    }
+    return course
+}
+
 const list = async (req, res) => {
     try {
         const isFilter = Object.keys(req.query).length;
@@ -95,7 +107,11 @@ const destroyById = async (req, res) => {
 }
 
 const detail = (req, res) => {
-    res.json({ status: 'OK', message: 'Success', data: appendCourseInformation(req.course) })
+    let course = appendCourseInformation(req.course)
+
+    if (req.userCourse == null) course = deleteDetail(course)
+    
+    res.json({ status: 'OK', message: 'Success', data: course })
 }
 
 module.exports = {

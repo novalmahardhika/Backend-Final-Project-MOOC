@@ -143,9 +143,12 @@ const checkUser = async (credentials) => {
         if (!password) throw new ApplicationError(`Please input your password.`, 400);
 
         const user = email ? await UserRepo.findOne({ email }) : await UserRepo.findOne({ phoneNumber });
+        if (!user) {
+            throw new ApplicationError(`Email or password is invalid.`, 404);
+        }
+        
         const checkedPassword = await UserRepo.checkPassword(password, user.encryptedPassword);
-
-        if (!user || !checkedPassword) {
+        if (!checkedPassword) {
             throw new ApplicationError(`Email or password is invalid.`, 404);
         }
 
@@ -154,6 +157,19 @@ const checkUser = async (credentials) => {
         const token = Auth.createToken({ id: user.id });
         const ret = { ...user.dataValues, token };
         return ret;
+    } catch (err) {
+        throw new ApplicationError(`${err.message}`, err.statusCode || 500);
+    }
+}
+
+const myCourse = async (id) => {
+    try {
+        const user = await UserRepo.findByPk(id);
+        if (!user) {
+            throw new ApplicationError(`User not found.`, 404);
+        }
+
+        return user;
     } catch (err) {
         throw new ApplicationError(`${err.message}`, err.statusCode || 500);
     }
@@ -168,5 +184,6 @@ module.exports = {
     findAll,
     create,
     update,
-    checkUser
+    checkUser,
+    myCourse
 }
