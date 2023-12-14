@@ -73,7 +73,14 @@ const processBankTransfer = async (
 
       const userId = data.userId;
       const courseId = data.courseId;
+      if (data.expiredDateAt && new Date() > new Date(data.expiredDateAt)) {
+        const canceledPayload = {
+          status: "CANCELED",
+        };
 
+        await orderRepository.updateOrder(orderId, canceledPayload);
+        throw new ApplicationError("Order expired and canceled", 400);
+      }
       await orderRepository.createNewUserCourse(userId, courseId);
 
       return data;
@@ -81,7 +88,7 @@ const processBankTransfer = async (
     return null;
   } catch (error) {
     throw new ApplicationError(
-      `Failed to payment order: ${error.message}`,
+      `Failed to process bank transfer: ${error.message}`,
       500
     );
   }
@@ -150,7 +157,7 @@ const processCreditCard = async (
     return null;
   } catch (error) {
     throw new ApplicationError(
-      `Failed to payment order: ${error.message}`,
+      `Failed to process credit card payment: ${error.message}`,
       500
     );
   }

@@ -32,13 +32,17 @@ module.exports = {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       telegram: {
         type: Sequelize.STRING
       },
       rating: {
         type: Sequelize.FLOAT,
+      },
+      audience: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: ['Not easily give up', 'everyone looking to build high-performance', 'Strong desire to learn']
       },
       createdAt: {
         allowNull: false,
