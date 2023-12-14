@@ -20,7 +20,7 @@ module.exports = {
       id: 'b4704a37-a60f-4ed0-b040-0afa6d2fd6a5',
       name: "Bob",
       email: `bob@mail.com`,
-      encryptedPassword: bcrypt.hashSync("bob123", 10),
+      encryptedPassword: bcrypt.hashSync("bob12345", 10),
       phoneNumber: "08808088808",
       role: "MEMBER",
       verified: true,
