@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         through:models.UserCourse ,
         foreignKey: 'userId' 
       })
+      
+      User.hasMany(models.UserCourseProgress, {
+        foreignKey: 'userId',
+      })
     }
   }
   User.init({

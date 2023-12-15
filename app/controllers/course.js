@@ -1,6 +1,7 @@
 const courseService = require('../services/course')
+const courseProgressService = require('../services/userCourseProgress')
 
-const appendCourseInformation = (course) => {
+const appendCourseInformation = async (course, user = null) => {
     const chapterLen = Object.keys(course.chapters).length;
     let totalModule = 0, totalDuration = 0;
     
@@ -8,7 +9,13 @@ const appendCourseInformation = (course) => {
         const moduleLen = Object.keys(course.chapters[i].modules).length;
         totalDuration += course.chapters[i].duration;
 
-        for(let j = 0; j < moduleLen; j++) totalModule++;
+        for(let j = 0; j < moduleLen; j++) {
+            totalModule++;
+            if (user != "guest") {
+                const progress = await courseProgressService.findOne({ userId: user.id, moduleId: course.chapters[i].modules[j].id, done: true })
+                if (progress) course.chapters[i].modules[j].dataValues.done = progress.done;
+            }
+        }
     }
 
     const { chapters } = course.dataValues;
@@ -23,7 +30,8 @@ const deleteDetail = (course) => {
         const moduleLen = Object.keys(course.chapters[i].modules).length;
         for(let j = 0; j < moduleLen; j++) {
             if (i == 0) continue;
-            delete course.chapters[i].modules[j].dataValues.video
+            delete course.chapters[i].modules[j].dataValues.id
+            // delete course.chapters[i].modules[j].dataValues.video
         }
     }
     return course
@@ -106,9 +114,9 @@ const destroyById = async (req, res) => {
     }
 }
 
-const detail = (req, res) => {
-    let course = appendCourseInformation(req.course)
-    if (req.userCourse == null) course = deleteDetail(course)
+const detail = async (req, res) => {
+    let course = await appendCourseInformation(req.course, req.user)
+    if (req.user == "guest") course = deleteDetail(course)
     
     res.json({ status: 'OK', message: 'Success', data: course })
 }
