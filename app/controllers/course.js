@@ -44,13 +44,13 @@ const list = async (req, res) => {
             const arr = search.split(' ').map((x)=> x.charAt(0).toUpperCase() + x.slice(1))
 
             if (arr.includes('Ios')) {
-                const cek = arr.indexOf("Ios")
-                arr.splice(cek, 1, 'IOS' )
+                const index = arr.indexOf("Ios")
+                arr.splice(index, 1, 'IOS' )
             }
 
             if (arr.includes('Ui/ux')) {
-                const cek = arr.indexOf("Ui/ux")
-                arr.splice(cek, 1, 'UI/UX' )
+                const index = arr.indexOf("Ui/ux")
+                arr.splice(index, 1, 'UI/UX' )
             }
 
             const searchFilter = arr.join(" ")
