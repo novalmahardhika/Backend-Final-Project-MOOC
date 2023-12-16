@@ -53,8 +53,8 @@ const datas = [
   },
   {
     id: "87cb85b4-f316-44e8-bd7a-85da3ba64c13",
-    title: "iOS Development Masterclass",
-    category: "iOS Development",
+    title: "IOS Development Masterclass",
+    category: "IOS Development",
     level: "intermediate"
   },
   {
@@ -83,8 +83,8 @@ const datas = [
   },
   {
     id: "05e3a2b8-9764-4d20-aad0-d565237b4da6",
-    title: "Advanced iOS Development",
-    category: "iOS Development",
+    title: "Advanced IOS Development",
+    category: "IOS Development",
     level: "advance"
   },
   {
