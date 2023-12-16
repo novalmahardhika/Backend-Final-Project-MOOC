@@ -18,13 +18,16 @@ router.post('/admin/register',isBodyNotNull,AuthMiddleware.authorize,AuthMiddlew
 // register user
 router.post('/register', isBodyNotNull, Auth.register)
 
-
+// verify password
 router.post('/account-verify', Auth.verifyAccount)
 
+// forgot password
 router.post('/forgot-password', Auth.forgotPassword)
 
+// update forgot password
 router.put('/forgot-password', Auth.forgotPassword)
 
+// resend OTP
 router.post('/resend-otp', Auth.resendOtp)
 
 
@@ -36,6 +39,11 @@ router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.f
 
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
+
+// get my course
 router.get('/my-course', AuthMiddleware.authorize, Auth.myCourse)
+
+// get user notification
+router.get('/notification', AuthMiddleware.authorize, Auth.notification )
 
 module.exports = router

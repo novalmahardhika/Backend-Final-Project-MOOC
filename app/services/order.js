@@ -1,5 +1,6 @@
 const ApplicationError = require("../../config/errors/ApplicationError.js");
 const orderRepository = require("../repositories/order");
+const NotificationService = require('../services/notification.js')
 
 const createOrder = async (userId, courseId) => {
   try {
@@ -81,6 +82,8 @@ const processBankTransfer = async (
         await orderRepository.updateOrder(orderId, canceledPayload);
         throw new ApplicationError("Order expired and canceled", 400);
       }
+
+      await NotificationService.create(userId, { title:"Information", message: `Payment Course id:${courseId} Success` })  
       await orderRepository.createNewUserCourse(userId, courseId);
 
       return data;
@@ -135,6 +138,7 @@ const processCreditCard = async (
           status: "CANCELED",
         };
 
+
         await orderRepository.updateOrder(orderId, canceledPayload);
         throw new ApplicationError("Order expired and canceled", 400);
       }
@@ -144,6 +148,7 @@ const processCreditCard = async (
           throw new ApplicationError("Please fill in all required fields", 400);
         }
 
+        await NotificationService.create(userId, { title:"Information", message: `Payment Course id:${courseId} Success` })
         const userCourseResult = await orderRepository.createNewUserCourse(
           userId,
           courseId
