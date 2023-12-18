@@ -41,9 +41,9 @@ router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.f
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
 
 // get my course
-router.get('/my-course', AuthMiddleware.authorize, Auth.myCourse)
+router.get('/my-courses', AuthMiddleware.authorize, Auth.myCourse)
 
 // get user notification
-router.get('/notification', AuthMiddleware.authorize, Auth.notification )
+router.get('/notifications', AuthMiddleware.authorize, Auth.notification )
 
 module.exports = router
