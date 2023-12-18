@@ -1,7 +1,7 @@
 const courseService = require('../services/course')
 const courseProgressService = require('../services/userCourseProgress')
 
-const appendCourseInformation = async (course, user = null) => {
+const appendCourseInformation = async (course, user = "guest") => {
     const chapterLen = Object.keys(course.chapters).length;
     let totalModule = 0, totalDuration = 0;
     
@@ -44,7 +44,7 @@ const list = async (req, res) => {
         const dataLen = Object.keys(data).length;
 
         for(let i = 0; i < dataLen; i++) {
-            data[i].dataValues = appendCourseInformation(data[i])
+            data[i].dataValues = await appendCourseInformation(data[i])
             delete data[i].dataValues.chapters;
         }
         
