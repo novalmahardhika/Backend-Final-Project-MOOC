@@ -23,7 +23,7 @@ async function checkPassword(password, hash) {
 }
 
 async function findByPk(id) {
-    return await User.findByPk(id, { include: [{ model: Course,through: {attributes: []}}], attributes: { exclude: ["updatedAt,createdAt","encryptedPassword", "phoneNumber", "address", "verified"] } });
+    return await User.findByPk(id, { include: [{ model: Course,through: {attributes: []}}], attributes: { exclude: ["updatedAt,createdAt","encryptedPassword", "verified"] } });
 }
 
 async function notification(id) {

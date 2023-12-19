@@ -130,10 +130,15 @@ const create = async (payload, isAdmin) => {
 const update = async (req, payload) => {
     try {
         const data = req;
+
+        if (payload.role ) {
+            throw new ApplicationError('Cannot Update Role User', 403)
+        }
+
         data.set(payload);
         return await data.save();
     } catch (err) {
-        throw new ApplicationError(`Failed to update data. ${err.message}`, 500);
+        throw new ApplicationError(`Failed to update data. ${err.message}`,  err.statusCode || 500);
     }
 }
 

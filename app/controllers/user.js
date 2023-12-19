@@ -27,6 +27,21 @@ const register = async (req, res) => {
     }
 }
 
+const update = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const { body } = req
+        const user = await userService.update(req.user, body);
+        res.status(201).json({ status: "OK", message: "Data was updated successfully.", data: user });
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
+
 const resendOtp = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
@@ -178,5 +193,6 @@ module.exports = {
     forgotPassword,
     currentUser,
     myCourse,
-    notification
+    notification,
+    update
 }
