@@ -117,7 +117,7 @@ const create = async (payload, isAdmin) => {
             role: isAdmin ? 'ADMIN': 'MEMBER'
         });
 
-        await NotificationService.create(user.id,{ title: 'Information', message: 'Registered Successfully, Welcome to Ideamy Academy' })
+        await NotificationService.create(user.id,{ title: 'Register Success', message: 'Halooo !!!, Welcome to Idea Academy' })
         await sendOtp(user, "verify");
         delete user.dataValues.verified;
 

@@ -83,7 +83,7 @@ const processBankTransfer = async (
         throw new ApplicationError("Order expired and canceled", 400);
       }
 
-      await NotificationService.create(userId, { title:"Information", message: `Payment Course id:${courseId} Success` })  
+      await NotificationService.create(userId, { title:"Payment Success", message: `Payment Course ${courseId} is Success` })  
       await orderRepository.createNewUserCourse(userId, courseId);
 
       return data;
@@ -148,7 +148,7 @@ const processCreditCard = async (
           throw new ApplicationError("Please fill in all required fields", 400);
         }
 
-        await NotificationService.create(userId, { title:"Information", message: `Payment Course id:${courseId} Success` })
+        await NotificationService.create(userId, { title:"Payment Success", message: `Payment Course ${courseId} is Success` })
         const userCourseResult = await orderRepository.createNewUserCourse(
           userId,
           courseId
