@@ -141,6 +141,24 @@ const myCourse = async (req, res) => {
     }
 }
 
+const notification = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const user = await userService.notification(req.user.id);
+
+        res.json({
+            status: "OK",
+            message: "Success.",
+            data: user
+        })
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
 const currentUser = async (req, res) => {
     res.json({
         status: "OK",
@@ -159,5 +177,6 @@ module.exports = {
     setPasswordByOtp,
     forgotPassword,
     currentUser,
-    myCourse
+    myCourse,
+    notification
 }

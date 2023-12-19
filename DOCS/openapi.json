@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://idea-academy.up.railway.app/"
+      "url": "http://localhost/"
     }
   ],
   "tags": [
@@ -44,7 +44,7 @@
     }
   ],
   "paths": {
-    "/api/v1/order": {
+    "/api/v1/orders": {
       "get": {
         "tags": [
           "order"
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/api/v1/order/list": {
+    "/api/v1/orders/list": {
       "get": {
         "tags": [
           "order"
@@ -261,7 +261,7 @@
         }
       }
     },
-    "/api/v1/order/{id}": {
+    "/api/v1/orders/{id}": {
       "post": {
         "tags": [
           "order"
@@ -949,7 +949,7 @@
         }
       }
     },
-    "/api/v1/module": {
+    "/api/v1/modules": {
       "get": {
         "tags": [
           "module"
@@ -1015,7 +1015,7 @@
         }
       }
     },
-    "/api/v1/chapter/{id}/": {
+    "/api/v1/chapters/{id}/": {
       "post": {
         "tags": [
           "module"
@@ -1098,7 +1098,7 @@
         }
       }
     },
-    "/api/v1/module/{id}": {
+    "/api/v1/modules/{id}": {
       "get": {
         "tags": [
           "module"
@@ -1376,7 +1376,7 @@
         }
       }
     },
-    "/api/v1/chapter": {
+    "/api/v1/chapters": {
       "get": {
         "tags": [
           "chapter"
@@ -1443,7 +1443,7 @@
         }
       }
     },
-    "/api/v1/course/{id}/": {
+    "/api/v1/courses/{id}/": {
       "post": {
         "tags": [
           "chapter"
@@ -1547,7 +1547,7 @@
         }
       }
     },
-    "/api/v1/chapter/{id}": {
+    "/api/v1/chapters/{id}": {
       "get": {
         "tags": [
           "chapter"
@@ -1893,7 +1893,7 @@
         }
       }
     },
-    "/api/v1/course": {
+    "/api/v1/courses": {
       "get": {
         "summary": "Get a list of course",
         "tags": [
@@ -2111,7 +2111,7 @@
         }
       }
     },
-    "/api/v1/course/{id}": {
+    "/api/v1/courses/{id}": {
       "get": {
         "tags": [
           "course"
@@ -2920,7 +2920,7 @@
         }
       }
     },
-    "/api/v1/my-course": {
+    "/api/v1/my-courses": {
       "get": {
         "tags": [
           "user"

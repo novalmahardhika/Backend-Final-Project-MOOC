@@ -41,19 +41,18 @@ const list = async (req, res) => {
         if (type) filter.type = type 
 
         if (search) {
-            const arr = search.split(' ').map((x)=> x.charAt(0).toUpperCase() + x.slice(1))
 
-            if (arr.includes('Ios')) {
-                const index = arr.indexOf("Ios")
-                arr.splice(index, 1, 'IOS' )
+            const arrData = search.split(' ').map((x)=> x.charAt(0).toUpperCase() + x.slice(1))
+            const arrFilter = ['Ios','Ui','Ux','Ui/ux']
+
+            arrFilter.map((data)=> (arrData.includes(data) ? arrData.splice(arrData.indexOf(data),1, 'UI/UX') : ''))
+
+            if (arrData.includes('Ios')) {
+                const index = arrData.indexOf("Ios")
+                arrData.splice(index, 1, 'IOS' )
             }
 
-            if (arr.includes('Ui/ux')) {
-                const index = arr.indexOf("Ui/ux")
-                arr.splice(index, 1, 'UI/UX' )
-            }
-
-            const searchFilter = arr.join(" ")
+            const searchFilter = arrData.join(" ")
 
             filter.title = { [Op.like]: `%${searchFilter}%` }
         }
