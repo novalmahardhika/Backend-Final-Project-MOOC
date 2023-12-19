@@ -15,31 +15,343 @@ tags:
     description: Operations about your user
   - name: otp
     description: Operations about your Otp
+  - name: order
+    description: Operations about your order
   - name: course
     description: Operations about your Course
   - name: chapter
     description: Operations about your Chapter
   - name: module
     description: Operations about your module
+
 paths:
+  /api/v1/orders:
+    get:
+      tags:
+        - order
+      summary: All payments completed
+      security:
+        - api_key: []
+      description: make an order to buy a course
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              example:
+                status: "OK"
+                message: "Success"
+                data:
+                  id: "15250d2c-0419-4004-ae8a-8437b3af1fb0"
+                  userId: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+                  courseId: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                  status: "COMPLETED"
+                  paymentMethod: "Bank Transfer"
+                  expiredDateAt: "2023-12-14T05:50:58.764Z"
+                  cardNumber: null
+                  cardHolderName: null
+                  cvv: null
+                  expiryDate: null
+                  Course:
+                    id: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                    title: "Learn Basic Javascript"
+                    category: "Android Development"
+                    level: "advance"
+                    price: 217214
+
+        201:
+          description: Successful response - Credit Card
+          content:
+            application/json:
+              example:
+                status: "OK"
+                message: "Success"
+                data:
+                  id: "45230e6a-9b6f-4c06-aa62-42fc57507c94"
+                  userId: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+                  courseId: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                  status: "COMPLETED"
+                  paymentMethod: "Credit Card"
+                  expiredDateAt: "2023-12-14T05:50:58.764Z"
+                  cardNumber: "**** **** **** 1234" # Example masked card number
+                  cardHolderName: "John Doe"
+                  cvv: "123"
+                  expiryDate: "12/2025"
+                  createdAt: "2023-12-14T04:50:58.764Z"
+                  updatedAt: "2023-12-14T04:51:53.965Z"
+                  Course:
+                    id: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                    title: "Learn Basic Javascript"
+                    category: "Android Development"
+                    level: "advance"
+                    price: 217214
+        "401":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Unauthorized"
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "No order has been placed"
+  /api/v1/orders/list:
+    get:
+      tags:
+        - order
+      summary: List of all orders
+      security:
+        - api_key: []
+      description: Retrieve a list of all orders in the system.
+      responses:
+        "200":
+          description: List of Module
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          oneOf:
+                            - $ref: "#/components/schemas/OKOrderCreditCard"
+                            - $ref: "#/components/schemas/OKOrderBankTransfer"
+                            - $ref: "#/components/schemas/OKOrderCANCELED"
+        "401":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Unauthorized"
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "there is no order list"
+  /api/v1/orders/{id}:
+    post:
+      tags:
+        - order
+      summary: Create a new order by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+          required: true
+
+      security:
+        - api_key: []
+      description: Create a new order with the provided ID.
+      responses:
+        "201":
+          description: Order created successfully.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          oneOf:
+                            - $ref: "#/components/schemas/OrderDetails"
+        "400":
+          description: Bad Request. The request is malformed or missing required parameters.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "You have already purchased this course"
+        "401":
+          description: Unauthorized. Invalid or missing API key.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Unauthorized"
+
+        "500":
+          description: Internal Server Error. Something went wrong on the server.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Failed create order"
+    put:
+      tags:
+        - order
+      summary: Update and Process Payment for Course Orders by ID
+      description: Update order details and process payment for the specified order ID.
+      security:
+        - api_key: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: "b5d70188-6b85-4d98-a975-509a80710671"
+          required: true
+      requestBody:
+        description: Request body for updating an order and processing payment
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/OrderCreditCard"
+                - $ref: "#/components/schemas/OrderBankTransfer"
+      responses:
+        "200":
+          description: payment successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          oneOf:
+                            - $ref: "#/components/schemas/OKOrderCreditCard"
+        "400":
+          description: It was not possible to make a payment because the payment date had expired
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Failed to process credit card payment: Order expired and canceled"
+        "401":
+          description: Unauthorized. Internal Server Error.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Unauthorized"
+
+        "500":
+          description: Internal Server Error. Order has already been paid.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Failed to payment order: Order has already been paid"
+    delete:
+      tags:
+        - order
+      summary: Delete order by ID
+      description: Delete the order with the specified ID.
+      security:
+        - api_key: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: "b5d70188-6b85-4d98-a975-509a80710671"
+          required: true
+      responses:
+        "200":
+          description: successful to delete the order
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Deleted"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Order deleted successfully"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Failed to delete order: Order not found."
+
   /api/v1/account-verify:
     post:
       tags:
         - otp
       summary: Verify
-      description: Retrieve a list of modules
+      description: Verify the account using OTP.
       operationId: postVerify
       requestBody:
-        description: Module object to be created
+        description: Object containing OTP for account verification
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Verify'
-              
+              $ref: "#/components/schemas/Verify"
+
       responses:
-        '200':
-          description: List of chapter
+        "200":
+          description: Successful response. Account is verified successfully. 
           content:
             application/json:
               schema:
@@ -47,39 +359,39 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'Account is verified successfully.'
+                    example: "Account is verified successfully."
                   data:
                     type: array
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/Verify'
-                        
-        '400':
+                        - $ref: "#/components/schemas/Verify"
+
+        "400":
+          description: Bad Request. Internal Server Error.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Your account is not exist."
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Account is verified already.'  
-                        
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/FAIL'
-                  - type: object
-                    properties:
-                      message:
-                        example: 'OTP is invalid.'  
+                        example: "OTP is invalid."
   /api/v1/resend-otp:
     post:
       tags:
@@ -93,10 +405,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResendOtp'
-              
+              $ref: "#/components/schemas/ResendOtp"
+
       responses:
-        '200':
+        "200":
           description: Resend-Otp
           content:
             application/json:
@@ -105,34 +417,34 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
-                        
-        '400':
+                    example: "success"
+
+        "400":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Your account is not exist.'  
-                        
-        '500':
+                        example: "Your account is not exist."
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'OTP is invalid.'
+                        example: "OTP is invalid."
   /api/v1/forgot-password:
     post:
       tags:
@@ -146,10 +458,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResendOtp'
-              
+              $ref: "#/components/schemas/ResendOtp"
+
       responses:
-        '200':
+        "200":
           description: Resend-Otp
           content:
             application/json:
@@ -158,22 +470,33 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
-                        
-        '500':
+                    example: "success"
+
+        "400":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Your account is not exist.'  
+                        example: "Your account is not exist."
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Your account is not exist."
     put:
       tags:
         - otp
@@ -186,10 +509,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ForgotPassword'
-              
+              $ref: "#/components/schemas/ForgotPassword"
+
       responses:
-        '200':
+        "200":
           description: Resend-Otp
           content:
             application/json:
@@ -198,38 +521,36 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
-                        
-        '400':
+                    example: "success"
+
+        "400":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Your account is not exist.'
-                        
-        
-        '500':
+                        example: "Your account is not exist."
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'OTP is invalid.'
-              
-  
-  /api/v1/module:
+                        example: "OTP is invalid."
+
+  /api/v1/modules:
     get:
       tags:
         - module
@@ -237,35 +558,35 @@ paths:
       description: Retrieve a list of modules
       operationId: getModules
       responses:
-        '200':
-            description: List of Module
-            content:
-              application/json:
-                schema:
-                  allOf:
-                    - $ref: '#/components/schemas/OK'
-                    - type: object
-                      properties:
-                        data:
-                          type: array
-                          items:
-                            oneOf:
-                              - $ref: '#/components/schemas/Module2'
-                              - $ref: '#/components/schemas/Module3'
-                              
-        '500':
+        "200":
+          description: List of Module
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          oneOf:
+                            - $ref: "#/components/schemas/Module2"
+                            - $ref: "#/components/schemas/Module3"
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to retrieve the list of Modules'
-                        
-  /api/v1/chapter/{id}/:
+                        example: "Failed to retrieve the list of Modules"
+
+  /api/v1/chapters/{id}/:
     post:
       tags:
         - module
@@ -278,7 +599,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
           description: ID of the chapter in which the module will be created
 
@@ -288,36 +609,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Module'
+              $ref: "#/components/schemas/Module"
 
       responses:
-        '200':
-            description: Create Module
-            content:
-              application/json:
-                schema:
-                  allOf:
-                    - $ref: '#/components/schemas/OK'
-                    - type: object
-                      properties:
-                        data:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/Module2'
-                            
-        '500':
+        "200":
+          description: Create Module
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Module2"
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to Create Module'
-                        
-  /api/v1/module/{id}:
+                        example: "Failed to Create Module"
+
+  /api/v1/modules/{id}:
     get:
       tags:
         - module
@@ -328,37 +649,37 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 'e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f'
+            example: "e1e4ec04-0ca4-4b8e-b3c3-4011c5ea2a1f"
           required: true
-          
+
       responses:
-        '200':
-          description:  get course details
+        "200":
+          description: get course details
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
                           allOf:
-                            - $ref: '#/components/schemas/Module2'
-                            
-        '500':
+                            - $ref: "#/components/schemas/Module2"
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
-                        
+                        example: "Failed to get course by ID: Course not found"
+
     put:
       tags:
         - module
@@ -371,7 +692,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
           description: ID of the module to be updated
 
@@ -381,47 +702,47 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Module'
+              $ref: "#/components/schemas/Module"
 
       responses:
-        '200':
-            description: Update Module
-            content:
-              application/json:
-                schema:
-                  allOf:
-                    - $ref: '#/components/schemas/OK'
-                    - type: object
-                      properties:
-                        data:
-                          type: array
-                          items:
-                            $ref: '#/components/schemas/Module2'
-                            
-        '404':
+        "200":
+          description: Update Module
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Module2"
+
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
-                        
-        '500':
+                        example: "Failed to get course by ID: Course not found"
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to update module by ID: ...'
-                        
+                        example: "Failed to update module by ID: ..."
+
     delete:
       tags:
         - module
@@ -434,12 +755,12 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
           description: ID of the module to be deleted
 
       responses:
-        '200':
+        "200":
           description: Delete Module
           content:
             application/json:
@@ -448,43 +769,43 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'Success'
+                    example: "Success"
                   data:
                     allOf:
                       - type: object
                         properties:
                           id:
                             example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/Module'
-                          
-        '404':
+                      - $ref: "#/components/schemas/Module"
+
+        "404":
           description: Not Found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
-                        
-        '500':
+                        example: "Failed to get course by ID: Course not found"
+
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to Delete module by ID: ...'
-                        
-  /api/v1/chapter:
+                        example: "Failed to Delete module by ID: ..."
+
+  /api/v1/chapters:
     get:
       tags:
         - chapter
@@ -492,7 +813,7 @@ paths:
       description: Get all Chapter list
       operationId: getChapterList
       responses:
-        '200':
+        "200":
           description: List of chapter
           content:
             application/json:
@@ -501,30 +822,30 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     type: array
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/Chapter2'
-                        - $ref: '#/components/schemas/Chapter3'
-                        
-        '500':
+                        - $ref: "#/components/schemas/Chapter2"
+                        - $ref: "#/components/schemas/Chapter3"
+
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Failed to retrieve the list of chapter
-                        
-  /api/v1/course/{id}/:
+
+  /api/v1/courses/{id}/:
     post:
       tags:
         - chapter
@@ -537,7 +858,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
           description: ID of the course for which the chapter is created
 
@@ -547,10 +868,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Chapter'
+              $ref: "#/components/schemas/Chapter"
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -559,17 +880,17 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     allOf:
                       - type: object
                         properties:
                           id:
                             example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/Chapter'
+                      - $ref: "#/components/schemas/Chapter"
                       - type: object
                         properties:
                           createdAt:
@@ -577,19 +898,19 @@ paths:
                           updatedAt:
                             example: 2023-11-24T10:10:02.523Z
 
-        '500':
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Failed to retrieve the list of chapter
 
-  /api/v1/chapter/{id}:
+  /api/v1/chapters/{id}:
     get:
       tags:
         - chapter
@@ -600,11 +921,11 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 'b1d45d20-5307-4f4e-bb5d-44fe9bb5a65d'
+            example: "b1d45d20-5307-4f4e-bb5d-44fe9bb5a65d"
           required: true
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -613,17 +934,17 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     allOf:
                       - type: object
                         properties:
                           id:
                             example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/Chapter'
+                      - $ref: "#/components/schemas/Chapter"
                       - type: object
                         properties:
                           createdAt:
@@ -631,30 +952,30 @@ paths:
                           updatedAt:
                             example: 2023-11-24T10:10:02.523Z
 
-        '404':
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Chapter not found'
+                        example: "Failed to get course by ID: Chapter not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: ...'
-                        
+                        example: "Failed to get course by ID: ..."
+
     put:
       tags:
         - chapter
@@ -665,7 +986,7 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
 
       requestBody:
@@ -673,11 +994,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Chapter'
+              $ref: "#/components/schemas/Chapter"
         required: true
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -686,10 +1007,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     type: array
                     items:
@@ -698,7 +1019,7 @@ paths:
                           properties:
                             id:
                               example: 82087470-5913-4137-bb57-a889d9b3030e
-                        - $ref: '#/components/schemas/Chapter'
+                        - $ref: "#/components/schemas/Chapter"
                         - type: object
                           properties:
                             createdAt:
@@ -706,29 +1027,29 @@ paths:
                             updatedAt:
                               example: 2023-11-24T10:10:02.523Z
 
-        '404':
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get chapter by ID: Chapter not found'
+                        example: "Failed to get chapter by ID: Chapter not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to update chapter by ID'
+                        example: "Failed to update chapter by ID"
     delete:
       tags:
         - chapter
@@ -739,11 +1060,11 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -752,17 +1073,17 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'Success'
+                    example: "Success"
                   data:
                     allOf:
                       - type: object
                         properties:
                           id:
                             example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/Chapter'
+                      - $ref: "#/components/schemas/Chapter"
                       - type: object
                         properties:
                           createdAt:
@@ -770,31 +1091,31 @@ paths:
                           updatedAt:
                             example: 2023-11-24T10:10:02.523Z
 
-        '404':
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get chapter by ID: Chapter not found'
+                        example: "Failed to get chapter by ID: Chapter not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to delete chapter by ID'
+                        example: "Failed to delete chapter by ID"
 
-  /api/v1/course:
+  /api/v1/courses:
     get:
       summary: Get a list of course
       tags:
@@ -811,7 +1132,7 @@ paths:
               - beginner
               - intermediate
               - advance
-              
+
         - name: category
           in: query
           description: Filter courses by category
@@ -824,7 +1145,7 @@ paths:
               - UI/UX Design
               - Android Development
               - Data Science
-          
+
         - name: type
           in: query
           description: Filter courses by type (free or premium)
@@ -834,23 +1155,23 @@ paths:
             enum:
               - free
               - premium
-              
+
         - name: title
           in: query
           description: Filter courses by title
           required: false
           schema:
             type: string
-            
+
         - name: creator
           in: query
           description: Filter courses by creator
           required: false
           schema:
             type: string
-              
+
       responses:
-        '200':
+        "200":
           description: List of courses
           content:
             application/json:
@@ -859,25 +1180,25 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     type: array
                     items:
                       oneOf:
-                        - $ref: '#/components/schemas/Course1'
-                        - $ref: '#/components/schemas/Course2'
-                        - $ref: '#/components/schemas/Course3'
-                        
-        '500':
+                        - $ref: "#/components/schemas/Course1"
+                        - $ref: "#/components/schemas/Course2"
+                        - $ref: "#/components/schemas/Course3"
+
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
@@ -892,10 +1213,10 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CourseList'
+              $ref: "#/components/schemas/CourseList"
 
       responses:
-        '201':
+        "201":
           description: Successful operation
           content:
             application/json:
@@ -904,37 +1225,37 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'success'
+                    example: "success"
                   data:
                     allOf:
                       - type: object
                         properties:
                           id:
                             example: 82087470-5913-4137-bb57-a889d9b3030e
-                      - $ref: '#/components/schemas/CourseList'
+                      - $ref: "#/components/schemas/CourseList"
                       - type: object
                         properties:
                           createdAt:
                             example: 2023-11-24T10:10:02.523Z
                           updatedAt:
                             example: 2023-11-24T10:10:02.523Z
-                            
-        '500':
+
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Failed to retrieve the list of course
 
-  /api/v1/course/{id}:
+  /api/v1/courses/{id}:
     get:
       tags:
         - course
@@ -945,62 +1266,61 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 'b5d70188-6b85-4d98-a975-509a80710671'
+            example: "b5d70188-6b85-4d98-a975-509a80710671"
           required: true
       responses:
-      
-        '200':
-          description:  get course details
+        "200":
+          description: get course details
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       data:
                         type: array
                         items:
                           allOf:
-                            - $ref: '#/components/schemas/Course3'
+                            - $ref: "#/components/schemas/Course3"
                             - type: object
                               properties:
                                 chapters:
                                   type: array
                                   items:
                                     allOf:
-                                      - $ref: '#/components/schemas/Chapter'
+                                      - $ref: "#/components/schemas/Chapter"
                                       - type: object
                                         properties:
                                           modules:
                                             type: array
                                             items:
                                               allOf:
-                                                - $ref: '#/components/schemas/Module'
-                                                
-        '404':
+                                                - $ref: "#/components/schemas/Module"
+
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
+                        example: "Failed to get course by ID: Course not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: ...'
+                        example: "Failed to get course by ID: ..."
     put:
       tags:
         - course
@@ -1011,18 +1331,18 @@ paths:
           schema:
             type: string
             format: uuid
-            example: 'b5d70188-6b85-4d98-a975-509a80710671'
+            example: "b5d70188-6b85-4d98-a975-509a80710671"
           required: true
-          
+
       requestBody:
         description: Register new user
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CourseList'
+              $ref: "#/components/schemas/CourseList"
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1031,36 +1351,36 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'Data was updated successfully.'
+                    example: "Data was updated successfully."
                   data:
-                    $ref: '#/components/schemas/CourseList'
-                    
-        '404':
+                    $ref: "#/components/schemas/CourseList"
+
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
+                        example: "Failed to get course by ID: Course not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to update data.'
+                        example: "Failed to update data."
 
     delete:
       tags:
@@ -1072,11 +1392,11 @@ paths:
           schema:
             type: string
             format: uuid
-            example: '82087470-5913-4137-bb57-a889d9b3030e'
+            example: "82087470-5913-4137-bb57-a889d9b3030e"
           required: true
 
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1085,36 +1405,36 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: 'OK'
+                    example: "OK"
                   message:
                     type: string
-                    example: 'Deleted successfully.'
+                    example: "Deleted successfully."
                   data:
-                    $ref: '#/components/schemas/Course3'
-                    
-        '404':
+                    $ref: "#/components/schemas/Course3"
+
+        "404":
           description: Id Not found
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Failed to get course by ID: Course not found'
+                        example: "Failed to get course by ID: Course not found"
 
-        '500':
+        "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
-                        example: 'Internal Server Error'
+                        example: "Internal Server Error"
 
   /api/v1/register:
     post:
@@ -1128,11 +1448,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MemberRequest'
+              $ref: "#/components/schemas/MemberRequest"
         required: true
-        
+
       responses:
-        '201':
+        "201":
           description: Successful operation
           content:
             application/json:
@@ -1143,9 +1463,9 @@ paths:
                     type: string
                     example: Data was created successfully.
                   data:
-                    $ref: '#/components/schemas/User3'
-                    
-        '400':
+                    $ref: "#/components/schemas/User3"
+
+        "400":
           description: Bad request
           content:
             application/json:
@@ -1155,19 +1475,19 @@ paths:
                   message:
                     type: string
                     example: Body is missing.
-                    
-        '500':
+
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Failed to create data. Validation error
-                        
+
   /api/v1/login:
     post:
       tags:
@@ -1180,17 +1500,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RootLogin'
+              $ref: "#/components/schemas/RootLogin"
         required: true
-        
+
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       message:
@@ -1199,38 +1519,38 @@ paths:
                       data:
                         type: object
                         allOf:
-                          - $ref: '#/components/schemas/User'
+                          - $ref: "#/components/schemas/User"
                           - type: object
                             properties:
                               token:
                                 type: string
                                 example: >-
                                   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQyZDZkNzkyLWZlNzUtNDYxMy1iMWMyLTU3OWVkMDU2NGIzYyIsImlhdCI6MTY5NzgzNDE3OSwiZXhwIjoxNjk3ODM3Nzc5fQ.JHrFKoKLtze1NwbWoKLsZR3-Gs3LtT5MtHJG-WVmyPs
-                                  
-        '400':
+
+        "400":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Please input email and password.
-                        
-        '404':
+
+        "404":
           description: Email or password is invalid
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Email or password is invalid.
-                        
+
   /api/v1/users:
     get:
       tags:
@@ -1241,13 +1561,13 @@ paths:
       security:
         - api_key: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       data:
@@ -1255,44 +1575,44 @@ paths:
                         items:
                           type: object
                           oneOf:
-                            - $ref: '#/components/schemas/User'
-                            - $ref: '#/components/schemas/User2'
-                            
-        '401':
+                            - $ref: "#/components/schemas/User"
+                            - $ref: "#/components/schemas/User2"
+
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Unauthorized
-                        
-        '403':
+
+        "403":
           description: Forbidden access
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: FORBIDDEN.
-        '500':
+        "500":
           description: Token expired
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: jwt expired
-                        
+
   /api/v1/current-user:
     get:
       tags:
@@ -1302,49 +1622,49 @@ paths:
       operationId: currentUser
       security:
         - api_key: []
-        
+
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       message:
                         type: string
                         example: Login successfully.
                       data:
-                        $ref: '#/components/schemas/User'
-                        
-        '400':
+                        $ref: "#/components/schemas/User"
+
+        "400":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Please input email and password.
-                        
-        '500':
+
+        "500":
           description: Invalid token or JWT expired
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         enum:
                           - invalid token
                           - jwt expired
-                          
+
   /api/v1/admin/register:
     post:
       tags:
@@ -1359,11 +1679,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterAdmin'
+              $ref: "#/components/schemas/RegisterAdmin"
         required: true
-        
+
       responses:
-        '201':
+        "201":
           description: Successful operation
           content:
             application/json:
@@ -1374,9 +1694,9 @@ paths:
                     type: string
                     example: Data was created successfully.
                   data:
-                    $ref: '#/components/schemas/User2'
-                    
-        '400':
+                    $ref: "#/components/schemas/User2"
+
+        "400":
           description: Bad request
           content:
             application/json:
@@ -1386,32 +1706,32 @@ paths:
                   message:
                     type: string
                     example: Body is missing.
-                    
-        '401':
+
+        "401":
           description: Unauthorized
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Unauthorized
-                        
-        '500':
+
+        "500":
           description: Invalid operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/FAIL'
+                  - $ref: "#/components/schemas/FAIL"
                   - type: object
                     properties:
                       message:
                         example: Failed to create data. Validation error
 
-  /api/v1/user-course:
+  /api/v1/my-courses:
     get:
       tags:
         - user
@@ -1420,23 +1740,58 @@ paths:
       operationId: user Course
       security:
         - api_key: []
-        
+
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/OK'
+                  - $ref: "#/components/schemas/OK"
                   - type: object
                     properties:
                       message:
                         type: string
                         example: success.
                       data:
-                        $ref: '#/components/schemas/UserCourse'
+                        $ref: "#/components/schemas/UserCourse"
                         
+  /api/v1/notifications:
+    get:
+      tags:
+        - user
+      summary: Get current user information
+      description: Get current user information
+      operationId: notifications
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      status: 
+                        type: string
+                        example: OK
+                      message:
+                        type: string
+                        example: Success.
+                      data:
+                        allOf:
+                        - $ref: "#/components/schemas/Notif1"
+                        - properties:
+                            notification:
+                              type: array
+                              items: 
+                                $ref: "#/components/schemas/Notif2"
+
 components:
   schemas:
     OK:
@@ -1482,11 +1837,11 @@ components:
           example: test
         phoneNumber:
           type: string
-          example: '082112345678'
+          example: "082112345678"
         address:
           type: string
           example: Earth
-          
+
     RegisterAdmin:
       type: object
       properties:
@@ -1501,11 +1856,11 @@ components:
           example: test
         phoneNumber:
           type: string
-          example: '082112345678'
+          example: "082112345678"
         address:
           type: string
           example: Earth
-          
+
     RootLogin:
       type: object
       properties:
@@ -1515,7 +1870,7 @@ components:
         password:
           type: string
           example: root
-          
+
     User:
       type: object
       properties:
@@ -1533,7 +1888,7 @@ components:
           example: $2b$10$CZWqOKzxtogiTgPNLmxMXORb0fEuZxr0qrEuh2exgpe5I8c6Zq.Du
         phoneNumber:
           type: string
-          example: '082112345678'
+          example: "082112345678"
         address:
           type: string
           example: Earth
@@ -1549,11 +1904,11 @@ components:
           example: indonesia
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-          
+          example: "2023-10-18T13:42:59.162Z"
+
     User2:
       type: object
       properties:
@@ -1571,7 +1926,7 @@ components:
           example: $2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK
         phoneNumber:
           type: string
-          example: '082112345678'
+          example: "082112345678"
         address:
           type: string
           example: Earth
@@ -1584,10 +1939,10 @@ components:
           example: ADMIN
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
 
     User3:
       type: object
@@ -1606,7 +1961,7 @@ components:
           example: $2b$10$P0VY83faE3Wy71l5ZGq4ZunVoxb6wy4q1SxZAZLU7PgOm4RMfw0oK
         phoneNumber:
           type: string
-          example: '082112345678'
+          example: "082112345678"
         address:
           type: string
           example: Earth
@@ -1619,11 +1974,11 @@ components:
           example: MEMBER
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-    
+          example: "2023-10-18T13:42:59.162Z"
+
     UserCourse:
       type: object
       properties:
@@ -1633,7 +1988,7 @@ components:
         courseId:
           type: string
           format: uuid
-          
+
     CourseList:
       type: object
       properties:
@@ -1665,7 +2020,37 @@ components:
         telegram:
           type: string
           example: https://web.telegram.org/
-        
+          
+  
+    Notif1:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Bob
+        email:
+          type: string
+          example: bob@mail.com
+        role:
+          type: string
+          example: MEMBER
+          
+    Notif2: 
+      type: object
+      properties:
+        id:
+          type: string
+          example: 84be766c-e5f3-406f-824a-eee9751e2958
+        title:
+          type: string
+          example: Register Success
+        message:
+          type: string
+          example: Helooo !!!, Welcome to Ideamy Academy
+        createdAt:
+          type: string
+          example: 2023-12-19T06:49:23.721Z
+
     Course1:
       type: object
       properties:
@@ -1705,11 +2090,11 @@ components:
           example: John Doe
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-        
+          example: "2023-10-18T13:42:59.162Z"
+
     Course2:
       type: object
       properties:
@@ -1749,11 +2134,11 @@ components:
           example: Jane Doe
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-          
+          example: "2023-10-18T13:42:59.162Z"
+
     Course3:
       type: object
       properties:
@@ -1793,11 +2178,11 @@ components:
           example: Jane Doe
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-          
+          example: "2023-10-18T13:42:59.162Z"
+
     Chapter:
       type: object
       properties:
@@ -1810,7 +2195,7 @@ components:
         duration:
           type: integer
           example: 60
-          
+
     Chapter2:
       type: object
       properties:
@@ -1831,11 +2216,11 @@ components:
           example: 60
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-          
+          example: "2023-10-18T13:42:59.162Z"
+
     Chapter3:
       type: object
       properties:
@@ -1856,21 +2241,21 @@ components:
           example: 60
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-        
+          example: "2023-10-18T13:42:59.162Z"
+
     Module:
       type: object
       properties:
         title:
           type: string
           example: Inheritance Javascript
-        Video: 
+        Video:
           type: string
           example: https://youtu.be/DwTkyMJi890
-          
+
     Module2:
       type: object
       properties:
@@ -1884,16 +2269,16 @@ components:
         title:
           type: string
           example: Abstraction Javascript
-        Video: 
+        Video:
           type: string
           example: https://youtu.be/ixOd42SEUF0
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
-          
+          example: "2023-10-18T13:42:59.162Z"
+
     Module3:
       type: object
       properties:
@@ -1907,15 +2292,15 @@ components:
         title:
           type: string
           example: Abstraction Javascript
-        Video: 
+        Video:
           type: string
           example: https://youtu.be/ixOd42SEUF0
         createdAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
         updatedAt:
           type: string
-          example: '2023-10-18T13:42:59.162Z'
+          example: "2023-10-18T13:42:59.162Z"
     Verify:
       type: object
       properties:
@@ -1924,15 +2309,15 @@ components:
           example: test2@gmail.com
         otp:
           type: string
-          example:   031442
-          
+          example: 031442
+
     ResendOtp:
       type: object
       properties:
         email:
           type: string
           example: test2@gmail.com
-          
+
     ForgotPassword:
       type: object
       properties:
@@ -1945,7 +2330,201 @@ components:
         password:
           type: integer
           example: test1234
-      
+
+    OrderCreditCard:
+      type: object
+      properties:
+        paymentMethod:
+          type: string
+          example: Credit Card
+        cardNumber:
+          type: string
+          example: 341000485488983
+        cardHolderName:
+          type: string
+          example: jose Smith
+        cvv:
+          type: string
+          example: 233
+        expiryDate:
+          type: string
+          example: 05/25
+
+    OrderBankTransfer:
+      type: object
+      properties:
+        paymentMethod:
+          type: string
+          example: Bank Transfer
+
+    OKOrderCreditCard:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "fef89fef-0ce8-4b8d-8647-1a924e488d52"
+        userId:
+          type: string
+          format: uuid
+          example: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+        courseId:
+          type: string
+          format: uuid
+          example: "746112de-b9c0-464b-bc8e-74e524ec1408"
+        status:
+          type: string
+          example: "COMPLETED"
+        paymentMethod:
+          type: string
+          example: "Credit Card"
+        expiredDateAt:
+          type: string
+          format: date-time
+          example: "2023-12-13T06:14:54.792Z"
+        cardNumber:
+          type: string
+          example: "1234567891012141"
+        cardHolderName:
+          type: string
+          example: "John Doe"
+        cvv:
+          type: string
+          example: "1234"
+        expiryDate:
+          type: string
+          example: "08/24"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-12-13T05:14:54.793Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-12-13T05:15:08.237Z"
+          
+    OKOrderBankTransfer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "fef89fef-0ce8-4b8d-8647-1a924e488d52"
+        userId:
+          type: string
+          format: uuid
+          example: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+        courseId:
+          type: string
+          format: uuid
+          example: "746112de-b9c0-464b-bc8e-74e524ec1408"
+        status:
+          type: string
+          example: "COMPLETED"
+        paymentMethod:
+          type: string
+          example: "Bank Transfer"
+        expiredDateAt:
+          type: string
+          format: date-time
+          example: "2023-12-13T06:14:54.792Z"
+        cardNumber:
+          type: string
+          example: "null"
+        cardHolderName:
+          type: string
+          example: "null"
+        cvv:
+          type: string
+          example: "null"
+        expiryDate:
+          type: string
+          example: "null"
+
+    OKOrderCANCELED:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "fef89fef-0ce8-4b8d-8647-1a924e488d52"
+        userId:
+          type: string
+          format: uuid
+          example: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+        courseId:
+          type: string
+          format: uuid
+          example: "746112de-b9c0-464b-bc8e-74e524ec1408"
+        status:
+          type: string
+          example: "CANCELED"
+        paymentMethod:
+          type: string
+          example: "null"
+        expiredDateAt:
+          type: string
+          format: date-time
+          example: "2023-12-13T06:14:54.792Z"
+        cardNumber:
+          type: string
+          example: "null"
+        cardHolderName:
+          type: string
+          example: "null"
+        cvv:
+          type: string
+          example: "null"
+        expiryDate:
+          type: string
+          example: "null"
+          
+    OrderDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "49b69738-e8e3-4446-b976-c9bb4e62c5e8"
+        userId:
+          type: string
+          format: uuid
+          example: "f508c403-9260-4d18-a0c9-d22d5d6117e0"
+        courseId:
+          type: string
+          format: uuid
+          example: "b5d70188-6b85-4d98-a975-509a80710671"
+        expiredDateAt:
+          type: string
+          format: date-time
+          example: "2023-12-14T06:42:32.658Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2023-12-14T05:42:32.658Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2023-12-14T05:42:32.658Z"
+        status:
+          type: string
+          example: "PENDING"
+        paymentMethod:
+          type: string
+          nullable: true
+        cardNumber:
+          type: string
+          nullable: true
+        cardHolderName:
+          type: string
+          nullable: true
+        cvv:
+          type: string
+          nullable: true
+        expiryDate:
+          type: string
+          nullable: true
+
   securitySchemes:
     api_key:
       type: apiKey

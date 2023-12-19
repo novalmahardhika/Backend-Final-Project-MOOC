@@ -10,39 +10,60 @@ const UserCourse = require('../../app/controllers/userCourse')
 const { uploadToMemory } = require('../../middlewares/uploadOnMemory.js');
 const { uploadToCloudinary } = require("../../middlewares/uploadOnCloudinary.js")
 
-// Get ist
-router.get("/course", Course.list)
+// Get List
+router.get("/courses", Course.list)
 
 // Create new data
-router.post("/course", uploadToMemory, uploadToCloudinary, Course.create)
+router.post("/courses", uploadToMemory, uploadToCloudinary, Course.create)
 
 // Update data by ID
-router.put("/course/:id", Course.findAndSetById, uploadToMemory, uploadToCloudinary, Course.update)
+router.put("/courses/:id", Course.findAndSetById, uploadToMemory, uploadToCloudinary, Course.update)
 
 // Delete data by ID
-router.delete("/course/:id", Course.findAndSetById, Course.destroyById)
+router.delete("/courses/:id", Course.findAndSetById, Course.destroyById)
 
 // Get data detail from ID
-router.get("/course/:id", AuthMiddleware.authorize2, Course.findAndSetById, UserCourse.findOneAndSet, Course.detail)
+router.get("/courses/:id", AuthMiddleware.authorize2, Course.findAndSetById, UserCourse.findOneAndSet, Course.detail)
 
 
 
 //  chapter
-router.get("/chapter", Chapter.findAll )
-router.get("/chapter/:chapterId", Chapter.findByPk, Chapter.detail )
-router.put("/chapter/:chapterId", Chapter.findByPk, Chapter.update )
-router.delete("/chapter/:chapterId", Chapter.findByPk, Chapter.destroy )
+
+// Get List Chapter
+router.get("/chapters", Chapter.findAll )
+
+// Get Detail Chapter
+router.get("/chapters/:chapterId", Chapter.findByPk, Chapter.detail )
+
+// Update Chapter
+router.put("/chapters/:chapterId", Chapter.findByPk, Chapter.update )
+
+// Delete Chapter
+router.delete("/chapters/:chapterId", Chapter.findByPk, Chapter.destroy )
 // create chapter, why using endpoint course ? because we need assign course id as a value for field courseId
-router.post("/course/:id", Chapter.create )
+
+// Create Chapter
+router.post("/courses/:id", Chapter.create )
 
 
 //  module
-router.get("/module", Module.findAll )
-router.get("/module/:moduleId", AuthMiddleware.authorize2, Module.findSetById, Module.detail )
-router.put("/module/:moduleId", Module.update )
-router.delete("/module/:moduleId",  Module.findSetById ,Module.destroy )
+
+// Get List Module
+router.get("/modules", Module.findAll )
+
+// Get Detail Module
+router.get("/modules/:moduleId", AuthMiddleware.authorize2, Module.findSetById, Module.detail )
+
+// Update Module
+router.put("/modules/:moduleId", Module.update )
+
+// Delete Module
+router.delete("/modules/:moduleId",  Module.findSetById ,Module.destroy )
+
 // create module, why using endpoint chapter ? because we need assign chapter id as a value for field chapterId
-router.post("/chapter/:chapterId", Module.create )
+
+// Create Module
+router.post("/chapters/:chapterId", Module.create )
 
 
 

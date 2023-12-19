@@ -3,6 +3,7 @@ const router = Router()
 
 const UserCourse = require('../../app/controllers/userCourse')
 
-router.get('/my-course', UserCourse.list)
+// get list user course
+router.get('/user-courses', UserCourse.list)
 
 module.exports = router

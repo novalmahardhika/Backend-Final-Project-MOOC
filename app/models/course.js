@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         as: 'chapters'
       })
 
+      Course.hasMany(models.Order, {
+        foreignKey: 'courseId',
+      })
       Course.belongsToMany(models.User, {
         through: models.UserCourse  ,
         foreignKey: 'courseId',
@@ -39,10 +42,11 @@ module.exports = (sequelize, DataTypes) => {
       level: DataTypes.ENUM('beginner','intermediate','advance'),
       price: DataTypes.INTEGER,
       image: DataTypes.STRING,
-      description: DataTypes.STRING,
+      description: DataTypes.TEXT,
       telegram: DataTypes.STRING,
       creator: DataTypes.STRING,
-      rating: DataTypes.FLOAT
+      rating: DataTypes.FLOAT,
+      audience: DataTypes.ARRAY(DataTypes.STRING)
     },
     {
       sequelize,
