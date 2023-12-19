@@ -1756,6 +1756,41 @@ paths:
                         example: success.
                       data:
                         $ref: "#/components/schemas/UserCourse"
+                        
+  /api/v1/notifications:
+    get:
+      tags:
+        - user
+      summary: Get current user information
+      description: Get current user information
+      operationId: notifications
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      status: 
+                        type: string
+                        example: OK
+                      message:
+                        type: string
+                        example: Success.
+                      data:
+                        allOf:
+                        - $ref: "#/components/schemas/Notif1"
+                        - properties:
+                            notification:
+                              type: array
+                              items: 
+                                $ref: "#/components/schemas/Notif2"
 
 components:
   schemas:
@@ -1985,6 +2020,36 @@ components:
         telegram:
           type: string
           example: https://web.telegram.org/
+          
+  
+    Notif1:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Bob
+        email:
+          type: string
+          example: bob@mail.com
+        role:
+          type: string
+          example: MEMBER
+          
+    Notif2: 
+      type: object
+      properties:
+        id:
+          type: string
+          example: 84be766c-e5f3-406f-824a-eee9751e2958
+        title:
+          type: string
+          example: Register Success
+        message:
+          type: string
+          example: Helooo !!!, Welcome to Ideamy Academy
+        createdAt:
+          type: string
+          example: 2023-12-19T06:49:23.721Z
 
     Course1:
       type: object
