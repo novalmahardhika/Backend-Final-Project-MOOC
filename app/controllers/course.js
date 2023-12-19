@@ -1,4 +1,5 @@
 const courseService = require('../services/course')
+const { Op } = require("sequelize");
 
 const appendCourseInformation = (course) => {
     const chapterLen = Object.keys(course.chapters).length;
@@ -31,8 +32,33 @@ const deleteDetail = (course) => {
 
 const list = async (req, res) => {
     try {
+        const { category, title, search, type } = req.query
+
+        const filter={}
+
+        if (category) filter.category = category 
+        if (title) filter.title = title 
+        if (type) filter.type = type 
+
+        if (search) {
+
+            const arrData = search.split(' ').map((x)=> x.charAt(0).toUpperCase() + x.slice(1))
+            const arrFilter = ['Ios','Ui','Ux','Ui/ux']
+
+            arrFilter.map((data)=> (arrData.includes(data) ? arrData.splice(arrData.indexOf(data),1, 'UI/UX') : ''))
+
+            if (arrData.includes('Ios')) {
+                const index = arrData.indexOf("Ios")
+                arrData.splice(index, 1, 'IOS' )
+            }
+
+            const searchFilter = arrData.join(" ")
+
+            filter.title = { [Op.like]: `%${searchFilter}%` }
+        }
+
         const isFilter = Object.keys(req.query).length;
-        const data = (isFilter) ? await courseService.findAll({ ...req.query }) : await courseService.findAll()
+        const data = (isFilter) > 0 ? await courseService.findAll(filter) : await courseService.findAll()
         const dataLen = Object.keys(data).length;
 
         for(let i = 0; i < dataLen; i++) {

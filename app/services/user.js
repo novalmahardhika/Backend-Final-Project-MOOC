@@ -2,6 +2,7 @@ const ApplicationError = require("../../config/errors/ApplicationError.js");
 const UserRepo = require("../repositories/user.js");
 const OtpRepo = require("../repositories/otp.js");
 const Auth = require("./auth.js");
+const NotificationService = require("../services/notification.js");
 const { sendMail } = require("./mailer.js");
 const { otpTypeList, sendMailType } = require("../../config/struct.js")
 
@@ -115,8 +116,8 @@ const create = async (payload, isAdmin) => {
             phoneNumber,
             role: isAdmin ? 'ADMIN': 'MEMBER'
         });
-        
 
+        await NotificationService.create(user.id,{ title: 'Register Success', message: 'Halooo !!!, Welcome to Idea Academy' })
         await sendOtp(user, "verify");
         delete user.dataValues.verified;
 
@@ -175,6 +176,19 @@ const myCourse = async (id) => {
     }
 }
 
+const notification = async (id) => {
+    try {
+        const user = await UserRepo.notification(id);
+        if (!user) {
+            throw new ApplicationError(`User not found.`, 404);
+        }
+
+        return user;
+    } catch (err) {
+        throw new ApplicationError(`${err.message}`, err.statusCode || 500);
+    }
+}
+
 module.exports = {
     sendOtp,
     resendOtp,
@@ -185,5 +199,6 @@ module.exports = {
     create,
     update,
     checkUser,
-    myCourse
+    myCourse,
+    notification
 }

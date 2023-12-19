@@ -1,4 +1,4 @@
-const { User, Course } = require("../models/index.js");
+const { User, Course,Notification } = require("../models/index.js");
 const bcrypt = require("bcrypt");
 
 async function findAll() {
@@ -23,7 +23,11 @@ async function checkPassword(password, hash) {
 }
 
 async function findByPk(id) {
-    return await User.findByPk(id, { include: [{ model: Course }], attributes: { exclude: ["UserCourse"] } });
+    return await User.findByPk(id, { include: [{ model: Course,through: {attributes: []}}], attributes: { exclude: ["updatedAt,createdAt","encryptedPassword", "phoneNumber", "address", "verified"] } });
+}
+
+async function notification(id) {
+    return await User.findByPk(id, { include: [{ model: Notification,as: 'notifications' ,attributes: {exclude: ['userId','updatedAt']} }], attributes: { exclude: ["id","updatedAt","createdAt", "encryptedPassword", "phoneNumber", "address", "verified"] }});
 }
 
 module.exports = {
@@ -31,5 +35,6 @@ module.exports = {
     create,
     findOne,
     checkPassword,
-    findByPk
+    findByPk,
+    notification
 }

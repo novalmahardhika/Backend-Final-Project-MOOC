@@ -44,7 +44,7 @@
     }
   ],
   "paths": {
-    "/api/v1/order": {
+    "/api/v1/orders": {
       "get": {
         "tags": [
           "order"
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/api/v1/order/list": {
+    "/api/v1/orders/list": {
       "get": {
         "tags": [
           "order"
@@ -261,7 +261,7 @@
         }
       }
     },
-    "/api/v1/order/{id}": {
+    "/api/v1/orders/{id}": {
       "post": {
         "tags": [
           "order"
@@ -949,7 +949,7 @@
         }
       }
     },
-    "/api/v1/module": {
+    "/api/v1/modules": {
       "get": {
         "tags": [
           "module"
@@ -1015,7 +1015,7 @@
         }
       }
     },
-    "/api/v1/chapter/{id}/": {
+    "/api/v1/chapters/{id}/": {
       "post": {
         "tags": [
           "module"
@@ -1098,7 +1098,7 @@
         }
       }
     },
-    "/api/v1/module/{id}": {
+    "/api/v1/modules/{id}": {
       "get": {
         "tags": [
           "module"
@@ -1376,7 +1376,7 @@
         }
       }
     },
-    "/api/v1/chapter": {
+    "/api/v1/chapters": {
       "get": {
         "tags": [
           "chapter"
@@ -1443,7 +1443,7 @@
         }
       }
     },
-    "/api/v1/course/{id}/": {
+    "/api/v1/courses/{id}/": {
       "post": {
         "tags": [
           "chapter"
@@ -1547,7 +1547,7 @@
         }
       }
     },
-    "/api/v1/chapter/{id}": {
+    "/api/v1/chapters/{id}": {
       "get": {
         "tags": [
           "chapter"
@@ -1893,7 +1893,7 @@
         }
       }
     },
-    "/api/v1/course": {
+    "/api/v1/courses": {
       "get": {
         "summary": "Get a list of course",
         "tags": [
@@ -2111,7 +2111,7 @@
         }
       }
     },
-    "/api/v1/course/{id}": {
+    "/api/v1/courses/{id}": {
       "get": {
         "tags": [
           "course"
@@ -2920,7 +2920,7 @@
         }
       }
     },
-    "/api/v1/my-course": {
+    "/api/v1/my-courses": {
       "get": {
         "tags": [
           "user"
@@ -2952,6 +2952,67 @@
                         },
                         "data": {
                           "$ref": "#/components/schemas/UserCourse"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notifications": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get current user information",
+        "description": "Get current user information",
+        "operationId": "notifications",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OK"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string",
+                          "example": "OK"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Success."
+                        },
+                        "data": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/Notif1"
+                            },
+                            {
+                              "properties": {
+                                "notification": {
+                                  "type": "array",
+                                  "items": {
+                                    "$ref": "#/components/schemas/Notif2"
+                                  }
+                                }
+                              }
+                            }
+                          ]
                         }
                       }
                     }
@@ -3261,6 +3322,44 @@
           "telegram": {
             "type": "string",
             "example": "https://web.telegram.org/"
+          }
+        }
+      },
+      "Notif1": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Bob"
+          },
+          "email": {
+            "type": "string",
+            "example": "bob@mail.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "MEMBER"
+          }
+        }
+      },
+      "Notif2": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "84be766c-e5f3-406f-824a-eee9751e2958"
+          },
+          "title": {
+            "type": "string",
+            "example": "Register Success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Helooo !!!, Welcome to Ideamy Academy"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2023-12-19T06:49:23.721Z"
           }
         }
       },
