@@ -11,7 +11,7 @@ const rootRouter = require('./root.routes')
 
 
 // tes ping router
-router.use('/', rootRouter)
+router.use('/v1', rootRouter)
 
 // routes controller
 router.use('/v1/', authRoute)
