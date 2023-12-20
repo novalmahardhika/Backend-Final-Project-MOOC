@@ -31,7 +31,21 @@ const update = async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
         const { body } = req
-        const user = await userService.update(req.user, body);
+        const user = await userService.update(req.user.id, body);
+        res.status(201).json({ status: "OK", message: "Data was updated successfully.", data: user });
+    } catch (err) {
+        res.status(err.statusCode).json({
+            status: "FAIL",
+            message: err.message
+        });
+    }
+}
+
+const resetPassword = async (req, res) => {
+    try {
+        res.setHeader('Content-Type', 'application/json');
+        const { body } = req
+        const user = await userService.reset(req.user, body);
         res.status(201).json({ status: "OK", message: "Data was updated successfully.", data: user });
     } catch (err) {
         res.status(err.statusCode).json({
@@ -194,5 +208,6 @@ module.exports = {
     currentUser,
     myCourse,
     notification,
-    update
+    update,
+    resetPassword
 }

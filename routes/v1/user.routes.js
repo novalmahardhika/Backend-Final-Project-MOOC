@@ -43,6 +43,8 @@ router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.f
 // update user
 router.put('/users',AuthMiddleware.authorize,uploadToMemory,uploadToCloudinary, Auth.update)
 
+// update user
+router.put('/reset-password',AuthMiddleware.authorize, Auth.resetPassword)
 
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)

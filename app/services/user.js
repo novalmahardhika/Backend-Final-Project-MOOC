@@ -127,20 +127,39 @@ const create = async (payload, isAdmin) => {
     }
 }
 
-const update = async (req, payload) => {
+const update = async (userId, payload) => {
     try {
-        const data = req;
+        const { role } = payload
 
-        if (payload.role ) {
+        if ( role) {
             throw new ApplicationError('Cannot Update Role User', 403)
         }
 
-        data.set(payload);
-        return await data.save();
+        const data = await UserRepo.update(userId,payload)
+        return data
     } catch (err) {
         throw new ApplicationError(`Failed to update data. ${err.message}`,  err.statusCode || 500);
     }
 }
+
+const reset = async (user, payload) => {
+    try {
+        const { password, newPassword } = payload
+        if (!password) {
+            throw new ApplicationError('Please input your Password', 400)
+        }
+        const checkPass = await Auth.cmpPassword(password, user.encryptedPassword)
+        if (!checkPass) {
+            throw new ApplicationError("Password doesn't match", 400)
+        }
+        const encryptedPassword = await Auth.encryptPassword(newPassword)
+        const data = await UserRepo.update(user.id, { encryptedPassword: encryptedPassword })
+        return data
+    } catch (err) {
+        throw new ApplicationError(`Failed to update data. ${err.message}`,  err.statusCode || 500);
+    }
+}
+
 
 const checkUser = async (credentials) => {
     try {
@@ -205,5 +224,6 @@ module.exports = {
     update,
     checkUser,
     myCourse,
-    notification
+    notification,
+    reset
 }
