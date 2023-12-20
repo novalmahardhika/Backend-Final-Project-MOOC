@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     phoneNumber: DataTypes.STRING,
+    image: DataTypes.STRING,
     address: DataTypes.STRING,
     role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER'),
     verified: DataTypes.BOOLEAN

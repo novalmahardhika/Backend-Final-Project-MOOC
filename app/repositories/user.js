@@ -22,8 +22,13 @@ async function checkPassword(password, hash) {
     return await bcrypt.compare(password, hash);
 }
 
+async function update(userId, payload) {
+    const [_,data] = await User.update(payload, { where: { id:userId }, returning:true });
+    return data[0]
+}
+
 async function findByPk(id) {
-    return await User.findByPk(id, { include: [{ model: Course,through: {attributes: []}}], attributes: { exclude: ["updatedAt,createdAt","encryptedPassword", "phoneNumber", "address", "verified"] } });
+    return await User.findByPk(id, { include: [{ model: Course,through: {attributes: []}}], attributes: { exclude: ["updatedAt,createdAt", "verified"] } });
 }
 
 async function notification(id) {
@@ -36,5 +41,6 @@ module.exports = {
     findOne,
     checkPassword,
     findByPk,
-    notification
+    notification,
+    update
 }

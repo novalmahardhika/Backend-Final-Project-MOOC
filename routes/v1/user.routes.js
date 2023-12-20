@@ -4,6 +4,9 @@ const router = Router()
 const Auth = require('../../app/controllers/user')
 const AuthMiddleware = require('../../middlewares/auth')
 
+const { uploadToMemory } = require('../../middlewares/uploadOnMemory.js');
+const { uploadToCloudinary } = require("../../middlewares/uploadOnCloudinary.js")
+
 const isBodyNotNull = async (req, res, next) => {
   if (!Object.keys(req.body).length) {
     res.setHeader('Content-Type', 'application/json')
@@ -36,6 +39,12 @@ router.post('/login', isBodyNotNull, Auth.login)
 
 // get user
 router.get('/users',AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin,Auth.findAll)
+
+// update user
+router.put('/users',AuthMiddleware.authorize,uploadToMemory,uploadToCloudinary, Auth.update)
+
+// update user
+router.put('/reset-password',AuthMiddleware.authorize, Auth.resetPassword)
 
 // get current user
 router.get('/current-user', AuthMiddleware.authorize, Auth.currentUser)
