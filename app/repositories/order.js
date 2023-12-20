@@ -18,13 +18,12 @@ const getCourse = (userId, payload) => {
     return Order.findAll({
         where: {
             userId: userId,
-            status: "COMPLETED",
             ...payload,
         },
         include: [
             {
                 model: Course,
-                attributes: ['id', 'title', 'type', 'category', 'level', 'price', 'image'],
+                attributes: ['title', 'type', 'category', 'level', 'price', 'image'],
             },
         ],
     });
