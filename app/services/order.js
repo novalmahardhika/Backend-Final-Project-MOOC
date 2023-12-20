@@ -106,7 +106,6 @@ const processPayment = async (
 
         if (paymentMethod === "Credit Card") {
           const userCourseResult = await orderRepository.createNewUserCourse(userId, courseId);
-          console.log(userCourseResult);
         }
       }
 
