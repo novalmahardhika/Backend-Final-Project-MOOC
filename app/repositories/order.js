@@ -24,7 +24,7 @@ const getCourse = (userId, payload) => {
         include: [
             {
                 model: Course,
-                attributes: ['id', 'title', 'category', 'level', 'price'],
+                attributes: ['id', 'title', 'type', 'category', 'level', 'price', 'image'],
             },
         ],
     });
@@ -47,7 +47,14 @@ const deleteUserCourse = async (userId, courseId) => {
 };
 
 const getAllOrders = async () => {
-    return Order.findAll();
+    return Order.findAll({
+        include: [
+            {
+                model: Course,
+                attributes: ['title', 'type', 'category', 'level', 'price', 'image'],
+            },
+        ],
+    });
 };
 
   
