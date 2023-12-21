@@ -1612,6 +1612,131 @@ paths:
                     properties:
                       message:
                         example: jwt expired
+    put:
+      tags:
+        - user
+      summary: Update Profile for members
+      description: Update Profile Users
+      operationId: updateUsers
+      security:
+        - api_key: []
+      requestBody:
+        description: Register new admin
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          oneOf:
+                            - $ref: "#/components/schemas/User"
+
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: Unauthorized
+                        
+        "500":
+          description: Token expired
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: jwt expired
+                        
+  /api/v1/reset-password:
+    put:
+      tags:
+        - user
+      summary: Change Password
+      description: change user password
+      operationId: Change Password
+      security:
+        - api_key: []
+      requestBody:
+        description: Register new admin
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/changePassword"
+        required: true
+
+      responses:
+        "201":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/OK"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          oneOf:
+                            - $ref: "#/components/schemas/changePassword"
+
+        "400":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: Failed to update data. Password doesn't match
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: Unauthorized
+                        
+        "500":
+          description: Token expired
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: jwt expired
 
   /api/v1/current-user:
     get:
@@ -1889,6 +2014,9 @@ components:
         phoneNumber:
           type: string
           example: "082112345678"
+        image:
+          type: string
+          example: https://res.cloudinary.com/djsjnrfv0/image/upload/v1702988069/BINAR/mqtkzduziqwhdvxu1vzh.png
         address:
           type: string
           example: Earth
@@ -2349,6 +2477,17 @@ components:
         expiryDate:
           type: string
           example: 05/25
+
+    changePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          example: root
+        newPassword:
+          type: string
+          example: root123
+          
 
     OrderBankTransfer:
       type: object
