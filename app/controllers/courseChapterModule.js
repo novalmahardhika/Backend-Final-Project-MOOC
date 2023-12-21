@@ -1,4 +1,5 @@
 const courseService = require('../services/courseChapterModule')
+const courseProgressService = require('../services/userCourseProgress')
 
 const findAll = async (req, res) => {
     try {
@@ -78,6 +79,7 @@ const destroy = async (req, res) => {
 }
 
 const detail = (req, res) => {
+    if (req.user != "guest") courseProgressService.create({ userId: req.user.id, moduleId: req.courseChapterModule.id, done: true });
     res.json({ status: "OK", message: "Success", data: req.courseChapterModule });
 };
 

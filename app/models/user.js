@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId', 
         as: 'notifications'
       })
+      
+      User.hasMany(models.UserCourseProgress, {
+        foreignKey: 'userId',
+      })
     }
   }
   User.init({

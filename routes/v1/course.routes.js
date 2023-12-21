@@ -47,17 +47,19 @@ router.post("/courses/:id", Chapter.create )
 
 
 //  module
+
 // Get List Module
 router.get("/modules", Module.findAll )
 
 // Get Detail Module
-router.get("/modules/:moduleId", Module.findSetById, Module.detail )
+router.get("/modules/:moduleId", AuthMiddleware.authorize2, Module.findSetById, Module.detail )
 
 // Update Module
 router.put("/modules/:moduleId", Module.update )
 
 // Delete Module
 router.delete("/modules/:moduleId",  Module.findSetById ,Module.destroy )
+
 // create module, why using endpoint chapter ? because we need assign chapter id as a value for field chapterId
 
 // Create Module

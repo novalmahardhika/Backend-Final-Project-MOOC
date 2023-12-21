@@ -1,4 +1,4 @@
-const { courseChapterModule } = require('../models/index.js')
+const { courseChapterModule, CourseChapter } = require('../models/index.js')
 
 /**
 * Filter the course with specific condition.
@@ -10,7 +10,12 @@ const findAll = async (filter) => {
 }
 
 const findByPk = async (id) => {
-    const courseModule = await courseChapterModule.findByPk(id)
+    const courseModule = await courseChapterModule.findByPk(id, {
+        include: [{
+            model:CourseChapter,
+            attributes: ['chapterNumber']
+        }]
+    })
     return courseModule
 }
 const create = async (payload) => {

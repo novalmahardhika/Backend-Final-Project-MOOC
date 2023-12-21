@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       courseChapterModule.belongsTo(models.CourseChapter, {
         foreignKey: 'chapterId',
       })
+      
+      courseChapterModule.hasMany(models.UserCourseProgress, {
+        foreignKey: 'userId',
+      })
     }
   }
   courseChapterModule.init({
