@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'userId', 
         as: 'notifications'
       })
+      
+      User.hasMany(models.UserCourseProgress, {
+        foreignKey: 'userId',
+      })
     }
   }
   User.init({
@@ -43,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     phoneNumber: DataTypes.STRING,
+    image: DataTypes.STRING,
     address: DataTypes.STRING,
     role: DataTypes.ENUM('ROOT', 'ADMIN', 'MEMBER'),
     verified: DataTypes.BOOLEAN

@@ -6,7 +6,17 @@ const { Course,CourseChapter,courseChapterModule } = require("../models/index.js
 */
 async function findAll(filter) {
     if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
-    return await Course.findAll({ where: filter, include: [{ model: CourseChapter, as: 'chapters', include: [{ model: courseChapterModule, as: 'modules' }] }]});
+    return await Course.findAll({
+        where: filter,
+        include: [{
+            model: CourseChapter,
+            as: 'chapters',
+            include: [{
+                model: courseChapterModule,
+                as: 'modules'
+            }]
+        }]
+    });
 }
 
 async function create(body) {
@@ -23,7 +33,19 @@ async function destroy(filter) {
 }
 
 async function findByPk(id) {
-    return await Course.findByPk(id, { include: [{ model: CourseChapter, as: 'chapters', include: [{ model: courseChapterModule, as: 'modules' }] }]});
+    return await Course.findByPk(id, {
+        include: [{
+            model: CourseChapter,
+            as: 'chapters',
+            include: [{
+                model: courseChapterModule,
+                as: 'modules',
+                attributes: {
+                    exclude: ['chapterId', 'video']
+                },
+            }]
+        }]
+    });
 }
 
 module.exports = {

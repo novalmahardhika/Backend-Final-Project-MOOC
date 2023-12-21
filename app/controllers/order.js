@@ -35,28 +35,23 @@ const detailOrder = async (req, res) => {
       const { paymentMethod, cardNumber, cardHolderName, cvv, expiryDate } = req.body;
       const orderId = req.params.id;
   
-      let resultData;
-      if (paymentMethod === "Bank Transfer") {
-        resultData = await orderService.processBankTransfer(orderId, paymentMethod, cardNumber, cardHolderName, cvv, expiryDate);
-      } else if (paymentMethod === "Credit Card") {
-        resultData = await orderService.processCreditCard(orderId, paymentMethod, cardNumber, cardHolderName, cvv, expiryDate);
-      } 
-
+      const resultData = await orderService.processPayment(orderId, paymentMethod, cardNumber, cardHolderName, cvv, expiryDate);
+  
       return res.status(200).json({
         status: resultData ? 'OK' : 'FAIL',
         message: resultData ? 'Success' : 'Failed to process payment',
         data: resultData,
       });
     } catch (error) {
-      if (error) {
+      if (error.statusCode) {
         return res.status(error.statusCode).json({
           status: 'FAIL',
           message: error.message,
         });
       } else {
-        res.status(500).json({
+        return res.status(500).json({
           status: 'FAIL',
-          message: `Failed to payment order: ${error.message}`,
+          message: `Failed to process order payment: ${error.message}`,
         });
       }
     }
