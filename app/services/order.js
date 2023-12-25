@@ -31,7 +31,7 @@ const createOrder = async (userId, courseId) => {
 
     // Include the associated Course model
     const includedCourse = await data.getCourse({
-      attributes: [ 'title', 'category','type', 'level', 'price','image'],
+      attributes: [ 'title', 'category','type', 'level', 'price','image','rating','creator'],
     });
     const order = { ...data.toJSON(), course: includedCourse.toJSON() };
     
@@ -119,7 +119,7 @@ const processPayment = async (
       }
 
       const includedCourse = await data.getCourse({
-        attributes: ['title', 'category', 'type', 'level', 'price', 'image'],
+        attributes: ['title', 'category', 'type', 'level', 'price', 'image','rating','creator'],
       });
       const response = { ...data.toJSON(), course: includedCourse.toJSON() };
 

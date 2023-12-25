@@ -23,7 +23,7 @@ const getCourse = (userId, payload) => {
         include: [
             {
                 model: Course,
-                attributes: ['title', 'type', 'category', 'level', 'price', 'image'],
+                attributes: ['title', 'type', 'category', 'level', 'price', 'image','rating','creator'],
             },
         ],
     });
@@ -50,7 +50,7 @@ const getAllOrders = async () => {
         include: [
             {
                 model: Course,
-                attributes: ['title', 'type', 'category', 'level', 'price', 'image'],
+                attributes: ['title', 'type', 'category', 'level', 'price', 'image','rating','creator'],
             },
         ],
     });
