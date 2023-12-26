@@ -103,10 +103,7 @@ const processPayment = async (
         }
 
         await NotificationService.create(userId, { title: "Payment Success", message: `Payment Course ${courseId} is Success` });
-
-        if (paymentMethod === "Credit Card") {
-          await orderRepository.createNewUserCourse(userId, courseId);
-        }
+        await orderRepository.createNewUserCourse(userId, courseId);
       }
 
       if (data.expiredDateAt && new Date() > new Date(data.expiredDateAt)) {
