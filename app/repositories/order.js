@@ -1,4 +1,5 @@
 const { Order, Course, UserCourse } = require('../models/index');
+const { Op } = require('sequelize');
 
 const findCompletedOrder = async (userId, courseId) => {
     return Order.findOne({
@@ -56,6 +57,35 @@ const getAllOrders = async () => {
     });
 };
 
+const cekallorders = async (userId, courseId) => {
+    try {
+        const activeOrders = await Order.findAll({
+            where: {
+                userId: userId,
+                courseId: courseId,
+                expiredDateAt: { [Op.gt]: new Date() }
+            }
+        });
+
+        return activeOrders.length > 0;
+    } catch (error) {
+        console.error(`Failed to fetch orders: ${error.message}`);
+        throw error; 
+    }
+};
+
+const getById = async (orderId) => {
+    return Order.findOne({
+        where: { id: orderId },
+        include: [
+            {
+                model: Course,
+                attributes: ['title', 'type', 'category', 'level', 'price', 'image','rating','creator'],
+            },
+        ],
+    });
+};
+
   
   const updateOrder = async (orderId, payload) => {
     return Order.update(payload, {
@@ -79,5 +109,7 @@ module.exports = {
     deleteUserCourse,
     getAllOrders,
     updateOrder,
-    createNewUserCourse
+    createNewUserCourse,
+    getById,
+    cekallorders
 };

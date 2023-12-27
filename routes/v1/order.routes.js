@@ -10,5 +10,6 @@ router.put("/orders/:id", AuthMiddleware.authorize, Order.detailOrder);
 router.get("/orders", AuthMiddleware.authorize, Order.getPurchasedCourses);
 router.get("/orders/list", AuthMiddleware.authorize,AuthMiddleware.isRootOrAdmin, Order.getOrders);
 router.delete("/orders/:id", AuthMiddleware.authorize, Order.deleteOrder);
+router.get("/orders/:id", AuthMiddleware.authorize, Order.ordersDetail);
 
 module.exports = router

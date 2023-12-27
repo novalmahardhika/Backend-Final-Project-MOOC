@@ -17,6 +17,12 @@ const createOrder = async (userId, courseId) => {
       };
     }
 
+    const isActiveOrderExist = await orderRepository.cekallorders(userId,courseId);
+
+    if (isActiveOrderExist) {
+      throw new ApplicationError("There is an active order for this course", 400);
+    }
+
     const expirationMinutes = 60;
     const expiredDateAt = new Date();
     expiredDateAt.setMinutes(expiredDateAt.getMinutes() + expirationMinutes);
@@ -159,10 +165,25 @@ const getAllOrders = async () => {
   return orderRepository.getAllOrders();
 };
 
+const getOrderById = async (orderId) => {
+  try {
+    const order = await orderRepository.getById(orderId);
+
+    if (!order) {
+      throw new ApplicationError("Order not found", 404);
+    }
+
+    return order;
+  } catch (error) {
+    throw new ApplicationError(`Failed to get order by ID: ${error.message}`, 500);
+  }
+};
+
 module.exports = {
   createOrder,
   getCourse,
   deleteOrder,
   getAllOrders,
-  processPayment
+  processPayment,
+  getOrderById
 };

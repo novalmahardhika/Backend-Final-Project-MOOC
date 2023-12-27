@@ -109,10 +109,27 @@ const getOrders = async (req, res) => {
         res.status(500).json({ status: 'FAIL', message: error.message });
     }
 };
+
+
+const ordersDetail = async (req, res) => {
+    try {
+        const orderId = req.params.id;
+        const order = await orderService.getOrderById(orderId);
+        res.status(200).json({ status: 'OK', message: 'Order retrieved successfully', data: order });
+    } catch (error) {
+        console.error(error);
+        res.status(error.statuscode || 500).json({
+            status: 'FAIL',
+            message: error.message,
+        })
+    }
+}
+
 module.exports = {
     create,
     detailOrder,
     getPurchasedCourses,
     deleteOrder,
-    getOrders
+    getOrders,
+    ordersDetail
 };
