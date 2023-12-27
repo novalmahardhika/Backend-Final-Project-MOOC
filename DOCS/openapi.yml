@@ -156,7 +156,99 @@ paths:
                     properties:
                       message:
                         example: "there is no order list"
+                        
   /api/v1/orders/{id}:
+    get:
+      tags:
+        - order
+      summary: Get detaisl orders
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+            example: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+          required: true
+      security:
+        - api_key: []
+      description: Retrieve details of a specific order
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              example:
+                status: "OK"
+                message: "Success"
+                data:
+                  id: "15250d2c-0419-4004-ae8a-8437b3af1fb0"
+                  userId: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+                  courseId: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                  status: "COMPLETED"
+                  paymentMethod: "Bank Transfer"
+                  expiredDateAt: "2023-12-14T05:50:58.764Z"
+                  cardNumber: null
+                  cardHolderName: null
+                  cvv: null
+                  expiryDate: null
+                  Course:
+                    id: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                    title: "Learn Basic Javascript"
+                    category: "Android Development"
+                    level: "advance"
+                    price: 217214
+
+        201:
+          description: Successful response - Credit Card
+          content:
+            application/json:
+              example:
+                status: "OK"
+                message: "Success"
+                data:
+                  id: "45230e6a-9b6f-4c06-aa62-42fc57507c94"
+                  userId: "8ae3a322-ecdd-4752-b1c7-603c064bb952"
+                  courseId: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                  status: "COMPLETED"
+                  paymentMethod: "Credit Card"
+                  expiredDateAt: "2023-12-14T05:50:58.764Z"
+                  cardNumber: "**** **** **** 1234" # Example masked card number
+                  cardHolderName: "John Doe"
+                  cvv: "123"
+                  expiryDate: "12/2025"
+                  createdAt: "2023-12-14T04:50:58.764Z"
+                  updatedAt: "2023-12-14T04:51:53.965Z"
+                  Course:
+                    id: "0c06de8f-ea83-49d6-9447-a4247e5cd4ec"
+                    title: "Learn Basic Javascript"
+                    category: "Android Development"
+                    level: "advance"
+                    price: 217214
+        "401":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "Unauthorized"
+
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/FAIL"
+                  - type: object
+                    properties:
+                      message:
+                        example: "No order has been placed"
+  
     post:
       tags:
         - order
