@@ -8,6 +8,7 @@ async function findAll(filter) {
     if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
     return await Course.findAll({
         where: filter,
+         attributes: {include: ['createdAt']},
         include: [{
             model: CourseChapter,
             as: 'chapters',
