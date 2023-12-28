@@ -243,6 +243,201 @@ const chapters = [
     chapterNumber: 4,
     duration: 60
   },
+
+
+
+
+  {
+    id: "7590e494-ae6a-4978-908c-56bfb8d07d79",
+    title: 'Introduction to UI/UX Design',
+    courseId: '1f2a0062-c061-43e9-817b-1b427d8eca41',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "807eb8a0-6be0-4cb6-8062-6a19297ea2c2",
+    title: 'Fundamentals of Design Principles',
+    courseId: '1f2a0062-c061-43e9-817b-1b427d8eca41',
+    chapterNumber: 2,
+    duration: 60
+  },
+  {
+    id: "477d8f1d-7bb7-4fab-ad68-88dbd8f551c2",
+    title: 'Advanced Techniques in UI Design',
+    courseId: '1f2a0062-c061-43e9-817b-1b427d8eca41',
+    chapterNumber: 3,
+    duration: 60
+  },
+  {
+    id: "990b17ef-f57d-4b12-b3b1-4e61ce47b39b",
+    title: "UX Research and Usability Testing",
+    courseId: '1f2a0062-c061-43e9-817b-1b427d8eca41',
+    chapterNumber: 4,
+    duration: 60
+  },
+
+
+
+  {
+    id: "7caa20ee-a659-4d93-886c-a31f91e6b835",
+    title: 'Introduction to Product Management',
+    courseId: '02b948cb-f34d-4e93-b21b-3aed09a61ed0',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "9ff8cb7b-dee7-48c7-9e9f-d82404420acd",
+    title: "Strategic Planning in Product Management",
+    courseId: '02b948cb-f34d-4e93-b21b-3aed09a61ed0',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "13a793c5-0d7e-4fca-ae31-54284d57c3fc",
+    title: 'Introduction to Golang',
+    courseId: '98fbfb03-5c4a-40fb-9a86-c31f6f62028f',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "8a838fbb-9aa8-4c2d-b1cc-811d92f4c443",
+    title: "Core Concepts in Golang",
+    courseId: '98fbfb03-5c4a-40fb-9a86-c31f6f62028f',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "8367edae-a839-46a3-81b8-963e489acea5",
+    title: 'Introduction to Advanced iOS Development',
+    courseId: '05e3a2b8-9764-4d20-aad0-d565237b4da6',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "caab2bc4-d4b2-43e1-9993-3c4b78be1ab6",
+    title: "Advanced UI/UX Development",
+    courseId: '05e3a2b8-9764-4d20-aad0-d565237b4da6',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "8a907f62-4b0f-4aa1-aa06-1e6c20d33565",
+    title: 'Product Management Foundations',
+    courseId: 'ad738f74-ca56-460a-8900-3ad5328d4d05',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "671012b9-d3bd-4b07-a848-4c8247c3d4c4",
+    title: "Market Analysis and User Research",
+    courseId: 'ad738f74-ca56-460a-8900-3ad5328d4d05',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "05118b72-2034-4535-9738-ce7293e6790b",
+    title: 'UI/UX Design Fundamentals',
+    courseId: 'a20d6bfd-2b68-4ae9-8cdd-8e99cf7d2fba',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "d3f89243-3b60-4a2c-8635-a07636dbd30a",
+    title: "Wireframing and Prototyping",
+    courseId: 'a20d6bfd-2b68-4ae9-8cdd-8e99cf7d2fba',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "c154f37b-58da-4a8e-b912-194f90f76e5f",
+    title: 'Exploring Data Science Techniques',
+    courseId: '61f88815-909d-4098-8c70-e6f848501d0b',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "47d6956a-78b0-4a07-8de3-c3cc829bd315",
+    title: "Machine Learning Applications in Business",
+    courseId: '61f88815-909d-4098-8c70-e6f848501d0b',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "85c5b972-31d8-49cd-aeaa-caf55990c2b1",
+    title: 'Frontend Web Development',
+    courseId: 'fbc0f659-cd49-4320-b164-118e285fe1ea',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "e971d758-af7a-4b80-b374-6974632ebbad",
+    title: "Backend Development and Server-Side Scripting",
+    courseId: 'fbc0f659-cd49-4320-b164-118e285fe1ea',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "3b70b70b-11ec-4c2f-b0c8-6c5da1129f1c",
+    title: 'Advanced Android Development with Firebase',
+    courseId: 'dd86c454-e9e5-40e7-94ac-de8638abaa0c',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "6183c09e-3de0-4df3-a6f1-ff80f9bd6d7f",
+    title: "Firebase Cloud Functions and Hosting",
+    courseId: 'dd86c454-e9e5-40e7-94ac-de8638abaa0c',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
+
+
+  {
+    id: "7dbb2772-bf79-4f3d-9b7b-f256f4b0b91d",
+    title: 'Intermediate Kotlin Techniques for Android Development',
+    courseId: '04288b41-479c-4479-9afe-61bd4a4db5fd',
+    chapterNumber: 1,
+    duration: 60
+  },
+  {
+    id: "41f71ae5-3779-4e95-8394-810373f5e4c0",
+    title: "Architectural Patterns in Kotlin for Android",
+    courseId: '04288b41-479c-4479-9afe-61bd4a4db5fd',
+    chapterNumber: 2,
+    duration: 60
+  },
+
+
 ]
 
 /** @type {import('sequelize-cli').Migration} */
