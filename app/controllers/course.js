@@ -1,6 +1,7 @@
 const courseService = require('../services/course')
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const courseProgressService = require('../services/userCourseProgress')
+const userCourse = require('../services/userCourse')
 
 
 const appendCourseInformation = async (course, user = "guest") => {
@@ -73,6 +74,12 @@ const list = async (req, res) => {
         for(let i = 0; i < dataLen; i++) {
             data[i].dataValues = await appendCourseInformation(data[i])
             delete data[i].dataValues.chapters;
+        }
+
+        for (let i = 0; i < dataLen; i++) {
+        const courseId = data[i].dataValues.id
+        const userId = req.user.id
+        data[i].dataValues.statusPayment = await userCourse.findOne({ userId, courseId }) ? true : false
         }
         
         res.status(200).json({
