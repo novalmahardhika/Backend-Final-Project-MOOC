@@ -6,7 +6,7 @@ const { UserCourse } = require("../models/index.js");
 */
 async function findAll(filter) {
     if (typeof filter !== "object" && filter != null) return new Error('filter is not an object');
-    return await UserCourse.findAll({ where: filter });
+    return await UserCourse.findAll({ where: filter, raw: true });
 }
 
 async function create(body) {

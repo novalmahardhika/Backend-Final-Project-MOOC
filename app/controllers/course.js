@@ -76,16 +76,41 @@ const list = async (req, res) => {
             delete data[i].dataValues.chapters;
         }
 
+        const payment = await userCourse.findAll()
+
+        // for (let index = 0; index < payment.length; index++) {
+        //     console.log(payment[index].dataValues);
+        // }
+
+        // console.log(Object.values(payment));
+        // console.log(payment[0].userId);
+
+        // for (const iterator of payment) {
+        //     console.log(iterator.userId)
+        // }
+
             if (req.user !== "guest") {
                 for (let i = 0; i < dataLen; i++) {
                     const courseId = data[i].dataValues.id
                     const userId = req.user.id
-                    // data[i].dataValues.statusPayment = await userCourse.findOne({ userId, courseId }) ? true : false
-                    const payment = await userCourse.findOne({ userId, courseId })
 
-                    if (payment) {
-                        data[i].dataValues.statusPayment = true
-                    }
+                    payment.forEach((x)=> {
+                        if(x.userId === userId && x.courseId === courseId) data[i].dataValues.statusPayment = true
+                    })
+                    
+                    // data[i].dataValues.statusPayment = await userCourse.findOne({ userId, courseId }) ? true : false
+                    // const payment = await userCourse.findAll({ userId, courseId })
+                    // if (payment) {
+                    //     data[i].dataValues.statusPayment = true
+                    // }
+
+                    
+                    // payment.forEach(x => {
+                    //     const dataPayment = x.dataValues
+                    //     if (dataPayment.userId === userId && dataPayment.courseId === courseId ) data[i].statusPayment = true
+                    //     // console.log(x.dataValues);
+                    //     // console.log(dataPayment);
+                    // });
                 }
             }
         
@@ -162,7 +187,7 @@ const detail = async (req, res) => {
     
 
     if (req.user !== 'guest') {
-        const statusPayment = await userCourse.findOne({userId:id, courseId:course.id})
+        const statusPayment = await userCourse.findAll({userId:id, courseId:course.id})
         if (statusPayment) course.statusPayment = true
     }
     if (req.user == "guest") course = deleteDetail(course)
