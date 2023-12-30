@@ -131,7 +131,7 @@ const processPayment = async (
 
         await NotificationService.create(userId, {
           title: 'Payment Success',
-          message: `Payment Course ${data.course.title} is Success`,
+          message: `Payment Course ${courseId} is Success`,
         })
         await orderRepository.createNewUserCourse(userId, courseId)
       }
