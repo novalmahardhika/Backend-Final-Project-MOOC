@@ -9,7 +9,7 @@ externalDocs:
   description: My Github
   url: https://github.com/TheReVeaLz
 servers:
-  - url: http://idea-academy.up.railway.app/
+  - url: https://idea-academy.up.railway.app/
 tags:
   - name: user
     description: Operations about your user
