@@ -220,7 +220,7 @@ module.exports = {
       level: data.type === "free" ? "beginner" : getRandomLevel(),
       price: data.type === "free" ? 0 : Math.random() * 200000 + 50000,
       image: data.image,
-      description: data.category,
+      description: data.description,
       telegram: 'https://web.telegram.org/',
       creator: creator[getRandomInt(creator.length)],
       rating: (4 + Math.random()).toFixed(1),
