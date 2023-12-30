@@ -11,7 +11,7 @@ const { uploadToMemory } = require('../../middlewares/uploadOnMemory.js');
 const { uploadToCloudinary } = require("../../middlewares/uploadOnCloudinary.js")
 
 // Get List
-router.get("/courses", Course.list)
+router.get("/courses",AuthMiddleware.authorize2, Course.list)
 
 // Create new data
 router.post("/courses",AuthMiddleware.authorize, AuthMiddleware.isRootOrAdmin, uploadToMemory, uploadToCloudinary, Course.create)

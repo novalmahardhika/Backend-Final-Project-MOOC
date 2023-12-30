@@ -14,7 +14,7 @@
   },
   "servers": [
     {
-      "url": "https://idea-academy.up.railway.app/"
+      "url": "http://idea-academy.up.railway.app/"
     }
   ],
   "tags": [
@@ -2327,6 +2327,11 @@
     "/api/v1/courses": {
       "get": {
         "summary": "Get a list of course",
+        "security": [
+          {
+            "api_key": []
+          }
+        ],
         "tags": [
           "course"
         ],
