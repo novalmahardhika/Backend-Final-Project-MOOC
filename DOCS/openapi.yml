@@ -9,7 +9,7 @@ externalDocs:
   description: My Github
   url: https://github.com/TheReVeaLz
 servers:
-  - url: https://idea-academy.up.railway.app/
+  - url: http://localhost:8000/
 tags:
   - name: user
     description: Operations about your user
@@ -1371,6 +1371,8 @@ paths:
   /api/v1/courses:
     get:
       summary: Get a list of course
+      security:
+        - api_key: []
       tags:
         - course
       description: Get all course list

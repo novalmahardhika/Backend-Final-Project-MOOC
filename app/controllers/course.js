@@ -76,11 +76,18 @@ const list = async (req, res) => {
             delete data[i].dataValues.chapters;
         }
 
-        for (let i = 0; i < dataLen; i++) {
-        const courseId = data[i].dataValues.id
-        const userId = req.user.id
-        data[i].dataValues.statusPayment = await userCourse.findOne({ userId, courseId }) ? true : false
-        }
+            if (req.user !== "guest") {
+                for (let i = 0; i < dataLen; i++) {
+                    const courseId = data[i].dataValues.id
+                    const userId = req.user.id
+                    // data[i].dataValues.statusPayment = await userCourse.findOne({ userId, courseId }) ? true : false
+                    const payment = await userCourse.findOne({ userId, courseId })
+
+                    if (payment) {
+                        data[i].dataValues.statusPayment = true
+                    }
+                }
+            }
         
         res.status(200).json({
             status: 'OK',
@@ -150,10 +157,15 @@ const destroyById = async (req, res) => {
 
 
 const detail = async (req, res) => {
+    const { id } = req.user
     let course = await appendCourseInformation(req.course, req.user)
-    if (req.user == "guest") course = deleteDetail(course)
-
     
+
+    if (req.user !== 'guest') {
+        const statusPayment = await userCourse.findOne({userId:id, courseId:course.id})
+        if (statusPayment) course.statusPayment = true
+    }
+    if (req.user == "guest") course = deleteDetail(course)
     res.json({ status: 'OK', message: 'Success', data: course })
 }
 
