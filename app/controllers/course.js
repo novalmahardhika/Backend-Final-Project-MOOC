@@ -185,10 +185,10 @@ const detail = async (req, res) => {
     const { id } = req.user
     let course = await appendCourseInformation(req.course, req.user)
     
-
     if (req.user !== 'guest') {
-        const statusPayment = await userCourse.findAll({userId:id, courseId:course.id})
+        const statusPayment = await userCourse.findOne({userId:id, courseId:course.id})
         if (statusPayment) course.statusPayment = true
+        if (course.type == "premium" && !statusPayment) course = deleteDetail(course)
     }
     if (req.user == "guest") course = deleteDetail(course)
     res.json({ status: 'OK', message: 'Success', data: course })
