@@ -42,13 +42,9 @@ const deleteDetail = (course) => {
 
 const list = async (req, res) => {
     try {
-        const { category, title, search, type } = req.query
-
-        const filter={}
-
-        if (category) filter.category = category 
-        if (title) filter.title = title 
-        if (type) filter.type = type 
+        const { search } = req.query
+        const filter = req.query
+        delete filter.search;
 
         if (search) {
 
