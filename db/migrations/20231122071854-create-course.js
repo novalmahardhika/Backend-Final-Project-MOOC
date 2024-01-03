@@ -42,7 +42,13 @@ module.exports = {
       },
       audience: {
         type: Sequelize.ARRAY(Sequelize.STRING),
-        defaultValue: ['Not easily give up', 'everyone looking to build high-performance', 'Strong desire to learn']
+        defaultValue: [
+          'Penuh Semangat dan Tidak Mudah Menyerah',
+          'Mencari Kinerja Tinggi',
+          'Berkemauan Kuat untuk Belajar',
+          'Pencinta Inovasi dan Teknologi',
+          'Komunitas Pembelajar yang Aktif'
+        ],
       },
       createdAt: {
         allowNull: false,
