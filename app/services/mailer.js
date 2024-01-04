@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 
 async function sendMailOtp(data) {
-    const verifyURL = (data.otpType == "verify") ? "http://localhost/api/v1/account-verify" : "http://localhost/api/v1/forgot-password"
+    const verifyURL = (data.otpType == "verify") ? "https://ideacademy.vercel.app/user/otp" : "https://ideacademy.vercel.app/user/forgot-password/verified"
     const mail = {
         from: 'Ideamy <no-reply@gmail.com>',
         to: data.email,
